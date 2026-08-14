@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: villaone-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health/
+    autoDeployTrigger: commit
+    envVars:
+      - key: DJANGO_DEBUG
+        value: "false"
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: villaone-db
+          property: connectionString
+      - key: DJANGO_ALLOWED_HOSTS
+        value: villaone-api.onrender.com
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://villaone-mazandaran.eamirhn.chatgpt.site
+      - key: CSRF_TRUSTED_ORIGINS
+        value: https://villaone-api.onrender.com
+      - key: SECURE_SSL_REDIRECT
+        value: "true"
+      - key: SECURE_HSTS_SECONDS
+        value: "31536000"
+
+databases:
+  - name: villaone-db
+    databaseName: villaone
+    user: villaone

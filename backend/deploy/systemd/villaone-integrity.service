@@ -1,0 +1,9 @@
+[Unit]
+Description=VillaOne nightly operational integrity check
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/srv/villaone/backend/deploy
+ExecStart=/usr/bin/docker compose --env-file .env.production -f docker-compose.production.yml exec -T backend python manage.py check_operational_integrity

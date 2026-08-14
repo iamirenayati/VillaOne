@@ -1,0 +1,9 @@
+[Unit]
+Description=Back up VillaOne daily
+
+[Timer]
+OnCalendar=*-*-* 03:15:00 Asia/Tehran
+Persistent=true
+
+[Install]
+WantedBy=timers.target

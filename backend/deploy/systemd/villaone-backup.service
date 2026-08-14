@@ -1,0 +1,9 @@
+[Unit]
+Description=VillaOne daily database and media backup
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/srv/villaone/backend/deploy
+ExecStart=/srv/villaone/backend/deploy/backup.sh

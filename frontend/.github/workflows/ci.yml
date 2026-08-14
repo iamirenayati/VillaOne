@@ -1,0 +1,36 @@
+name: Frontend CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.13.1"
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_VILLAONE_API_URL: /api/v1
+          NEXT_PUBLIC_VILLAONE_SITE_URL: https://villaone.example
+      - run: node --test tests/rendered-html.test.mjs
+
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          tags: villaone-frontend:ci
+          build-args: |
+            NEXT_PUBLIC_VILLAONE_API_URL=/api/v1
+            NEXT_PUBLIC_VILLAONE_SITE_URL=https://villaone.example

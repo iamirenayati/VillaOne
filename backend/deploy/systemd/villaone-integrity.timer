@@ -1,0 +1,9 @@
+[Unit]
+Description=Run VillaOne integrity checks nightly
+
+[Timer]
+OnCalendar=*-*-* 02:15:00 Asia/Tehran
+Persistent=true
+
+[Install]
+WantedBy=timers.target

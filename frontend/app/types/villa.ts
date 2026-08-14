@@ -1,0 +1,23 @@
+export type VillaListing = {
+  slug: string;
+  title: string;
+  city: string;
+  region: string;
+  setting: string;
+  description: string;
+  price: number;
+  priceLabel: string;
+  depositPercentage: number;
+  guests: number;
+  rooms: number;
+  beds: number;
+  baths: number;
+  rating: string;
+  reviews: number;
+  badge: string;
+  instant: boolean;
+  pool: boolean;
+  image: string;
+  gallery: string[];
+  tags: string[];
+};

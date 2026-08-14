@@ -1,0 +1,9 @@
+[Unit]
+Description=VillaOne operational housekeeping
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/srv/villaone/backend/deploy
+ExecStart=/usr/bin/docker compose --env-file .env.production -f docker-compose.production.yml exec -T backend python manage.py process_operational_tasks --batch-size 100

@@ -1,0 +1,10 @@
+.article-editor-toolbar { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 8px; direction:rtl; }
+.article-editor-toolbar button { border:1px solid #c9d1cd; border-radius:5px; background:#fff; color:#23453e; cursor:pointer; padding:5px 10px; }
+.article-editor-toolbar button:hover,.article-editor-toolbar button:focus { border-color:#b48649; background:#f8f4ec; }
+.article-markdown-editor { min-height:360px; width:100%; max-width:900px; font-family:ui-monospace,SFMono-Regular,Consolas,monospace; line-height:1.8; }
+.article-editor-preview { box-sizing:border-box; max-width:900px; margin-top:12px; padding:20px 24px; border:1px solid #d8dfdb; border-radius:8px; background:#fbfcfa; direction:rtl; line-height:2; }
+.article-editor-preview.is-loading { opacity:.55; }
+.article-editor-preview h2,.article-editor-preview h3 { color:#193f37; }
+.article-editor-preview img { max-width:100%; height:auto; border-radius:6px; }
+.article-editor-preview figure { margin:1rem 0; }
+.article-editor-preview figcaption { color:#65766f; font-size:12px; }
