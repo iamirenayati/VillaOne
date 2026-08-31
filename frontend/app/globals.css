@@ -2469,3 +2469,33 @@ footer {
 /* Homepage date pickers open into the hero's clear upper space instead of being clipped below the search rail. */
 .home-date-field.shamsi-field .shamsi-popover { top:auto; bottom:calc(100% + 9px); }
 @media (max-width:560px) { .home-date-field.shamsi-field .shamsi-popover { width:min(260px,calc(100vw - 38px)); } }
+
+/* Shared fallback actions keep route-level recovery controls visually consistent. */
+.detail-error-state .detail-error-back { min-height:2.5rem; display:inline-flex; align-items:center; justify-content:center; margin-top:.35rem; padding:0 1rem; border:1px solid var(--vo-pine-950); border-radius:var(--vo-radius-control); background:transparent; color:var(--vo-pine-950); font-size:.78rem; font-weight:650; text-decoration:none; }
+.detail-error-state .detail-error-back:hover { background:var(--vo-mist-50); }
+
+/* Marketplace recovery panels use the same readable hierarchy as the rest of the public shell. */
+.service-catalogue-state { min-height:18rem; border:1px solid var(--vo-border-subtle); border-radius:var(--vo-radius-xl); background:var(--vo-surface-raised); box-shadow:var(--vo-shadow-soft); }
+.service-catalogue-state h2 { margin:0; color:var(--vo-text-primary); font-size:var(--vo-text-lg); line-height:var(--vo-leading-tight); }
+.service-catalogue-state p { max-width:32rem; margin:0; color:var(--vo-text-secondary); font-size:var(--vo-text-sm); line-height:var(--vo-leading-relaxed); }
+.service-catalogue-state > a { min-height:2.5rem; display:inline-flex; align-items:center; justify-content:center; margin-top:.35rem; padding-inline:1rem; border:1px solid var(--vo-pine-950); border-radius:var(--vo-radius-control); color:#fff; background:var(--vo-pine-950); font-size:var(--vo-text-sm); font-weight:650; text-decoration:none; }
+.service-catalogue-state > a:hover { background:var(--vo-pine-800); }
+
+/* Public form controls share one comfortable hit area and focus treatment. */
+.inner-page :where(input:not([type="checkbox"]):not([type="radio"]), textarea) { min-height:var(--vo-control-md); padding:.72rem .9rem; border:1px solid var(--vo-border-default); border-radius:var(--vo-radius-control); color:var(--vo-text-primary); background:var(--vo-paper); font-size:var(--vo-text-sm); line-height:1.7; transition:border-color var(--vo-motion-fast) ease, box-shadow var(--vo-motion-fast) ease, background-color var(--vo-motion-fast) ease; }
+.inner-page :where(input:not([type="checkbox"]):not([type="radio"]), textarea)::placeholder { color:var(--vo-text-muted); opacity:1; }
+.inner-page :where(input:not([type="checkbox"]):not([type="radio"]), textarea):focus { border-color:var(--vo-champagne-600); background:var(--vo-surface-raised); box-shadow:0 0 0 3px rgb(199 165 107 / .16); outline:none; }
+.inner-page :where(textarea) { min-height:7rem; resize:vertical; }
+
+/* The service catalogue keeps price, description and action legible on the same card. */
+.service-editorial-copy > p:not(.service-card-category) { color:var(--vo-text-secondary); font-size:var(--vo-text-md); line-height:var(--vo-leading-relaxed); }
+.service-editorial-copy li { color:var(--vo-text-secondary); font-size:var(--vo-text-sm); line-height:1.7; }
+.service-editorial-copy footer { border-color:var(--vo-border-subtle); border-radius:var(--vo-radius-md); background:var(--vo-surface-muted); }
+.service-editorial-copy footer span { font-size:var(--vo-text-xs); }
+.service-editorial-copy footer strong { color:var(--vo-pine-950); font-size:var(--vo-text-md); line-height:1.7; }
+.service-editorial-copy footer > a { min-height:var(--vo-control-sm); border-radius:var(--vo-radius-control); background:var(--vo-pine-950); color:var(--vo-text-inverse); font-size:var(--vo-text-sm); font-weight:650; }
+
+@media (max-width:720px) {
+  .service-editorial-copy > p:not(.service-card-category) { font-size:var(--vo-text-sm); }
+  .service-editorial-copy footer strong { font-size:var(--vo-text-sm); }
+}

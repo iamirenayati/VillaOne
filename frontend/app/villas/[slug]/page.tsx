@@ -5,8 +5,10 @@ import { useEffect, useState } from "react";
 import { AvailabilityCalendar } from "../../components/AvailabilityCalendar";
 import { BrandMark } from "../../components/BrandLogo";
 import { InnerHeader } from "../../components/InnerHeader";
+import { PublicFooter } from "../../components/PublicFooter";
 import { PublicSelect } from "../../components/PublicSelect";
 import { ShamsiDateField } from "../../components/ShamsiDateField";
+import { ErrorState } from "../../components/ui/Feedback";
 import type { VillaListing } from "../../types/villa";
 import { type BookingQuote, type VillaReview, fetchBookingQuote, fetchFavoriteVillas, fetchVilla, fetchVillaAvailability, fetchVillaReviews, hasAuthenticatedSession, requestOtp, toggleVillaFavorite, verifyOtp, VillaOneApiError } from "../../lib/api";
 import styles from "./VillaDetail.module.css";
@@ -149,7 +151,7 @@ export default function VillaDetailPage() {
   }
 
   if (loadState === "loading") return <main id="main-content" tabIndex={-1} dir="rtl" className={`inner-page villa-luxury-detail ${styles.page}`}><InnerHeader /><DetailSkeleton /></main>;
-  if (loadState === "error" || !villa.slug) return <main id="main-content" tabIndex={-1} dir="rtl" className={`inner-page villa-luxury-detail ${styles.page}`}><InnerHeader /><section className="section-shell"><div className="detail-error-state" role="alert"><span>!</span><h1>این ویلا در دسترس نیست</h1><p>ممکن است اقامتگاه منتشر نشده باشد یا ارتباط با سرور موقتاً قطع شده باشد.</p><div><button type="button" onClick={() => setLoadRevision((value) => value + 1)}>تلاش دوباره</button><a href="/villas">بازگشت به ویلاها</a></div></div></section></main>;
+  if (loadState === "error" || !villa.slug) return <main id="main-content" tabIndex={-1} dir="rtl" className={`inner-page villa-luxury-detail ${styles.page}`}><InnerHeader /><section className="section-shell"><ErrorState className="detail-error-state" title="این ویلا در دسترس نیست" message="ممکن است اقامتگاه منتشر نشده باشد یا ارتباط با سرور موقتاً قطع شده باشد." onRetry={() => setLoadRevision((value) => value + 1)} action={<a className="detail-error-back" href="/villas">بازگشت به ویلاها</a>} /></section><PublicFooter /></main>;
 
   return <main id="main-content" tabIndex={-1} dir="rtl" className={`inner-page villa-luxury-detail ${styles.page}`}>
     <InnerHeader />
@@ -198,6 +200,6 @@ export default function VillaDetailPage() {
     </div>
 
     {activePhoto !== null && gallery[activePhoto] && <div className="gallery-lightbox" role="dialog" aria-modal="true" aria-label="نمایش تصاویر ویلا" onClick={() => setActivePhoto(null)}><button type="button" className="gallery-lightbox-close" onClick={() => setActivePhoto(null)} aria-label="بستن تصاویر">×</button><button type="button" className="gallery-lightbox-next" onClick={(event) => { event.stopPropagation(); setActivePhoto((activePhoto + 1) % gallery.length); }} aria-label="تصویر بعدی">←</button><figure onClick={(event) => event.stopPropagation()}><img src={gallery[activePhoto]} alt={`${villa.title}، تصویر ${activePhoto + 1}`} /><figcaption>{(activePhoto + 1).toLocaleString("fa-IR")} از {gallery.length.toLocaleString("fa-IR")}</figcaption></figure><button type="button" className="gallery-lightbox-prev" onClick={(event) => { event.stopPropagation(); setActivePhoto((activePhoto - 1 + gallery.length) % gallery.length); }} aria-label="تصویر قبلی">→</button></div>}
-    <footer className="mini-footer"><div className="section-shell"><span>© {new Intl.DateTimeFormat("fa-IR-u-ca-persian", { year: "numeric" }).format(new Date())} ویلاوان</span><div><a href="/support">پشتیبانی</a><a href="/terms">قوانین رزرو</a><a href="/privacy">حریم خصوصی</a></div></div></footer>
+    <PublicFooter />
   </main>;
 }

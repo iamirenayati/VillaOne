@@ -3,8 +3,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { InnerHeader } from "../components/InnerHeader";
+import { PublicFooter } from "../components/PublicFooter";
 import { PublicSelect } from "../components/PublicSelect";
 import { formatShamsiDate } from "../components/ShamsiDateField";
+import { InlineNotice } from "../components/ui/Feedback";
 import type { VillaListing } from "../types/villa";
 import { createApiBooking, fetchBookingQuote, fetchEligibleServices, fetchVilla, type BookingQuote, type ServiceOffer, type ServiceSelection, VillaOneApiError } from "../lib/api";
 import styles from "./Checkout.module.css";
@@ -29,7 +31,11 @@ export default function CheckoutPage() {
   const [servicesError, setServicesError] = useState("");
   const [serviceItems, setServiceItems] = useState<ServiceSelection[]>(() => (searchParams.get("services") ?? "").split(",").filter(Boolean).map((slug) => ({ slug })));
 
-  const nights = Math.max(1, Math.round((new Date(`${checkout}T12:00:00`).getTime() - new Date(`${checkin}T12:00:00`).getTime()) / 86400000));
+  const rawNights = Math.round((new Date(`${checkout}T12:00:00`).getTime() - new Date(`${checkin}T12:00:00`).getTime()) / 86400000);
+  const nights = Math.max(0, rawNights);
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const validDateRange = Boolean(checkin && checkout && checkin >= todayIso && rawNights >= 2);
+  const dateValidationMessage = !checkin || !checkout ? "تاریخ ورود و خروج را انتخاب کنید." : checkin < todayIso ? "تاریخ ورود نمی‌تواند در گذشته باشد." : rawNights < 2 ? "حداقل اقامت برای ثبت درخواست ۲ شب است." : "";
   const formatStayDate = (value: string) => new Intl.DateTimeFormat("fa-IR-u-ca-persian", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date(`${value}T12:00:00`));
   const stayTotal = quote ? Number(quote.stay_total) : 0;
   const serviceFee = quote ? Number(quote.service_fee) : 0;
@@ -69,7 +75,7 @@ export default function CheckoutPage() {
   // The checkout query-string values are intentionally captured by this request callback.
   // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const loadServices = useCallback(async () => {
-    if (!requestedSlug || !checkin || !checkout) { setServices([]); setServicesLoading(false); return; }
+    if (!requestedSlug || !validDateRange) { setServices([]); setServicesLoading(false); return; }
     setServicesLoading(true); setServicesError("");
     try {
       const items = (await fetchEligibleServices({ villaSlug: requestedSlug, checkin, checkout })) ?? [];
@@ -82,7 +88,7 @@ export default function CheckoutPage() {
       setServicesError(reason instanceof Error ? reason.message : "دریافت خدمات قابل رزرو ممکن نشد.");
     } finally { setServicesLoading(false); }
   // eslint-disable-next-line react-hooks/preserve-manual-memoization
-  }, [requestedSlug, checkin, checkout]);
+  }, [requestedSlug, checkin, checkout, validDateRange]);
 
   useEffect(() => {
     let active = true;
@@ -94,16 +100,16 @@ export default function CheckoutPage() {
     let active = true;
     setQuoteLoading(true);
     setQuoteError("");
-    if (!villa || !checkin || !checkout) { setQuoteLoading(false); return; }
+    if (!villa || !validDateRange) { setQuote(null); setQuoteLoading(false); return; }
     void fetchBookingQuote({ villaSlug: villa.slug, checkin, checkout, guests: Number(guests), paymentType, serviceItems })
       .then((result) => { if (active) setQuote(result); })
       .catch((error) => { if (active) { setQuote(null); setQuoteError(error instanceof Error ? error.message : "محاسبه قیمت انجام نشد."); } })
       .finally(() => { if (active) setQuoteLoading(false); });
     return () => { active = false; };
-  }, [villa, checkin, checkout, guests, paymentType, serviceItems]);
+  }, [villa, checkin, checkout, guests, paymentType, serviceItems, validDateRange]);
 
   async function completePayment() {
-    if (!terms || !villa) return;
+    if (!terms || !villa || !validDateRange) return;
     setSubmitting(true);
     setBookingError("");
     try {
@@ -125,7 +131,7 @@ export default function CheckoutPage() {
     }
   }
 
-  if (!villa) return <main dir="rtl" className={`${styles.page} inner-page checkout-page`}><InnerHeader /><section className="checkout-shell section-shell"><div className="account-empty"><span>!</span><h1>اطلاعات رزرو پیدا نشد</h1><p>برای ادامه، ابتدا یک ویلا و تاریخ معتبر انتخاب کنید.</p><a href="/villas">بازگشت به ویلاها</a></div></section></main>;
+  if (!villa) return <main dir="rtl" className={`${styles.page} inner-page checkout-page`}><InnerHeader /><section className="checkout-shell section-shell"><div className="account-empty"><span>!</span><h1>اطلاعات رزرو پیدا نشد</h1><p>برای ادامه، ابتدا یک ویلا و تاریخ معتبر انتخاب کنید.</p><a href="/villas">بازگشت به ویلاها</a></div></section><PublicFooter /></main>;
 
   return (
     <main dir="rtl" className={`${styles.page} inner-page checkout-page`}>
@@ -199,7 +205,8 @@ export default function CheckoutPage() {
               <div className="summary-guests"><span>مدت اقامت</span><b>{nights.toLocaleString("fa-IR")} شب · {Number(guests).toLocaleString("fa-IR")} مهمان</b></div>
               <div className="summary-price"><p><span>{nights.toLocaleString("fa-IR")} شب اقامت</span><b>{stayTotal.toLocaleString("fa-IR")} تومان</b></p>{extrasTotal > 0 && <p><span>خدمات انتخابی</span><b>{extrasTotal.toLocaleString("fa-IR")} تومان</b></p>}<p><span>هزینه خدمات ویلاوان</span><b>{serviceFee === 0 ? "رایگان" : `${serviceFee.toLocaleString("fa-IR")} تومان`}</b></p><p className="summary-total"><span>مبلغ کل رزرو</span><strong>{grandTotal.toLocaleString("fa-IR")} تومان</strong></p><p className="pay-now"><span>مبلغ قابل پرداخت در مرحله بعد</span><strong>{quoteLoading ? "در حال محاسبه…" : `${payable.toLocaleString("fa-IR")} تومان`}</strong></p></div>
               <label className="terms-row"><input type="checkbox" checked={terms} onChange={(event) => setTerms(event.target.checked)} /><span><a href="/terms">قوانین اقامت</a>، <a href="/cancellation">سیاست کنسلی</a> و شرایط پرداخت ویلاوان را خوانده‌ام و می‌پذیرم.</span></label>
-              <button className="final-pay-button" type="button" disabled={!terms || submitting || quoteLoading || Boolean(quoteError)} onClick={completePayment}>{submitting ? "در حال ثبت درخواست..." : quoteLoading ? "در حال دریافت قیمت نهایی…" : `ثبت درخواست و نگه‌داری زمان`}</button>
+              {dateValidationMessage && <InlineNotice tone="warning" message={dateValidationMessage} />}
+              <button className="final-pay-button" type="button" disabled={!terms || submitting || quoteLoading || Boolean(quoteError) || !validDateRange} onClick={completePayment}>{submitting ? "در حال ثبت درخواست..." : quoteLoading ? "در حال دریافت قیمت نهایی…" : `ثبت درخواست و نگه‌داری زمان`}</button>
               {quoteError && <p className="checkout-api-error" role="alert">{quoteError}</p>}
               {bookingError && <p className="checkout-api-error" role="alert">{bookingError}</p>}
             </div>
@@ -207,7 +214,7 @@ export default function CheckoutPage() {
           </aside>
         </div>
       </section>
-      <footer className="mini-footer"><div className="section-shell"><span>© {new Intl.DateTimeFormat("fa-IR-u-ca-persian", { year: "numeric" }).format(new Date())} ویلاوان</span><div><a href="/support">پشتیبانی</a><a href="/terms">قوانین رزرو</a><a href="/privacy">حریم خصوصی</a></div></div></footer>
+      <PublicFooter />
     </main>
   );
 }
