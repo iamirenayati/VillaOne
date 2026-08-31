@@ -1,9 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { InnerHeader } from "../../components/InnerHeader";
 import { InquiryForm } from "../../components/InquiryForm";
+import { PublicFooter } from "../../components/PublicFooter";
+import { EmptyState, ErrorState } from "../../components/ui/Feedback";
 import { type Contractor, type ContractorCatalogItem, fetchContractor } from "../../lib/api";
 import styles from "../Contractor.module.css";
 
@@ -106,7 +109,7 @@ function ContractorProfile({ item }: { item: Contractor }) {
       {item.cover_image ? <img src={item.cover_image} alt="" /> : <span className="contractor-image-fallback" aria-hidden="true"><i>V1</i> تصویر پروفایل به‌زودی</span>}
       <div className="contractor-profile-shade" />
       <div className="section-shell contractor-profile-hero-content">
-        <a className="contractor-back-link" href="/contractors"><span aria-hidden="true">→</span> بازگشت به متخصصان</a>
+        <Link className="contractor-back-link" href="/contractors"><span aria-hidden="true">→</span> بازگشت به متخصصان</Link>
         <div className="contractor-profile-badges">{item.featured && <span>منتخب ویلاوان</span>}{item.verified && <span><i aria-hidden="true">✓</i> بررسی اولیه ویلاوان</span>}</div>
         <p>{item.specialty}</p>
         <h1>{item.name}</h1>
@@ -155,6 +158,7 @@ export default function ContractorDetailPage() {
 
   return <main dir="rtl" className={`${styles.page} inner-page market-detail contractor-profile-page`}>
     <InnerHeader />
-    {loading ? <div className="contractor-profile-loading section-shell" role="status" aria-live="polite" aria-busy="true"><span className="status-pulse" /><p>در حال آماده‌سازی کاتالوگ…</p></div> : error ? <div className="market-state section-shell market-state-error" role="alert"><strong>{error}</strong><span>ممکن است پروفایل منتشر نشده باشد یا ارتباط با سرور قطع شده باشد.</span><button type="button" onClick={() => void load()}>تلاش دوباره</button><a className="text-link" href="/contractors">بازگشت به متخصصان</a></div> : item ? <ContractorProfile item={item} /> : null}
+    {loading ? <div className="contractor-profile-loading section-shell" role="status" aria-live="polite" aria-busy="true"><span className="status-pulse" /><p>در حال آماده‌سازی کاتالوگ…</p></div> : error ? <ErrorState className="market-state section-shell market-state-error" title="دریافت پروفایل انجام نشد" message={`${error} ممکن است پروفایل منتشر نشده باشد یا ارتباط با سرور قطع شده باشد.`} onRetry={() => void load()} action={<Link className="text-link" href="/contractors">بازگشت به متخصصان</Link>} /> : item ? <ContractorProfile item={item} /> : <EmptyState className="market-state section-shell" title="پروفایل پیدا نشد" message="این متخصص در حال حاضر برای معرفی عمومی منتشر نشده است." action={<Link className="text-link" href="/contractors">بازگشت به متخصصان</Link>} />}
+    <PublicFooter />
   </main>;
 }

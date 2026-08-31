@@ -9,6 +9,7 @@ import styles from "./PublicHeader.module.css";
 
 const links = [
   ["/map", "نقشه"],
+  ["/3d", "3D"],
   ["/villas", "ویلاها"],
   ["/real-estate", "املاک"],
   ["/contractors", "پیمانکاران"],
@@ -43,11 +44,19 @@ export function PublicHeader({ variant = "surface" }: PublicHeaderProps) {
   useEffect(() => closeMenu(), [pathname]);
 
   useEffect(() => {
+    let active = true;
     if (!hasAuthenticatedSession()) {
       setCurrentUser(null);
-      return;
+      return () => { active = false; };
     }
-    void fetchCurrentUser().then(setCurrentUser).catch(() => setCurrentUser(null));
+    // Route changes can overlap a slow profile request. Ignore stale results
+    // so an older request cannot repaint a signed-out or newer session.
+    void fetchCurrentUser().then((user) => {
+      if (active) setCurrentUser(user);
+    }).catch(() => {
+      if (active) setCurrentUser(null);
+    });
+    return () => { active = false; };
   }, [pathname]);
 
   useEffect(() => {

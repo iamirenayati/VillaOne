@@ -1,0 +1,108 @@
+:root {
+  /* Kept as a named alias because older page modules still reference the
+     display token. Defining it here prevents a silent fallback to serif and
+     keeps headings consistent across every route. */
+  --font-display: "Yekan Bakh", Tahoma, sans-serif;
+  --vo-pine-950: #0b2924;
+  --vo-pine-900: #11372f;
+  --vo-pine-800: #17483f;
+  --vo-pine-700: #1e594d;
+  --vo-caspian-700: #2f675c;
+  --vo-caspian-600: #3d786c;
+  --vo-sage-500: #8aa79d;
+  --vo-mist-50: #f2f6f3;
+  --vo-mist-100: #e7eeea;
+  --vo-ivory-50: #f5f1e7;
+  --vo-champagne-100: #f3ebdd;
+  --vo-champagne-500: #c7a56b;
+  --vo-champagne-600: #b78a4a;
+  --vo-champagne-700: #8f632c;
+  --vo-ink-900: #1a2623;
+  --vo-ink-800: #31413c;
+  --vo-ink-700: #475852;
+  --vo-ink-600: #586660;
+  --vo-ink-500: #6c7974;
+  --vo-ink-400: #899590;
+  --vo-ink-300: #a6b0ac;
+  --vo-surface: #f8f6ef;
+  --vo-surface-raised: #fdfcf7;
+  --vo-paper: #fffdf8;
+  --vo-line: rgb(20 61 52 / 0.14);
+  --vo-line-strong: rgb(20 61 52 / 0.24);
+  --vo-danger-600: #a44f45;
+  --vo-success-700: #37705f;
+  --vo-focus: #d9b676;
+
+  /* Semantic surfaces and typography shared by public and operations UI. */
+  --vo-surface-muted: #f0eee7;
+  --vo-surface-inverse: var(--vo-pine-950);
+  --vo-text-primary: var(--vo-ink-900);
+  --vo-text-secondary: var(--vo-ink-600);
+  --vo-text-muted: var(--vo-ink-500);
+  --vo-text-inverse: var(--vo-ivory-50);
+  --vo-border-subtle: var(--vo-line);
+  --vo-border-default: var(--vo-line-strong);
+  --vo-status-info: #386d83;
+  --vo-status-info-surface: #eaf3f6;
+  --vo-status-warning: #956b31;
+  --vo-status-warning-surface: #f7efe0;
+  --vo-status-danger: var(--vo-danger-600);
+  --vo-status-danger-surface: #fff1ee;
+  --vo-status-success: var(--vo-success-700);
+  --vo-status-success-surface: #eaf4ed;
+
+  --vo-text-xs: 0.75rem;
+  --vo-text-sm: 0.875rem;
+  --vo-text-md: 0.9375rem;
+  --vo-text-lg: 1.125rem;
+  --vo-text-xl: clamp(1.65rem, 3vw, 2.6rem);
+  --vo-text-display: clamp(2.4rem, 7vw, 5.8rem);
+  --vo-leading-tight: 1.3;
+  --vo-leading-body: 1.9;
+  --vo-leading-relaxed: 2.15;
+
+  --vo-control-sm: 2.5rem;
+  --vo-control-md: 3rem;
+  --vo-control-lg: 3.5rem;
+  --vo-content-narrow: 48rem;
+  --vo-content-wide: 82rem;
+  --vo-motion-fast: 140ms;
+  --vo-motion-standard: 220ms;
+  --vo-motion-slow: 360ms;
+
+  --vo-space-1: 0.25rem;
+  --vo-space-2: 0.5rem;
+  --vo-space-3: 0.75rem;
+  --vo-space-4: 1rem;
+  --vo-space-6: 1.5rem;
+  --vo-space-8: 2rem;
+  --vo-space-12: 3rem;
+  --vo-space-16: 4rem;
+  --vo-space-24: 6rem;
+  --vo-space-32: 8rem;
+
+  --vo-radius-control: 0.75rem;
+  --vo-radius-sm: 0.65rem;
+  --vo-radius-md: 1rem;
+  --vo-radius-lg: 1.35rem;
+  --vo-radius-xl: 1.75rem;
+  --vo-radius-card: 1.25rem;
+  --vo-radius-sheet: 1.75rem;
+  --vo-radius-round: 999px;
+
+  --vo-shadow-soft: 0 1rem 3rem rgb(5 36 29 / 0.1);
+  --vo-shadow-card: 0 1.2rem 3.6rem rgb(5 36 29 / 0.12);
+  --vo-shadow-deep: 0 1.8rem 5rem rgb(5 36 29 / 0.2);
+  --vo-shadow-float: 0 1.5rem 4rem rgb(5 36 29 / 0.16);
+  --vo-shadow-glass: inset 0 1px 0 rgb(255 255 255 / 0.42), 0 1.2rem 3.5rem rgb(5 36 29 / 0.16);
+
+  --vo-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --vo-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --vo-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --vo-ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  --vo-z-header: 80;
+  --vo-z-scrim: 81;
+  --vo-z-drawer: 82;
+  --vo-z-dialog: 100;
+}

@@ -1,0 +1,43 @@
+.button {
+  min-height: var(--ui-button-height, var(--vo-control-md));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--vo-space-2);
+  padding-inline: var(--ui-button-padding, var(--vo-space-6));
+  border: 1px solid transparent;
+  border-radius: var(--vo-radius-control);
+  font-size: var(--ui-button-size, var(--vo-text-sm));
+  font-weight: 650;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--vo-motion-fast) var(--vo-ease-standard),
+    border-color var(--vo-motion-fast) var(--vo-ease-standard),
+    color var(--vo-motion-fast) var(--vo-ease-standard),
+    transform var(--vo-motion-fast) var(--vo-ease-out);
+}
+
+.button:active:not(:disabled) { transform: translateY(1px); }
+.button:disabled { cursor: not-allowed; opacity: .56; }
+.icon { display: inline-flex; align-items: center; line-height: 1; }
+
+.primary { color: var(--vo-text-inverse); background: var(--vo-pine-950); }
+.secondary { border-color: var(--vo-border-default); color: var(--vo-pine-950); background: var(--vo-paper); }
+.quiet { border-color: transparent; color: var(--vo-pine-800); background: transparent; }
+.danger { color: var(--vo-text-inverse); background: var(--vo-danger-600); }
+
+.sm { --ui-button-height: var(--vo-control-sm); --ui-button-padding: var(--vo-space-4); --ui-button-size: var(--vo-text-xs); }
+.md { --ui-button-height: var(--vo-control-md); --ui-button-size: var(--vo-text-sm); }
+.lg { --ui-button-height: var(--vo-control-lg); --ui-button-size: var(--vo-text-md); }
+
+@media (hover: hover) and (pointer: fine) {
+  .primary:hover:not(:disabled) { background: var(--vo-pine-800); }
+  .secondary:hover:not(:disabled) { border-color: var(--vo-pine-700); background: var(--vo-mist-50); }
+  .quiet:hover:not(:disabled) { background: var(--vo-mist-50); }
+  .danger:hover:not(:disabled) { background: #873e38; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button { transition: none; }
+}

@@ -1,0 +1,4 @@
+.frame { position: relative; overflow: hidden; background: var(--vo-surface-muted); }
+.frame img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.fallback { display: grid; place-items: center; color: var(--vo-champagne-700); background: linear-gradient(145deg, var(--vo-mist-100), var(--vo-champagne-100)); }
+.mark { width: 2.5rem; height: 2.5rem; display: grid; place-items: center; border: 1px solid currentColor; border-radius: 50%; font-family: Georgia, serif; font-size: var(--vo-text-xs); letter-spacing: .12em; }

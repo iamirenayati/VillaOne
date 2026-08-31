@@ -2,16 +2,19 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { InnerHeader } from "../components/InnerHeader";
+import { PublicFooter } from "../components/PublicFooter";
+import { EmptyState, ErrorState } from "../components/ui/Feedback";
 import { type Contractor, fetchContractors } from "../lib/api";
 import styles from "./Contractor.module.css";
 
 function ContractorPortrait({ item }: { item: Contractor }) {
-  return <a className="contractor-showcase-visual" href={`/contractors/${item.slug}`} aria-label={`مشاهده پروفایل ${item.name}`}>
+  return <Link className="contractor-showcase-visual" href={`/contractors/${item.slug}`} aria-label={`مشاهده پروفایل ${item.name}`}>
     {item.cover_image ? <img src={item.cover_image} alt="" /> : <span className="contractor-image-fallback" aria-hidden="true"><i>V1</i> تصویر به‌زودی</span>}
     <span className="contractor-showcase-index" aria-hidden="true">{String(item.id).padStart(2, "0")}</span>
     {item.featured && <span className="contractor-featured-ribbon">منتخب ویلاوان</span>}
-  </a>;
+  </Link>;
 }
 
 function ContractorShowcase({ item, index }: { item: Contractor; index: number }) {
@@ -24,13 +27,13 @@ function ContractorShowcase({ item, index }: { item: Contractor; index: number }
         {item.verified && <span className="is-verified"><i aria-hidden="true">✓</i> بررسی اولیه ویلاوان</span>}
       </div>
       <p className="contractor-showcase-kicker">{item.specialty}</p>
-      <h2><a href={`/contractors/${item.slug}`}>{item.name}</a></h2>
+      <h2><Link href={`/contractors/${item.slug}`}>{item.name}</Link></h2>
       <p className="contractor-showcase-description">{item.description}</p>
       {item.services.length > 0 && <ul className="contractor-service-tags" aria-label="خدمات قابل درخواست">
         {item.services.slice(0, 4).map((service) => <li key={service}>{service}</li>)}
       </ul>}
       <footer>
-        <a className="contractor-primary-link" href={`/contractors/${item.slug}`}>مشاهده کاتالوگ و خدمات <span aria-hidden="true">←</span></a>
+        <Link className="contractor-primary-link" href={`/contractors/${item.slug}`}>مشاهده کاتالوگ و خدمات <span aria-hidden="true">←</span></Link>
         <small>معرفی و پیگیری توسط کانسیرج ویلاوان</small>
       </footer>
     </div>
@@ -78,7 +81,7 @@ export default function ContractorsPage() {
           <p>به‌جای فهرستی شلوغ، مجموعه‌ای محدود از تیم‌های معماری و اجرا را معرفی می‌کنیم؛ مناسب پروژه‌های واقعی ویلا در اقلیم شمال.</p>
           <div className="contractor-hero-actions">
             <a className="contractor-hero-primary" href="#contractors">دیدن متخصصان <span aria-hidden="true">↓</span></a>
-            <a href="/support">مشاوره با ویلاوان</a>
+            <Link href="/support">مشاوره با ویلاوان</Link>
           </div>
         </div>
         <aside className="contractor-hero-note" aria-label="نحوه همکاری">
@@ -102,15 +105,16 @@ export default function ContractorsPage() {
         <p>هر پروفایل شامل حوزه تخصص، خدمات قابل درخواست و کاتالوگ قیمت‌های راهنماست. ادعاهای تأییدنشده، امتیاز ساختگی یا قیمت قطعی نمایش داده نمی‌شود.</p>
       </header>
 
-      {loading ? <ContractorLoading /> : error ? <div className="market-state market-state-error" role="alert"><strong>{error}</strong><span>اتصال را بررسی کنید و دوباره تلاش کنید.</span><button type="button" onClick={() => void load()}>تلاش دوباره</button></div> : items.length === 0 ? <div className="market-state"><strong>هنوز پروفایل منتشرشده‌ای وجود ندارد.</strong><span>اگر پروژه‌ای در دست دارید، کانسیرج ویلاوان می‌تواند درخواست شما را ثبت کند.</span><a className="text-link" href="/support">گفت‌وگو با کانسیرج <span>←</span></a></div> : <div className="contractor-showcase-list">{items.map((item, index) => <ContractorShowcase key={item.slug} item={item} index={index} />)}</div>}
+      {loading ? <ContractorLoading /> : error ? <ErrorState className="market-state market-state-error" title="دریافت متخصصان انجام نشد" message={error} retryLabel="تلاش دوباره" onRetry={() => void load()} /> : items.length === 0 ? <EmptyState className="market-state" title="هنوز پروفایل منتشرشده‌ای وجود ندارد" message="اگر پروژه‌ای در دست دارید، کانسیرج ویلاوان می‌تواند درخواست شما را ثبت کند." action={<Link className="text-link" href="/support">گفت‌وگو با کانسیرج <span>←</span></Link>} /> : <div className="contractor-showcase-list">{items.map((item, index) => <ContractorShowcase key={item.slug} item={item} index={index} />)}</div>}
     </section>
 
     <section className="contractor-concierge-band">
       <div className="section-shell">
         <div><p className="eyebrow"><span /> هنوز مطمئن نیستید؟</p><h2>پروژه را تعریف کنید؛<br />ما مسیر معرفی را کوتاه می‌کنیم.</h2></div>
         <p>شهر، حدود متراژ و نوع کار را برای ما بنویسید. تیم ویلاوان درخواست را بررسی می‌کند و برای هماهنگی مرحله بعد تماس می‌گیرد.</p>
-        <a href="/support">شروع گفت‌وگو <span aria-hidden="true">←</span></a>
+        <Link href="/support">شروع گفت‌وگو <span aria-hidden="true">←</span></Link>
       </div>
     </section>
+    <PublicFooter />
   </main>;
 }

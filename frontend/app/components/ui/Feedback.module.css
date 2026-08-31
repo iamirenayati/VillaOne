@@ -1,0 +1,36 @@
+.state {
+  min-height: 14rem;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--vo-space-3);
+  padding: var(--vo-space-8);
+  border: 1px solid var(--vo-border-subtle);
+  border-radius: var(--vo-radius-card);
+  color: var(--vo-text-secondary);
+  background: var(--vo-paper);
+  text-align: center;
+}
+
+.state h2,
+.state p { margin: 0; }
+.state h2 { color: var(--vo-text-primary); font-size: var(--vo-text-lg); line-height: var(--vo-leading-tight); }
+.state p { max-width: 32rem; font-size: var(--vo-text-sm); line-height: var(--vo-leading-relaxed); }
+.state > a { min-height: 2.5rem; display: inline-flex; align-items: center; justify-content: center; margin-top: var(--vo-space-2); padding-inline: var(--vo-space-4); border: 1px solid var(--vo-pine-950); border-radius: var(--vo-radius-control); color: var(--vo-pine-950); background: transparent; font-size: var(--vo-text-sm); font-weight: 650; text-decoration: none; transition: background var(--vo-motion-fast) ease, color var(--vo-motion-fast) ease; }
+.state > a:hover { color: var(--vo-text-inverse); background: var(--vo-pine-950); }
+.loading { border-style: dashed; background: var(--vo-surface-muted); }
+.spinner { width: 1.4rem; height: 1.4rem; border: 2px solid var(--vo-line-strong); border-top-color: var(--vo-champagne-600); border-radius: 50%; animation: spin .75s linear infinite; }
+.mark { width: 2.25rem; height: 2.25rem; display: grid; place-items: center; border: 1px solid var(--vo-border-default); border-radius: 50%; color: var(--vo-champagne-700); font-size: var(--vo-text-lg); }
+.error { border-color: rgb(164 79 69 / .2); background: var(--vo-status-danger-surface); }
+.error .mark { border-color: rgb(164 79 69 / .35); color: var(--vo-status-danger); }
+.notice { margin: 0; padding: var(--vo-space-3) var(--vo-space-4); border: 1px solid transparent; border-radius: var(--vo-radius-sm); font-size: var(--vo-text-sm); line-height: var(--vo-leading-body); }
+.info { border-color: rgb(56 109 131 / .18); color: var(--vo-status-info); background: var(--vo-status-info-surface); }
+.success { border-color: rgb(55 112 95 / .2); color: var(--vo-status-success); background: var(--vo-status-success-surface); }
+.warning { border-color: rgb(149 107 49 / .22); color: var(--vo-status-warning); background: var(--vo-status-warning-surface); }
+.danger { border-color: rgb(164 79 69 / .2); color: var(--vo-status-danger); background: var(--vo-status-danger-surface); }
+.badge { min-height: 1.8rem; display: inline-flex; align-items: center; gap: .45rem; padding-inline: .65rem; border: 1px solid currentColor; border-radius: var(--vo-radius-round); font-size: var(--vo-text-xs); font-weight: 650; white-space: nowrap; }
+.badge i { width: .4rem; height: .4rem; border-radius: 50%; background: currentColor; }
+.neutral { border-color: var(--vo-border-default); color: var(--vo-text-secondary); background: var(--vo-surface-muted); }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }

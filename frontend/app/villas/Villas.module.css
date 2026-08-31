@@ -1,0 +1,574 @@
+.page {
+  --catalog-ink: var(--vo-ink-900);
+  --catalog-pine: var(--vo-pine-950);
+  --catalog-sage: var(--vo-sage-500);
+  --catalog-gold: var(--vo-champagne-500);
+  color: var(--catalog-ink);
+  background: var(--vo-ivory-50);
+}
+
+.page :global(.section-shell) {
+  width: min(100% - clamp(2rem, 5vw, 5rem), 80rem);
+}
+
+.page :global(.villa-catalog-hero) {
+  padding: clamp(4.5rem, 8vw, 7.5rem) 0 clamp(6.5rem, 10vw, 9rem);
+  border-bottom: 0;
+  background:
+    radial-gradient(circle at 13% 28%, rgba(166, 183, 166, .22), transparent 26rem),
+    var(--vo-ivory-50);
+}
+
+.page :global(.villa-catalog-hero)::after {
+  display: none;
+}
+
+.page :global(.villa-catalog-hero > .section-shell) {
+  grid-template-columns: minmax(0, 1.28fr) minmax(19rem, .72fr);
+  gap: clamp(3rem, 7vw, 7rem);
+}
+
+.page :global(.villa-catalog-copy h1) {
+  max-width: 47rem;
+  margin: 1.15rem 0 1.4rem;
+  color: var(--catalog-ink);
+  font-size: clamp(3.2rem, 5.7vw, 5.8rem);
+  font-weight: 540;
+  line-height: 1.16;
+  letter-spacing: -.045em;
+}
+
+.page :global(.villa-catalog-copy h1 em) {
+  color: var(--catalog-pine);
+  font-weight: 500;
+}
+
+.page :global(.villa-catalog-copy > p:not(.eyebrow)) {
+  max-width: 36rem;
+  color: var(--vo-ink-600);
+  font-size: .92rem;
+  line-height: 2.05;
+}
+
+.page :global(.catalog-trust-line) {
+  gap: .75rem 1.5rem;
+  margin-top: 1.8rem;
+  color: var(--vo-pine-700);
+  font-size: .72rem;
+}
+
+.page :global(.catalog-trust-line span)::before {
+  width: .42rem;
+  height: .42rem;
+  flex: none;
+  border-radius: 50%;
+  background: var(--catalog-gold);
+  box-shadow: 0 0 0 4px rgba(183, 138, 74, .1);
+  content: "";
+}
+
+.page :global(.catalog-hero-art) {
+  min-height: 19rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: var(--vo-radius-xl);
+  background: rgba(14, 54, 47, .95);
+  box-shadow: var(--vo-shadow-deep), inset 0 1px 0 rgba(255, 255, 255, .12);
+}
+
+.page :global(.catalog-hero-art)::before {
+  width: 15rem;
+  height: 15rem;
+  border-color: rgba(230, 197, 144, .18);
+}
+
+.page :global(.catalog-hero-art > small) {
+  color: rgba(244, 240, 229, .68);
+  font-size: .67rem;
+  letter-spacing: 0;
+}
+
+.page :global(.catalog-search-shell) {
+  margin-top: -3.25rem;
+}
+
+.page :global(.catalog-search-panel) {
+  grid-template-columns: 1.15fr 1fr 1fr .72fr 1.08fr;
+  padding: .65rem;
+  border: 1px solid rgba(255, 255, 255, .62);
+  border-radius: var(--vo-radius-xl);
+  background: rgba(255, 253, 247, .88);
+  box-shadow: 0 24px 70px rgba(13, 48, 40, .14), inset 0 1px 0 rgba(255, 255, 255, .74);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+}
+
+.page :global(.catalog-search-panel > label),
+.page :global(.catalog-search-panel > .shamsi-field) {
+  min-height: 4.75rem;
+  padding: .7rem 1.25rem;
+  border-left-color: rgba(18, 52, 45, .11);
+  border-radius: var(--vo-radius-md);
+  transition: background-color 180ms var(--vo-ease-standard);
+}
+
+.page :global(.catalog-search-panel > label:focus-within),
+.page :global(.catalog-search-panel > .shamsi-field:focus-within) {
+  background: rgba(255, 255, 255, .6);
+}
+
+.page :global(.catalog-search-panel label > span),
+.page :global(.catalog-search-panel .shamsi-field > span) {
+  color: var(--vo-ink-500);
+  font-size: .67rem;
+}
+
+.page :global(.catalog-search-panel select) {
+  color: var(--catalog-pine);
+  font-family: inherit;
+  font-size: .78rem;
+  font-weight: 600;
+}
+
+.page :global(.catalog-search-panel > button) {
+  min-height: 4.75rem;
+  padding: 0 1.4rem;
+  border-radius: var(--vo-radius-lg);
+  background: var(--catalog-pine);
+  font-family: inherit;
+  font-size: .78rem;
+  font-weight: 650;
+  transition: background-color 180ms var(--vo-ease-standard), transform 180ms var(--vo-ease-standard), box-shadow 180ms var(--vo-ease-standard);
+}
+
+.page :global(.catalog-search-panel > button:active) {
+  transform: scale(.985);
+}
+
+.page :global(.catalog-search-shell > .search-form-error) {
+  margin-top: .75rem;
+  border-color: rgba(164, 77, 61, .22);
+  border-radius: var(--vo-radius-sm);
+  background: #fff8f5;
+  font-size: .78rem;
+}
+
+.page :global(.luxury-catalog-layout) {
+  padding-top: clamp(4rem, 7vw, 6.25rem);
+  padding-bottom: clamp(5rem, 9vw, 8rem);
+}
+
+.page :global(.catalog-topbar) {
+  margin-bottom: 2rem;
+  padding-bottom: 1.3rem;
+  border-color: var(--vo-line);
+}
+
+.page :global(.catalog-topbar small) {
+  color: var(--catalog-gold);
+  font-size: .68rem;
+}
+
+.page :global(.catalog-topbar h2) {
+  margin-top: .55rem;
+  font-size: clamp(1.55rem, 2.6vw, 2.35rem);
+  font-weight: 570;
+  line-height: 1.45;
+}
+
+.page :global(.catalog-topbar-actions > label),
+.page :global(.mobile-filter-button) {
+  min-height: 2.85rem;
+  border-color: var(--vo-line);
+  border-radius: var(--vo-radius-sm);
+  background: var(--vo-paper);
+  color: var(--vo-ink-600);
+  font-size: .7rem;
+}
+
+.page :global(.catalog-content-grid) {
+  grid-template-columns: 16rem minmax(0, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.page :global(.luxury-filter-panel) {
+  top: 6.5rem;
+  overflow: hidden;
+  border-color: var(--vo-line);
+  border-radius: var(--vo-radius-lg);
+  background: rgba(255, 255, 255, .86);
+  box-shadow: var(--vo-shadow-soft);
+}
+
+.page :global(.luxury-filter-panel > div:first-child),
+.page :global(.luxury-filter-panel fieldset) {
+  padding: 1.2rem;
+  border-color: var(--vo-line);
+}
+
+.page :global(.luxury-filter-panel h3),
+.page :global(.luxury-filter-panel legend) {
+  color: var(--catalog-ink);
+  font-size: .82rem;
+}
+
+.page :global(.luxury-filter-panel > div button) {
+  color: var(--catalog-gold);
+  font-family: inherit;
+  font-size: .68rem;
+}
+
+.page :global(.luxury-price-inputs span),
+.page :global(.luxury-check small) {
+  font-size: .65rem;
+}
+
+.page :global(.luxury-price-inputs input) {
+  min-height: 2.6rem;
+  border-color: var(--vo-line);
+  border-radius: var(--vo-radius-sm);
+  background: var(--vo-ivory-50);
+  font-family: inherit;
+  font-size: .72rem;
+}
+
+.page :global(.luxury-check b) {
+  font-size: .72rem;
+}
+
+.page :global(.filter-map-link) {
+  padding: 1.2rem;
+  background: var(--catalog-pine);
+}
+
+.page :global(.luxury-villa-grid),
+.page :global(.villa-catalog-skeleton) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.2rem, 2.6vw, 2rem);
+}
+
+.page :global(.luxury-villa-card) {
+  overflow: hidden;
+  border-color: rgba(14, 54, 47, .1);
+  border-radius: var(--vo-radius-xl);
+  background: var(--vo-paper);
+  box-shadow: var(--vo-shadow-card);
+  transition: transform 240ms var(--vo-ease-standard), box-shadow 240ms var(--vo-ease-standard), border-color 240ms var(--vo-ease-standard);
+}
+
+.page :global(.luxury-villa-media) {
+  height: auto;
+  aspect-ratio: 4 / 3;
+  background: var(--vo-mist-100);
+}
+
+.page :global(.luxury-villa-media > img) {
+  transition: transform 700ms var(--vo-ease-out);
+}
+
+.page :global(.luxury-villa-badge),
+.page :global(.luxury-villa-media > small),
+.page :global(.luxury-favorite) {
+  border-color: rgba(255, 255, 255, .58);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.page :global(.luxury-villa-badge) {
+  padding: .55rem .72rem;
+  border-radius: var(--vo-radius-sm);
+  background: rgba(255, 253, 247, .88);
+  font-size: .63rem;
+}
+
+.page :global(.luxury-villa-media > small) {
+  border-radius: var(--vo-radius-sm);
+  font-size: .62rem;
+}
+
+.page :global(.luxury-favorite) {
+  width: 2.75rem;
+  height: 2.75rem;
+  background: rgba(255, 253, 247, .82);
+  transition: background-color 180ms var(--vo-ease-standard), color 180ms var(--vo-ease-standard), transform 180ms var(--vo-ease-standard);
+}
+
+.page :global(.luxury-villa-body) {
+  padding: 1.35rem 1.35rem 1.25rem;
+}
+
+.page :global(.luxury-villa-overline) {
+  color: var(--catalog-gold);
+  font-size: .68rem;
+}
+
+.page :global(.luxury-villa-body h3) {
+  margin: .65rem 0 .55rem;
+  font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+  font-weight: 590;
+  line-height: 1.5;
+}
+
+.page :global(.luxury-villa-body > p),
+.page :global(.villa-rating-truth) {
+  color: var(--vo-ink-500);
+  font-size: .68rem;
+}
+
+.page :global(.luxury-villa-footer) {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-color: var(--vo-line);
+}
+
+.page :global(.luxury-villa-footer strong) {
+  font-size: 1.05rem;
+}
+
+.page :global(.luxury-villa-footer > div span) {
+  font-size: .64rem;
+}
+
+.page :global(.villa-catalog-skeleton > div) {
+  height: auto;
+  min-height: 27rem;
+  overflow: hidden;
+  border-color: var(--vo-line);
+  border-radius: var(--vo-radius-xl);
+  background: var(--vo-paper);
+}
+
+.page :global(.catalog-error-state),
+.page :global(.catalog-empty-state) {
+  min-height: 27rem;
+  border-color: var(--vo-line);
+  border-radius: var(--vo-radius-xl);
+  background: var(--vo-paper);
+  box-shadow: var(--vo-shadow-soft);
+}
+
+.page :global(.catalog-error-state h2),
+.page :global(.catalog-empty-state h2) {
+  font-size: 1.55rem;
+}
+
+.page :global(.catalog-error-state p),
+.page :global(.catalog-empty-state p) {
+  font-size: .76rem;
+}
+
+.page :global(.catalog-error-state button),
+.page :global(.catalog-empty-state button) {
+  min-height: 2.85rem;
+  padding-inline: 1.25rem;
+  border-radius: var(--vo-radius-sm);
+  background: var(--catalog-pine);
+  font-family: inherit;
+  font-size: .72rem;
+}
+
+.page :global(.catalog-map-cta) {
+  margin-bottom: 5rem;
+  padding: clamp(1.6rem, 4vw, 2.5rem);
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: var(--vo-radius-xl);
+  background: var(--catalog-pine);
+  box-shadow: var(--vo-shadow-deep);
+}
+
+.page :global(.catalog-map-cta h2) {
+  font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+}
+
+.page :global(.catalog-map-cta p),
+.page :global(.catalog-map-cta small),
+.page :global(.catalog-map-cta > a) {
+  font-size: .7rem;
+}
+
+.page :global(.catalog-map-cta > a) {
+  min-height: 3rem;
+  border-radius: var(--vo-radius-sm);
+}
+
+.page :global(.mini-footer) {
+  border-top: 1px solid var(--vo-line);
+  background: var(--vo-paper);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .page :global(.catalog-search-panel > button:hover) {
+    background: var(--vo-pine-800);
+    box-shadow: 0 12px 28px rgba(9, 41, 34, .16);
+    transform: translateY(-1px);
+  }
+
+  .page :global(.luxury-villa-card:hover) {
+    border-color: rgba(183, 138, 74, .42);
+    box-shadow: var(--vo-shadow-deep);
+    transform: translateY(-4px);
+  }
+
+  .page :global(.luxury-villa-card:hover .luxury-villa-media > img) {
+    transform: scale(1.025);
+  }
+
+  .page :global(.luxury-favorite:hover) {
+    color: var(--catalog-gold);
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 64rem) {
+  .page :global(.villa-catalog-hero > .section-shell) {
+    grid-template-columns: minmax(0, 1fr) 18rem;
+    gap: 2.5rem;
+  }
+
+  .page :global(.catalog-search-panel) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .page :global(.catalog-search-panel > button) {
+    grid-column: 1 / -1;
+  }
+
+  .page :global(.catalog-content-grid) {
+    grid-template-columns: 14rem minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 51.25rem) {
+  .page :global(.villa-catalog-hero) {
+    padding-top: 4rem;
+  }
+
+  .page :global(.villa-catalog-hero > .section-shell) {
+    grid-template-columns: 1fr;
+  }
+
+  .page :global(.catalog-hero-art) {
+    display: none;
+  }
+
+  .page :global(.catalog-search-panel) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .page :global(.catalog-content-grid) {
+    display: block;
+  }
+
+  .page :global(.mobile-filter-button) {
+    display: flex;
+  }
+
+  .page :global(.luxury-filter-panel) {
+    position: static;
+    display: none;
+    margin-bottom: 1.5rem;
+  }
+
+  .page :global(.luxury-filter-panel.is-open) {
+    display: block;
+  }
+}
+
+@media (max-width: 45rem) {
+  .page :global(.section-shell) {
+    width: min(100% - 1.25rem, 40rem);
+  }
+
+  .page :global(.villa-catalog-hero) {
+    padding: 3.25rem 0 6.25rem;
+  }
+
+  .page :global(.villa-catalog-copy h1) {
+    font-size: clamp(2.8rem, 12vw, 4rem);
+    letter-spacing: -.035em;
+  }
+
+  .page :global(.catalog-trust-line) {
+    display: grid;
+  }
+
+  .page :global(.catalog-search-shell) {
+    margin-top: -3.2rem;
+  }
+
+  .page :global(.catalog-search-panel) {
+    padding: .5rem;
+    border-radius: var(--vo-radius-lg);
+  }
+
+  .page :global(.catalog-search-panel > label),
+  .page :global(.catalog-search-panel > .shamsi-field) {
+    min-height: 4.3rem;
+    padding: .55rem .8rem;
+  }
+
+  .page :global(.catalog-topbar) {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .page :global(.catalog-topbar-actions) {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .page :global(.luxury-villa-grid),
+  .page :global(.villa-catalog-skeleton) {
+    grid-template-columns: 1fr;
+  }
+
+  .page :global(.luxury-villa-card),
+  .page :global(.villa-catalog-skeleton > div) {
+    border-radius: var(--vo-radius-lg);
+  }
+
+  .page :global(.catalog-map-cta) {
+    align-items: flex-start;
+    flex-direction: column;
+    border-radius: var(--vo-radius-lg);
+  }
+
+  .page :global(.catalog-map-cta > a) {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 25rem) {
+  .page :global(.catalog-search-panel) {
+    grid-template-columns: 1fr;
+  }
+
+  .page :global(.catalog-search-panel > button) {
+    grid-column: auto;
+  }
+
+  .page :global(.luxury-villa-footer) {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page :global(.luxury-villa-card),
+  .page :global(.luxury-villa-media > img),
+  .page :global(.luxury-favorite),
+  .page :global(.catalog-search-panel > button) {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .page :global(.catalog-search-panel) {
+    background: var(--vo-paper);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

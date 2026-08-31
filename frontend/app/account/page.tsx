@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { InnerHeader } from "../components/InnerHeader";
+import { PublicFooter } from "../components/PublicFooter";
 import type { VillaListing } from "../types/villa";
 import { type ApiBooking, type ApiUser, fetchCurrentUser, fetchFavoriteVillas, fetchMyBookings, hasAuthenticatedSession, requestBookingCancellation, signOut, toggleVillaFavorite, updateCurrentUser } from "../lib/api";
 import styles from "./Account.module.css";
@@ -42,6 +43,7 @@ const nightsOf = (booking: AccountBooking) => Math.max(1, Math.round((new Date(`
 
 export default function AccountPage() {
   const [ready, setReady] = useState(false);
+  const [loadRevision, setLoadRevision] = useState(0);
   const [loadError, setLoadError] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const [user, setUser] = useState<ApiUser | null>(null);
@@ -60,9 +62,13 @@ export default function AccountPage() {
   const guestName = user ? (`${user.first_name} ${user.last_name}`.trim() || user.phone) : "مهمان ویلاوان";
 
   useEffect(() => {
+    let active = true;
+    setLoadError("");
+    setReady(false);
     if (!hasAuthenticatedSession()) { setReady(true); return; }
     setAuthenticated(true);
     void Promise.all([fetchCurrentUser(), fetchMyBookings(), fetchFavoriteVillas()]).then(([currentUser, items, savedVillas]) => {
+      if (!active) return;
       if (currentUser) {
         setUser(currentUser);
         setProfile({ first_name: currentUser.first_name, last_name: currentUser.last_name, email: currentUser.email, booking_sms_enabled: currentUser.booking_sms_enabled, marketing_sms_enabled: currentUser.marketing_sms_enabled, email_notifications_enabled: currentUser.email_notifications_enabled });
@@ -71,8 +77,9 @@ export default function AccountPage() {
       setBookings(mapped);
       setFavorites(savedVillas ?? []);
       if (mapped[0]) setSelectedCode(mapped[0].code);
-    }).catch((error) => setLoadError(error instanceof Error ? error.message : "دریافت اطلاعات حساب انجام نشد.")).finally(() => setReady(true));
-  }, []);
+    }).catch((error) => { if (active) setLoadError(error instanceof Error ? error.message : "دریافت اطلاعات حساب انجام نشد."); }).finally(() => { if (active) setReady(true); });
+    return () => { active = false; };
+  }, [loadRevision]);
 
   async function saveProfile() {
     setSavingProfile(true); setProfileMessage("");
@@ -101,9 +108,9 @@ export default function AccountPage() {
     catch { const restored = await fetchFavoriteVillas().catch(() => null); if (restored) setFavorites(restored); }
   }
 
-  if (!ready) return <main dir="rtl" className={`${styles.page} inner-page account-page`}><InnerHeader /><section className="account-access-state section-shell"><span className="status-pulse" /><h1>در حال آماده‌کردن حساب شما…</h1></section></main>;
-  if (!authenticated) return <main dir="rtl" className={`${styles.page} inner-page account-page`}><InnerHeader /><section className="account-access-state section-shell"><span className="brand-mark"><i>V</i><b>1</b></span><h1>برای دیدن سفرها وارد شوید</h1><p>رزروها، پرداخت‌ها و درخواست‌های لغو فقط در حساب امن شما نمایش داده می‌شوند.</p><Link href="/login?next=/account">ورود با شماره موبایل</Link></section></main>;
-  if (loadError) return <main dir="rtl" className={`${styles.page} inner-page account-page`}><InnerHeader /><section className="account-access-state section-shell"><span className="brand-mark"><i>!</i></span><h1>اطلاعات حساب دریافت نشد</h1><p>{loadError}</p><button type="button" onClick={() => window.location.reload()}>تلاش دوباره</button></section></main>;
+  if (!ready) return <main dir="rtl" className={`${styles.page} inner-page account-page`}><InnerHeader /><section className="account-access-state section-shell"><span className="status-pulse" /><h1>در حال آماده‌کردن حساب شما…</h1></section><PublicFooter /></main>;
+  if (!authenticated) return <main dir="rtl" className={`${styles.page} inner-page account-page`}><InnerHeader /><section className="account-access-state section-shell"><span className="brand-mark"><i>V</i><b>1</b></span><h1>برای دیدن سفرها وارد شوید</h1><p>رزروها، پرداخت‌ها و درخواست‌های لغو فقط در حساب امن شما نمایش داده می‌شوند.</p><Link href="/login?next=/account">ورود با شماره موبایل</Link></section><PublicFooter /></main>;
+  if (loadError) return <main dir="rtl" className={`${styles.page} inner-page account-page`}><InnerHeader /><section className="account-access-state section-shell"><span className="brand-mark"><i>!</i></span><h1>اطلاعات حساب دریافت نشد</h1><p>{loadError}</p><button type="button" onClick={() => setLoadRevision((value) => value + 1)}>تلاش دوباره</button></section><PublicFooter /></main>;
 
   const cancelled = selected && (selected.status === "cancelled" || selected.status === "expired" || selected.cancellationStatus === "approved" || selected.cancellationStatus === "refunded");
   const statusLabel = selected?.status === "expired" ? "مهلت پرداخت تمام شد" : cancelled ? "رزرو لغو شد" : selected?.cancellationStatus === "requested" ? "درخواست لغو در حال بررسی" : selected?.status === "confirmed" ? "رزرو تأیید شد" : "در انتظار تأیید میزبان";
@@ -126,5 +133,6 @@ export default function AccountPage() {
         </>}
       </div>
     </section>
+    <PublicFooter />
   </main>;
 }

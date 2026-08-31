@@ -1,0 +1,673 @@
+.page {
+  --detail-ink: var(--vo-ink-900);
+  --detail-pine: var(--vo-pine-950);
+  --detail-gold: var(--vo-champagne-500);
+  color: var(--detail-ink);
+  background: var(--vo-ivory-50);
+}
+
+.page :global(.section-shell) {
+  width: min(100% - clamp(2rem, 5vw, 5rem), 80rem);
+}
+
+.page :global(.luxury-detail-shell) {
+  padding-top: clamp(2rem, 4vw, 3.5rem);
+  padding-bottom: clamp(5rem, 9vw, 8rem);
+}
+
+.page :global(.luxury-detail-breadcrumb) {
+  gap: .65rem;
+  margin-bottom: 2rem;
+  color: var(--vo-ink-500);
+  font-size: .72rem;
+}
+
+.page :global(.luxury-detail-breadcrumb a) {
+  color: var(--vo-ink-600);
+}
+
+.page :global(.luxury-detail-heading) {
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.page :global(.luxury-detail-kicker) {
+  gap: .75rem;
+}
+
+.page :global(.luxury-detail-kicker > span) {
+  padding: .55rem .75rem;
+  border: 1px solid rgba(183, 138, 74, .18);
+  border-radius: var(--vo-radius-sm);
+  background: rgba(243, 235, 221, .78);
+  color: #745225;
+  font-size: .66rem;
+}
+
+.page :global(.luxury-detail-kicker small),
+.page :global(.luxury-detail-heading > div:first-child > p) {
+  color: var(--vo-ink-500);
+  font-size: .72rem;
+}
+
+.page :global(.luxury-detail-heading h1) {
+  max-width: 50rem;
+  margin: .85rem 0 .75rem;
+  font-size: clamp(3.25rem, 5.8vw, 6rem);
+  font-weight: 560;
+  line-height: 1.18;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+
+.page :global(.luxury-detail-actions button) {
+  min-height: 2.9rem;
+  padding: 0 1rem;
+  border-color: var(--vo-line);
+  border-radius: var(--vo-radius-sm);
+  background: var(--vo-paper);
+  color: var(--vo-pine-700);
+  font-family: inherit;
+  font-size: .72rem;
+  transition: border-color 180ms var(--vo-ease-standard), color 180ms var(--vo-ease-standard), transform 180ms var(--vo-ease-standard);
+}
+
+.page :global(.luxury-detail-actions button:active) {
+  transform: scale(.98);
+}
+
+.mobileBookingJump {
+  display: none;
+}
+
+.page :global(.luxury-detail-gallery) {
+  height: clamp(31rem, 48vw, 39rem);
+  gap: .55rem;
+  border-radius: var(--vo-radius-xl);
+  background: var(--vo-mist-100);
+  box-shadow: var(--vo-shadow-card);
+}
+
+.page :global(.luxury-gallery-item > img) {
+  transition: transform 700ms var(--vo-ease-out), filter 240ms var(--vo-ease-standard);
+}
+
+.page :global(.luxury-all-photos) {
+  min-height: 2.75rem;
+  padding: .65rem .9rem;
+  border-radius: var(--vo-radius-sm);
+  background: rgba(255, 253, 247, .86);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .72);
+  font-family: inherit;
+  font-size: .68rem;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.page :global(.luxury-detail-layout) {
+  grid-template-columns: minmax(0, 1fr) 24rem;
+  gap: clamp(2rem, 4vw, 4rem);
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  min-width: 0;
+}
+
+.page :global(.luxury-detail-content) {
+  width: 100%;
+  min-width: 0;
+}
+
+.page :global(.luxury-booking-wrap) {
+  top: 6.5rem;
+  scroll-margin-top: 6.5rem;
+}
+
+.page :global(.luxury-trust-row) {
+  overflow: hidden;
+  margin-bottom: 2rem;
+  border-color: var(--vo-line);
+  border-radius: var(--vo-radius-lg);
+  background: rgba(255, 255, 255, .78);
+  box-shadow: var(--vo-shadow-soft);
+}
+
+.page :global(.luxury-trust-row article) {
+  min-height: 5.8rem;
+  padding: 1.1rem;
+  border-color: var(--vo-line);
+}
+
+.page :global(.luxury-trust-row article > span) {
+  width: 2.2rem;
+  height: 2.2rem;
+  background: var(--vo-mist-100);
+  color: var(--detail-gold);
+  font-size: .78rem;
+}
+
+.page :global(.luxury-trust-row strong) {
+  font-size: .74rem;
+}
+
+.page :global(.luxury-trust-row small) {
+  font-size: .62rem;
+}
+
+.page :global(.luxury-quick-facts) {
+  margin-bottom: 2.5rem;
+  padding: 1.5rem 0;
+  border-color: var(--vo-line);
+}
+
+.page :global(.luxury-quick-facts > div) {
+  border-color: var(--vo-line);
+}
+
+.page :global(.luxury-quick-facts strong) {
+  color: var(--detail-pine);
+  font-family: inherit;
+  font-size: 1.65rem;
+}
+
+.page :global(.luxury-quick-facts span) {
+  color: var(--vo-ink-500);
+  font-size: .68rem;
+}
+
+.page :global(.luxury-detail-section) {
+  padding: clamp(3.25rem, 7vw, 5.5rem) 0;
+  border-color: var(--vo-line);
+  scroll-margin-top: 6.5rem;
+}
+
+.page :global(.luxury-detail-section h2) {
+  margin: .75rem 0 1.5rem;
+  font-size: clamp(2rem, 3.6vw, 3.25rem);
+  font-weight: 570;
+  line-height: 1.5;
+  letter-spacing: -.03em;
+}
+
+.page :global(.luxury-about-villa > p:last-child) {
+  max-width: 44rem;
+  color: var(--vo-ink-600);
+  font-size: 1rem;
+  line-height: 2.25;
+}
+
+.page :global(.luxury-amenities ul) {
+  gap: .75rem 1.5rem;
+}
+
+.page :global(.luxury-amenities li) {
+  min-height: 3.5rem;
+  padding: .75rem;
+  border-color: var(--vo-line);
+  color: var(--vo-ink-700);
+  font-size: .76rem;
+}
+
+.page :global(.truthful-empty-copy) {
+  padding: 1.25rem;
+  border-color: var(--vo-line);
+  border-radius: var(--vo-radius-md);
+  background: var(--vo-paper);
+  color: var(--vo-ink-500);
+  font-size: .78rem;
+}
+
+.page :global(.luxury-availability .availability-calendar) {
+  padding: 0;
+}
+
+.page :global(.luxury-availability .availability-calendar-head h2) {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+}
+
+.page :global(.luxury-availability .availability-day) {
+  min-height: 4.75rem;
+  border-radius: var(--vo-radius-sm);
+  background: var(--vo-paper);
+}
+
+.page :global(.luxury-region > a) {
+  min-height: 3rem;
+  padding: .75rem 1rem;
+  border-color: var(--vo-line);
+  border-radius: var(--vo-radius-sm);
+  color: var(--detail-pine);
+  font-size: .72rem;
+}
+
+.page :global(.luxury-region p) {
+  color: var(--vo-ink-500);
+  font-size: .74rem;
+}
+
+.page :global(.luxury-policies > div) {
+  gap: 1rem;
+}
+
+.page :global(.luxury-policies article) {
+  min-height: 10.5rem;
+  padding: 1.4rem;
+  border-color: var(--vo-line);
+  border-radius: var(--vo-radius-md);
+  background: var(--vo-paper);
+}
+
+.page :global(.luxury-policies article strong) {
+  margin: 0 0 .75rem;
+  color: var(--detail-pine);
+  font-size: .82rem;
+}
+
+.page :global(.luxury-policies article p) {
+  color: var(--vo-ink-500);
+  font-size: .72rem;
+  line-height: 2;
+}
+
+.page :global(.luxury-policies footer a) {
+  font-size: .72rem;
+}
+
+.page :global(.luxury-review-grid) {
+  gap: 1rem;
+}
+
+.page :global(.luxury-review-grid > article) {
+  padding: 1.4rem;
+  border-color: var(--vo-line);
+  border-radius: var(--vo-radius-md);
+  background: var(--vo-paper);
+}
+
+.page :global(.luxury-review-grid header b),
+.page :global(.luxury-review-grid h3),
+.page :global(.luxury-review-grid blockquote) {
+  font-size: .76rem;
+}
+
+.page :global(.luxury-review-grid blockquote) {
+  color: var(--vo-ink-600);
+  line-height: 2.1;
+}
+
+.page :global(.luxury-booking-card) {
+  overflow: visible;
+  border-color: rgba(14, 54, 47, .12);
+  border-radius: var(--vo-radius-xl);
+  background: rgba(255, 255, 255, .92);
+  box-shadow: var(--vo-shadow-deep), inset 0 1px 0 rgba(255, 255, 255, .78);
+}
+
+.page :global(.luxury-booking-card > header) {
+  padding: 1.5rem 1.35rem 1.1rem;
+}
+
+.page :global(.luxury-booking-card > header strong) {
+  font-size: 1.35rem;
+}
+
+.page :global(.luxury-booking-card > header > div span),
+.page :global(.luxury-booking-card > header > small) {
+  font-size: .66rem;
+}
+
+.page :global(.luxury-booking-card > header > small) {
+  border-radius: var(--vo-radius-sm);
+}
+
+.page :global(.luxury-booking-fields) {
+  margin: 0 1.25rem;
+  overflow: visible;
+  border-color: var(--vo-line);
+  border-radius: var(--vo-radius-md);
+}
+
+.page :global(.luxury-booking-fields > .shamsi-field) {
+  min-height: 4.4rem;
+  border-color: var(--vo-line);
+}
+
+.page :global(.luxury-booking-fields > label) {
+  min-height: 4rem;
+  border-color: var(--vo-line);
+}
+
+.page :global(.luxury-booking-fields label > span),
+.page :global(.luxury-booking-fields select) {
+  font-family: inherit;
+  font-size: .7rem;
+}
+
+.page :global(.luxury-date-status),
+.page :global(.luxury-auth-message),
+.page :global(.luxury-no-charge) {
+  margin-inline: 1.25rem;
+  font-size: .68rem;
+  line-height: 1.8;
+}
+
+.page :global(.luxury-date-status) {
+  border-radius: var(--vo-radius-sm);
+}
+
+.page :global(.luxury-phone-field) {
+  margin-inline: 1.25rem;
+}
+
+.page :global(.luxury-phone-field span) {
+  font-size: .7rem;
+}
+
+.page :global(.luxury-phone-field input) {
+  min-height: 2.9rem;
+  border-color: var(--vo-line);
+  border-radius: var(--vo-radius-sm);
+  font-family: inherit;
+  font-size: .78rem;
+}
+
+.page :global(.luxury-booking-submit) {
+  width: calc(100% - 2.5rem);
+  min-height: 3.25rem;
+  margin: .9rem 1.25rem 0;
+  padding: 0 1.15rem;
+  border-radius: var(--vo-radius-md);
+  background: var(--detail-pine);
+  font-family: inherit;
+  font-size: .76rem;
+  transition: background-color 180ms var(--vo-ease-standard), transform 180ms var(--vo-ease-standard), box-shadow 180ms var(--vo-ease-standard);
+}
+
+.page :global(.luxury-booking-submit:active) {
+  transform: scale(.985);
+}
+
+.page :global(.luxury-price-breakdown) {
+  margin: 0 1.25rem;
+  padding: 1.15rem 0;
+  border-color: var(--vo-line);
+}
+
+.page :global(.luxury-price-breakdown p),
+.page :global(.luxury-price-breakdown b) {
+  font-size: .7rem;
+}
+
+.page :global(.luxury-price-breakdown .luxury-total strong) {
+  font-size: .92rem;
+}
+
+.page :global(.luxury-deposit-note) {
+  margin: 0 1.25rem 1.25rem;
+  padding: 1rem;
+  border-radius: var(--vo-radius-md);
+  background: var(--vo-mist-100);
+}
+
+.page :global(.luxury-deposit-note p) {
+  font-size: .68rem;
+}
+
+.page :global(.luxury-deposit-note strong) {
+  font-size: .74rem;
+}
+
+.page :global(.luxury-concierge-link) {
+  margin-top: .8rem;
+  padding: 1rem;
+  border-color: var(--vo-line);
+  border-radius: var(--vo-radius-lg);
+  background: rgba(255, 255, 255, .65);
+}
+
+.page :global(.luxury-concierge-link b) {
+  font-size: .72rem;
+}
+
+.page :global(.luxury-concierge-link small) {
+  font-size: .65rem;
+}
+
+.page :global(.luxury-otp-step) {
+  padding: 2rem 1.4rem;
+}
+
+.page :global(.luxury-otp-step h2) {
+  font-size: 1.5rem;
+}
+
+.page :global(.luxury-otp-step p),
+.page :global(.luxury-otp-step > small),
+.page :global(.luxury-otp-step button) {
+  font-family: inherit;
+  font-size: .72rem;
+}
+
+.page :global(.luxury-otp-step input),
+.page :global(.luxury-otp-step button) {
+  border-radius: var(--vo-radius-sm);
+}
+
+.page :global(.detail-page-skeleton > div),
+.page :global(.detail-error-state) {
+  border-radius: var(--vo-radius-xl);
+}
+
+.page :global(.detail-error-state) {
+  min-height: 32rem;
+  margin-top: 2rem;
+  border: 1px solid var(--vo-line);
+  background: var(--vo-paper);
+}
+
+.page :global(.detail-error-state h1) {
+  font-size: 2rem;
+}
+
+.page :global(.detail-error-state p),
+.page :global(.detail-error-state button),
+.page :global(.detail-error-state a) {
+  font-family: inherit;
+  font-size: .74rem;
+}
+
+.page :global(.detail-error-state button),
+.page :global(.detail-error-state a) {
+  min-height: 2.8rem;
+  border-radius: var(--vo-radius-sm);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .page :global(.luxury-gallery-item:hover > img) {
+    filter: saturate(1.04);
+    transform: scale(1.022);
+  }
+
+  .page :global(.luxury-detail-actions button:hover) {
+    border-color: rgba(183, 138, 74, .5);
+    color: var(--detail-gold);
+  }
+
+  .page :global(.luxury-booking-submit:hover) {
+    background: var(--vo-pine-800);
+    box-shadow: 0 12px 28px rgba(9, 41, 34, .17);
+    transform: translateY(-1px);
+  }
+}
+
+@media (max-width: 65.625rem) {
+  .page :global(.luxury-detail-layout) {
+    grid-template-columns: minmax(0, 1fr) 21rem;
+    gap: 2rem;
+  }
+
+  .page :global(.luxury-trust-row) {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 51.25rem) {
+  .page :global(.luxury-detail-heading) {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .page :global(.luxury-detail-heading h1) {
+    font-size: clamp(3rem, 10vw, 4.75rem);
+  }
+
+  .mobileBookingJump {
+    min-height: 4.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    padding: .85rem 1rem;
+    border: 1px solid rgba(255, 255, 255, .5);
+    border-radius: var(--vo-radius-lg);
+    background: rgba(16, 54, 47, .94);
+    box-shadow: var(--vo-shadow-card), inset 0 1px 0 rgba(255, 255, 255, .14);
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .mobileBookingJump span {
+    color: rgba(255, 255, 255, .7);
+    font-size: .68rem;
+  }
+
+  .mobileBookingJump strong {
+    font-size: .78rem;
+  }
+
+  .page :global(.luxury-detail-layout) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page :global(.luxury-booking-wrap) {
+    position: static;
+    order: initial;
+    width: 100%;
+  }
+
+  .page :global(.luxury-booking-card) {
+    max-width: none;
+  }
+
+  .page :global(.luxury-trust-row) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 45rem) {
+  .page :global(.section-shell) {
+    width: min(100% - 1.25rem, 40rem);
+  }
+
+  .page :global(.luxury-detail-shell) {
+    padding-top: 1.25rem;
+  }
+
+  .page :global(.luxury-detail-heading h1) {
+    font-size: clamp(2.8rem, 12vw, 4rem);
+    letter-spacing: -.035em;
+  }
+
+  .page :global(.luxury-detail-actions) {
+    width: 100%;
+  }
+
+  .page :global(.luxury-detail-actions button) {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .page :global(.luxury-detail-gallery) {
+    height: 24rem;
+    border-radius: var(--vo-radius-lg);
+  }
+
+  .page :global(.luxury-gallery-item),
+  .page :global(.luxury-gallery-item.item-1) {
+    min-width: 88%;
+  }
+
+  .page :global(.luxury-detail-layout) {
+    margin-top: 2rem;
+  }
+
+  .page :global(.luxury-trust-row) {
+    grid-template-columns: 1fr;
+  }
+
+  .page :global(.luxury-quick-facts) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem 0;
+  }
+
+  .page :global(.luxury-detail-section) {
+    padding: 3rem 0;
+  }
+
+  .page :global(.luxury-amenities ul),
+  .page :global(.luxury-policies > div) {
+    grid-template-columns: 1fr;
+  }
+
+  .page :global(.luxury-region) {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .page :global(.luxury-region > a) {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .page :global(.luxury-booking-card),
+  .page :global(.luxury-concierge-link) {
+    border-radius: var(--vo-radius-lg);
+  }
+}
+
+@media (max-width: 26.25rem) {
+  .page :global(.availability-days) {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: .2rem;
+  }
+
+  .page :global(.luxury-booking-fields) {
+    grid-template-columns: 1fr;
+  }
+
+  .page :global(.luxury-booking-fields > .shamsi-field) {
+    border-bottom: 1px solid var(--vo-line);
+    border-left: 0;
+  }
+
+  .page :global(.luxury-booking-fields > label) {
+    grid-column: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page :global(.luxury-gallery-item > img),
+  .page :global(.luxury-detail-actions button),
+  .page :global(.luxury-booking-submit) {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .page :global(.luxury-all-photos),
+  .page :global(.luxury-booking-card) {
+    background: var(--vo-paper);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

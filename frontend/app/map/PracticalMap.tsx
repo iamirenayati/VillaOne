@@ -57,10 +57,13 @@ export function PracticalMap({ villas, activeSlug, fitRequest, onSelect }: Props
   const fittedStateRef = useRef({ villaKey: "", request: 0 });
   const [mapReady, setMapReady] = useState(false);
   const [providerError, setProviderError] = useState(false);
+  const [mapRevision, setMapRevision] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
     let loadTimer: ReturnType<typeof setTimeout> | undefined;
+    setMapReady(false);
+    setProviderError(false);
 
     void import("maplibre-gl").then(async (maplibregl) => {
       if (cancelled || !containerRef.current) return;
@@ -110,7 +113,7 @@ export function PracticalMap({ villas, activeSlug, fitRequest, onSelect }: Props
       mapRef.current = null;
       libraryRef.current = null;
     };
-  }, []);
+  }, [mapRevision]);
 
   useEffect(() => {
     const map = mapRef.current;
@@ -185,7 +188,7 @@ export function PracticalMap({ villas, activeSlug, fitRequest, onSelect }: Props
         <div className="map-provider-state is-error" role="alert">
           <strong>نقشه پایه در دسترس نیست</strong>
           <span>فهرست ویلاها همچنان قابل استفاده است. اتصال اینترنت را بررسی کنید.</span>
-          <button type="button" onClick={() => window.location.reload()}>بارگذاری دوباره</button>
+          <button type="button" onClick={() => setMapRevision((value) => value + 1)}>بارگذاری دوباره</button>
         </div>
       )}
     </div>

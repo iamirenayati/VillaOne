@@ -1,0 +1,366 @@
+.page {
+  --forest-950: #06130f;
+  --forest-900: #0a2018;
+  --forest-700: #23483a;
+  --ivory: #f4ecdf;
+  --bronze: #d2a05d;
+  min-height: 100svh;
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  color: var(--ivory);
+  background: var(--forest-950);
+}
+
+.experience {
+  min-height: 100svh;
+  position: relative;
+  display: grid;
+}
+
+.canvasSlot {
+  min-height: 100svh;
+  position: absolute;
+  inset: 0;
+}
+
+.posterLayer,
+.canvasLayer {
+  position: absolute;
+  inset: 0;
+}
+
+.posterLayer {
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 900ms ease;
+}
+
+.posterHidden { opacity: 0; pointer-events: none; }
+
+.canvasLayer {
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+.canvasReady { opacity: 1; }
+.canvasLayer canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+
+.sceneControls {
+  width: min(43rem, calc(100vw - 2.5rem));
+  position: absolute;
+  z-index: 14;
+  inset-inline-start: clamp(1.25rem, 4vw, 4rem);
+  bottom: 4.2rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .75rem;
+  align-items: center;
+  opacity: .62;
+  transition: opacity 500ms ease;
+}
+
+.sceneControls[data-ready="true"] { opacity: 1; }
+
+.viewpoints {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: .35rem;
+  border: 1px solid rgba(244, 236, 223, .16);
+  border-radius: 1rem;
+  background: rgba(5, 17, 13, .58);
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, .2);
+  backdrop-filter: blur(16px);
+}
+
+.viewpoints button,
+.resetView {
+  min-height: 3.15rem;
+  border: 0;
+  border-radius: .72rem;
+  color: rgba(244, 236, 223, .66);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  transition: color 220ms ease, background 220ms ease, transform 220ms ease;
+}
+
+.viewpoints button {
+  display: grid;
+  align-content: center;
+  gap: .12rem;
+  padding: .4rem .7rem;
+  text-align: start;
+}
+
+.viewpoints button span { color: inherit; font-size: .76rem; }
+.viewpoints button small { color: rgba(244, 236, 223, .38); font-size: .58rem; }
+.viewpoints button[aria-pressed="true"] { color: var(--ivory); background: rgba(244, 236, 223, .11); }
+.viewpoints button:not(:disabled):hover { color: var(--ivory); transform: translateY(-1px); }
+.viewpoints button:disabled,
+.resetView:disabled { cursor: wait; }
+
+.resetView {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  padding-inline: .9rem;
+  border: 1px solid rgba(244, 236, 223, .16);
+  white-space: nowrap;
+  background: rgba(5, 17, 13, .58);
+  backdrop-filter: blur(16px);
+  font-size: .68rem;
+}
+
+.resetView:not(:disabled):hover { color: var(--ivory); border-color: rgba(210, 160, 93, .5); }
+.interactionHint { grid-column: 1 / -1; margin: 0 .4rem; color: rgba(244, 236, 223, .4); font-size: .6rem; }
+
+.poster {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 29% 23%, rgba(113, 151, 129, .22), transparent 25%),
+    radial-gradient(circle at 67% 57%, rgba(210, 160, 93, .1), transparent 20%),
+    linear-gradient(147deg, #1a3d31 0%, #0b241b 46%, #04100c 100%);
+}
+
+.poster::before {
+  content: "";
+  position: absolute;
+  z-index: 8;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(3, 12, 9, .18), transparent 33%, transparent 65%, rgba(3, 12, 9, .5)),
+    linear-gradient(180deg, rgba(3, 12, 9, .26), transparent 30%, rgba(3, 12, 9, .62));
+}
+
+.poster::after {
+  content: "";
+  width: 70vw;
+  height: 18rem;
+  position: absolute;
+  z-index: 5;
+  left: 6vw;
+  bottom: 9vh;
+  border-radius: 50%;
+  background: rgba(157, 184, 163, .13);
+  filter: blur(48px);
+  transform: rotate(-6deg);
+}
+
+.posterMoon {
+  width: clamp(12rem, 27vw, 31rem);
+  aspect-ratio: 1;
+  position: absolute;
+  top: 5vh;
+  left: 17vw;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(217, 177, 117, .2), rgba(217, 177, 117, 0) 68%);
+  filter: blur(6px);
+}
+
+.posterMist {
+  width: 92%;
+  height: 28%;
+  position: absolute;
+  z-index: 4;
+  left: 4%;
+  bottom: 18%;
+  border-radius: 50%;
+  background: rgba(180, 199, 185, .12);
+  filter: blur(34px);
+}
+
+.posterIsland {
+  width: clamp(38rem, 62vw, 75rem);
+  height: clamp(17rem, 35vw, 34rem);
+  position: absolute;
+  z-index: 2;
+  left: 8vw;
+  bottom: 5vh;
+  border-radius: 48% 52% 45% 55% / 40% 48% 52% 60%;
+  background: linear-gradient(155deg, #355e45 2%, #153427 48%, #071812 78%);
+  box-shadow: inset -4rem -3rem 7rem rgba(2, 9, 7, .52), 0 4rem 7rem rgba(2, 8, 6, .45);
+  transform: perspective(900px) rotateX(59deg) rotateZ(-7deg);
+}
+
+.posterIsland::after {
+  content: "";
+  position: absolute;
+  inset: 9% 11% 18%;
+  border: 1px solid rgba(180, 204, 183, .15);
+  border-radius: inherit;
+}
+
+.posterVilla {
+  width: clamp(13rem, 26vw, 30rem);
+  height: clamp(7rem, 15vw, 17rem);
+  position: absolute;
+  z-index: 6;
+  left: clamp(11rem, 26vw, 31rem);
+  bottom: clamp(9rem, 20vh, 15rem);
+  background: linear-gradient(152deg, #d8cdbb, #8d8f82 66%);
+  box-shadow: 0 2rem 4rem rgba(2, 10, 7, .45);
+  transform: skewY(3deg);
+}
+
+.posterVilla::before {
+  content: "";
+  width: 104%;
+  height: 15%;
+  position: absolute;
+  top: -12%;
+  left: -2%;
+  background: #242a25;
+  transform: skewY(-3deg);
+  box-shadow: 0 1rem 2rem rgba(2, 10, 7, .24);
+}
+
+.posterVilla > i:first-child {
+  width: 72%;
+  height: 49%;
+  position: absolute;
+  right: 7%;
+  bottom: 14%;
+  border: 1px solid rgba(243, 205, 148, .56);
+  background: linear-gradient(110deg, rgba(226, 165, 85, .86), rgba(121, 119, 91, .47));
+  box-shadow: 0 0 3rem rgba(221, 155, 72, .34);
+}
+
+.posterVilla > i:nth-child(2) {
+  width: 20%;
+  height: 90%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(90deg, #665038 0 8%, #937454 8% 13%);
+}
+
+.posterVilla > i:last-child {
+  width: 112%;
+  height: 10%;
+  position: absolute;
+  left: -6%;
+  bottom: -10%;
+  background: #706857;
+}
+
+.posterTrees {
+  position: absolute;
+  z-index: 7;
+  inset: 0;
+}
+
+.posterTrees > i {
+  width: clamp(4rem, 9vw, 9rem);
+  height: clamp(12rem, 30vh, 27rem);
+  position: absolute;
+  bottom: 6vh;
+  clip-path: polygon(50% 0, 82% 44%, 68% 44%, 92% 76%, 57% 76%, 56% 100%, 44% 100%, 43% 76%, 8% 76%, 32% 44%, 18% 44%);
+  background: linear-gradient(90deg, #0b2118, #244b35 48%, #0b2118);
+  filter: drop-shadow(0 1.5rem 1.4rem rgba(2, 9, 6, .38));
+}
+
+.posterTrees > i:nth-child(1) { left: 2vw; transform: scale(1.45); }
+.posterTrees > i:nth-child(2) { left: 17vw; bottom: 16vh; transform: scale(.74); opacity: .8; }
+.posterTrees > i:nth-child(3) { left: 55vw; bottom: 12vh; transform: scale(.9); }
+.posterTrees > i:nth-child(4) { right: 5vw; transform: scale(1.6); }
+.posterTrees > i:nth-child(5) { right: 23vw; bottom: 18vh; transform: scale(.7); opacity: .72; }
+
+.posterWater {
+  width: clamp(12rem, 29vw, 34rem);
+  height: clamp(2rem, 6vw, 5rem);
+  position: absolute;
+  z-index: 6;
+  left: 27vw;
+  bottom: 9vh;
+  border: 1px solid rgba(170, 207, 198, .2);
+  border-radius: 50%;
+  background: linear-gradient(90deg, rgba(65, 119, 108, .16), rgba(207, 170, 111, .22), rgba(49, 99, 89, .18));
+  filter: blur(1px);
+  transform: rotate(-5deg);
+}
+
+.posterMotes > i {
+  width: .28rem;
+  height: .28rem;
+  position: absolute;
+  z-index: 7;
+  border-radius: 50%;
+  background: #ddb26e;
+  box-shadow: 0 0 1rem #dba65a;
+  opacity: .72;
+}
+
+.posterMotes > i:nth-child(1) { left: 23%; top: 32%; }
+.posterMotes > i:nth-child(2) { left: 47%; top: 24%; }
+.posterMotes > i:nth-child(3) { left: 58%; top: 48%; }
+.posterMotes > i:nth-child(4) { left: 73%; top: 29%; }
+.posterMotes > i:nth-child(5) { left: 41%; top: 62%; }
+
+.editorial {
+  max-width: 36rem;
+  position: absolute;
+  z-index: 12;
+  inset-inline-end: clamp(1.25rem, 5vw, 5rem);
+  bottom: clamp(7.5rem, 12vh, 10rem);
+}
+
+.conceptLabel {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin: 0 0 1rem;
+  color: rgba(244, 236, 223, .7);
+  font-size: .72rem;
+  letter-spacing: .04em;
+}
+
+.conceptLabel span { width: 2.5rem; height: 1px; background: var(--bronze); }
+.editorial h1 { margin: 0; font-size: clamp(3.5rem, 7.2vw, 7.5rem); font-weight: 500; line-height: 1.02; letter-spacing: -.055em; text-wrap: balance; }
+.lead { max-width: 30rem; margin: 1.25rem 0 0; color: rgba(244, 236, 223, .76); font-size: clamp(.9rem, 1.2vw, 1.05rem); line-height: 2; }
+.status { display: flex; align-items: center; gap: .7rem; margin: 1.25rem 0 0; color: rgba(244, 236, 223, .7); font-size: .74rem; }
+.status i { width: .5rem; height: .5rem; border-radius: 50%; background: var(--bronze); box-shadow: 0 0 0 .35rem rgba(210, 160, 93, .12); }
+.failure { max-width: 30rem; margin: 1.25rem 0 0; padding-inline-start: 1rem; border-inline-start: 1px solid var(--bronze); color: rgba(244, 236, 223, .82); font-size: .8rem; line-height: 1.9; }
+.fallbackActions { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
+.fallbackActions button { min-height: 2.75rem; margin-top: 1.4rem; padding-inline: 1rem; border: 1px solid rgba(244, 236, 223, .46); color: var(--ivory); background: rgba(6, 19, 15, .55); font: inherit; font-size: .76rem; cursor: pointer; }
+.fallbackLink { width: fit-content; min-height: 2.75rem; display: inline-flex; align-items: center; gap: 2rem; margin-top: 1.4rem; border-bottom: 1px solid rgba(244, 236, 223, .45); color: var(--ivory); text-decoration: none; font-size: .8rem; }
+.locationNote { position: absolute; z-index: 12; inset-inline-start: clamp(1.25rem, 4vw, 4rem); bottom: 2rem; margin: 0; color: rgba(244, 236, 223, .48); font-size: .66rem; letter-spacing: .05em; }
+.page :is(a, button):focus-visible { outline: 3px solid var(--bronze); outline-offset: 4px; }
+
+@media (max-width: 720px) {
+  .experience, .canvasSlot { min-height: 100dvh; }
+  .posterIsland { width: 38rem; height: 21rem; left: -13rem; bottom: 12vh; }
+  .posterVilla { width: 15rem; height: 8.5rem; left: 17vw; bottom: 28vh; }
+  .posterTrees > i:nth-child(2), .posterTrees > i:nth-child(5) { display: none; }
+  .posterTrees > i:nth-child(3) { left: 62vw; }
+  .posterWater { left: 12vw; bottom: 20vh; }
+  .editorial { inset-inline: 1rem; bottom: calc(5.25rem + env(safe-area-inset-bottom)); }
+  .editorial h1 { font-size: clamp(3rem, 14vw, 4.75rem); }
+  .lead { max-width: 22rem; font-size: .84rem; line-height: 1.8; }
+  .fallbackLink { margin-top: 1rem; }
+  .locationNote { display: none; }
+  .sceneControls {
+    width: auto;
+    inset-inline: 1rem;
+    bottom: calc(.75rem + env(safe-area-inset-bottom));
+    display: block;
+  }
+  .viewpoints {
+    overflow-x: auto;
+    grid-template-columns: repeat(4, minmax(5.3rem, 1fr));
+    scrollbar-width: none;
+  }
+  .viewpoints::-webkit-scrollbar { display: none; }
+  .resetView { position: absolute; inset-inline-end: 0; bottom: calc(100% + .65rem); }
+  .interactionHint { display: none; }
+  .editorial { bottom: calc(10.5rem + env(safe-area-inset-bottom)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .posterLayer, .canvasLayer, .sceneControls, .viewpoints button, .resetView, .poster, .poster * { animation: none !important; transition: none !important; }
+}

@@ -91,7 +91,22 @@ export default function VillaDetailPage() {
   }, [activePhoto]);
 
   useEffect(() => {
-    if (!checkin || !checkout || nights < 2) {
+    if (!checkin || !checkout) {
+      setDatesAvailable(false);
+      setDateMessage("تاریخ ورود و خروج را انتخاب کنید.");
+      return;
+    }
+    if (checkin < dateFromToday(0)) {
+      setDatesAvailable(false);
+      setDateMessage("تاریخ ورود نمی‌تواند گذشته باشد.");
+      return;
+    }
+    if (checkout <= checkin) {
+      setDatesAvailable(false);
+      setDateMessage("تاریخ خروج باید بعد از ورود باشد.");
+      return;
+    }
+    if (nights < 2) {
       setDatesAvailable(false);
       setDateMessage("حداقل اقامت این ویلا ۲ شب است.");
       return;
@@ -186,7 +201,7 @@ export default function VillaDetailPage() {
 
         <aside id="booking-panel" className="luxury-booking-wrap" aria-label="انتخاب تاریخ و رزرو"><div className="luxury-booking-card">
           {bookingStep < 2 ? <><header><div><strong>{villa.priceLabel}</strong><span> تومان / شب</span></div><small>{villa.instant ? "رزرو آنی" : "درخواست رزرو"}</small></header>
-            <div className="luxury-booking-fields"><ShamsiDateField value={checkin} onChange={setCheckin} label="ورود" disabledDates={unavailableDates} /><ShamsiDateField value={checkout} minValue={checkin} onChange={setCheckout} label="خروج" disabledDates={unavailableDates} /><PublicSelect className="booking-guest-select" label="مهمانان" value={guests} onChange={setGuests} options={Array.from({ length: villa.guests }, (_, index) => index + 1).map((count) => ({ value: String(count), label: `${count.toLocaleString("fa-IR")} مهمان` }))} /></div>
+            <div className="luxury-booking-fields"><ShamsiDateField value={checkin} minValue={dateFromToday(0)} onChange={setCheckin} label="ورود" disabledDates={unavailableDates} /><ShamsiDateField value={checkout} minValue={checkin || dateFromToday(0)} onChange={setCheckout} label="خروج" disabledDates={unavailableDates} /><PublicSelect className="booking-guest-select" label="مهمانان" value={guests} onChange={setGuests} options={Array.from({ length: villa.guests }, (_, index) => index + 1).map((count) => ({ value: String(count), label: `${count.toLocaleString("fa-IR")} مهمان` }))} /></div>
             {dateMessage && <p className={datesAvailable ? "luxury-date-status is-available" : "luxury-date-status"}>{datesAvailable ? "✓" : "◌"} {dateMessage}</p>}
             {bookingStep === 1 && <label className="luxury-phone-field"><span>شماره موبایل برای ادامه</span><input dir="ltr" inputMode="tel" value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="09•• ••• ••••" /></label>}
             <button className="luxury-booking-submit" type="button" disabled={authBusy || quoteLoading || !quote || datesAvailable !== true || nights < 2} onClick={() => bookingStep === 0 ? continueToCheckout() : sendOtp()}>{bookingStep === 0 ? quoteLoading ? "در حال محاسبه قیمت…" : "ادامه رزرو" : authBusy ? "در حال ارسال…" : "ارسال کد تأیید"}<span>←</span></button>

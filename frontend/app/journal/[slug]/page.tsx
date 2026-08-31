@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { InnerHeader } from "../../components/InnerHeader";
+import { PublicFooter } from "../../components/PublicFooter";
 import { VillaOneApiError, type JournalArticle, fetchArticle, formatPersianDate } from "../../lib/api";
 import ArticleReader from "./ArticleReader";
+import styles from "../Journal.module.css";
 
 type ArticlePageProps = { params: Promise<{ slug: string }> };
 
@@ -58,7 +61,7 @@ function ArticleCover({ article }: { article: JournalArticle }) {
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
   const article = await getArticle(slug);
-  if (!article) return <main dir="rtl" className="inner-page article-page"><InnerHeader /><section className="journal-state section-shell"><strong>مقاله موقتاً در دسترس نیست.</strong><p>مقاله‌های منتشرشده پس از آماده‌سازی از اینجا در دسترس هستند.</p><a href="/journal">بازگشت به مجله</a></section></main>;
+  if (!article) return <main dir="rtl" className={`${styles.articlePage} inner-page article-page`}><InnerHeader /><section className="journal-state section-shell"><strong>مقاله موقتاً در دسترس نیست.</strong><p>مقاله‌های منتشرشده پس از آماده‌سازی از اینجا در دسترس هستند.</p><a href="/journal">بازگشت به مجله</a></section><PublicFooter /></main>;
 
   const siteUrl = process.env.NEXT_PUBLIC_VILLAONE_SITE_URL || "http://localhost:3001";
   const headings = getHeadings(article.body_html);
@@ -78,7 +81,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const jsonLdString = JSON.stringify(jsonLd).replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026");
 
   return (
-    <main dir="rtl" className="inner-page article-page">
+    <main dir="rtl" className={`${styles.articlePage} inner-page article-page`}>
       <InnerHeader />
       <article>
         <header className="article-header">
@@ -95,11 +98,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <div className="article-body" dangerouslySetInnerHTML={{ __html: article.body_html || "" }} />
           </div>
         </ArticleReader>
-        {article.cta && <a className="article-cta" href={article.cta.url}>{article.cta.label}<span>←</span></a>}
-        {article.related_articles && article.related_articles.length > 0 && <section className="article-related" aria-labelledby="related-articles"><div className="section-heading"><p className="eyebrow dark"><span /> ادامه بخوانید</p><h2 id="related-articles">روایت‌های مرتبط</h2></div><div className="article-related-grid">{article.related_articles.map((related) => <a key={related.slug} href={`/journal/${related.slug}`}><div className="article-related-image">{related.cover_image ? <img src={related.cover_image} alt={related.title} /> : <span>ویلاوان</span>}</div><span>{related.category}</span><h3>{related.title}</h3></a>)}</div></section>}
-        <footer className="article-footer"><a href="/journal">← بازگشت به مجله</a><a href="/villas">کشف ویلاهای ویلاوان <span>↗</span></a></footer>
+        {article.cta && <Link className="article-cta" href={article.cta.url}>{article.cta.label}<span>←</span></Link>}
+        {article.related_articles && article.related_articles.length > 0 && <section className="article-related" aria-labelledby="related-articles"><div className="section-heading"><p className="eyebrow dark"><span /> ادامه بخوانید</p><h2 id="related-articles">روایت‌های مرتبط</h2></div><div className="article-related-grid">{article.related_articles.map((related) => <Link key={related.slug} href={`/journal/${related.slug}`}><div className="article-related-image">{related.cover_image ? <img src={related.cover_image} alt={related.title} /> : <span>ویلاوان</span>}</div><span>{related.category}</span><h3>{related.title}</h3></Link>)}</div></section>}
+        <footer className="article-footer"><Link href="/journal">← بازگشت به مجله</Link><Link href="/villas">کشف ویلاهای ویلاوان <span>↗</span></Link></footer>
       </article>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdString }} />
+      <PublicFooter />
     </main>
   );
 }

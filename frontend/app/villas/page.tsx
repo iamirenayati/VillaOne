@@ -6,7 +6,10 @@ import { useSearchParams } from "next/navigation";
 import { BrandMark } from "../components/BrandLogo";
 import { InnerHeader } from "../components/InnerHeader";
 import { PublicSelect } from "../components/PublicSelect";
+import { PublicFooter } from "../components/PublicFooter";
 import { ShamsiDateField } from "../components/ShamsiDateField";
+import { Button } from "../components/ui/Button";
+import { EmptyState, ErrorState } from "../components/ui/Feedback";
 import type { VillaListing } from "../types/villa";
 import { fetchCities, fetchFavoriteVillas, fetchVillas, hasAuthenticatedSession, toggleVillaFavorite } from "../lib/api";
 import styles from "./Villas.module.css";
@@ -102,7 +105,11 @@ export default function VillasPage() {
   function runSearch(event?: FormEvent<HTMLFormElement>) {
     event?.preventDefault();
     if (!checkin || !checkout) { setSearchError("لطفاً تاریخ ورود و خروج را انتخاب کنید."); return; }
+    const today = dateFromToday(0);
+    const nights = Math.round((new Date(`${checkout}T12:00:00`).getTime() - new Date(`${checkin}T12:00:00`).getTime()) / 86_400_000);
+    if (checkin < today) { setSearchError("تاریخ ورود نمی‌تواند گذشته باشد."); return; }
     if (checkout <= checkin) { setSearchError("تاریخ خروج باید بعد از تاریخ ورود باشد."); return; }
+    if (nights < 2) { setSearchError("حداقل مدت اقامت دو شب است."); return; }
     if (Number(guests) < 1) { setSearchError("تعداد مهمانان را انتخاب کنید."); return; }
     setSearchError("");
     const next = { city, checkin, checkout, guests };
@@ -149,7 +156,7 @@ export default function VillasPage() {
     <form className="catalog-search-shell section-shell" aria-label="جست‌وجوی ویلا" onSubmit={runSearch}>
       <div className="catalog-search-panel">
         <PublicSelect className="catalog-select-field" label="مقصد" value={city} onChange={setCity} options={cities.map((item) => ({ value: item, label: item }))} />
-        <ShamsiDateField value={checkin} onChange={setCheckin} label="ورود" />
+        <ShamsiDateField value={checkin} minValue={dateFromToday(0)} onChange={setCheckin} label="ورود" />
         <ShamsiDateField value={checkout} minValue={checkin} onChange={setCheckout} label="خروج" />
         <PublicSelect className="catalog-select-field" label="مهمان" value={guests} onChange={setGuests} options={[2, 4, 6, 8, 10, 12].map((count) => ({ value: String(count), label: `${count.toLocaleString("fa-IR")} نفر` }))} />
         <button type="submit"><span>جست‌وجوی اقامتگاه</span><b aria-hidden="true">←</b></button>
@@ -177,8 +184,8 @@ export default function VillasPage() {
 
         <div className="catalog-results" aria-live="polite">
           {dataSource === "loading" && <CatalogSkeleton />}
-          {dataSource === "error" && <div className="catalog-error-state" role="alert"><span>!</span><h2>دریافت ویلاها ممکن نشد</h2><p>اتصال با سرور برقرار نشد. دوباره تلاش کنید؛ اطلاعات غیرواقعی جایگزین نمی‌شود.</p><button type="button" onClick={() => setRequestRevision((value) => value + 1)}>تلاش دوباره</button></div>}
-          {dataSource === "ready" && results.length === 0 && <div className="catalog-empty-state"><span>⌂</span><h2>ویلایی با این انتخاب‌ها پیدا نشد</h2><p>محدوده قیمت یا فیلتر امکانات را بازتر کنید.</p><button type="button" onClick={clearFilters}>نمایش همه انتخاب‌ها</button></div>}
+          {dataSource === "error" && <ErrorState className="catalog-error-state" title="دریافت ویلاها ممکن نشد" message="اتصال با سرور برقرار نشد. دوباره تلاش کنید؛ اطلاعات غیرواقعی جایگزین نمی‌شود." onRetry={() => setRequestRevision((value) => value + 1)} />}
+          {dataSource === "ready" && results.length === 0 && <EmptyState className="catalog-empty-state" title="ویلایی با این انتخاب‌ها پیدا نشد" message="محدوده قیمت یا فیلتر امکانات را بازتر کنید." action={<Button variant="secondary" size="sm" onClick={clearFilters}>نمایش همه انتخاب‌ها</Button>} />}
           {dataSource === "ready" && results.length > 0 && <div className="luxury-villa-grid">{results.map((villa) => {
             const selected = favorites.includes(villa.slug);
             const galleryCount = Math.max(villa.gallery.length, villa.image ? 1 : 0);
@@ -193,6 +200,6 @@ export default function VillasPage() {
     </section>
 
     <section className="catalog-map-cta section-shell"><div><span>◎</span><div><small>دید متفاوت</small><h2>ویلاها را روی نقشه مازندران ببینید</h2><p>شهر، فاصله و موقعیت تقریبی اقامتگاه‌ها را یک‌جا مقایسه کنید.</p></div></div><Link href="/map">باز کردن نقشه <b>←</b></Link></section>
-    <footer className="mini-footer"><div className="section-shell"><span>© {new Intl.DateTimeFormat("fa-IR-u-ca-persian", { year: "numeric" }).format(new Date())} ویلاوان</span><div><Link href="/support">پشتیبانی</Link><Link href="/terms">قوانین رزرو</Link><Link href="/privacy">حریم خصوصی</Link></div></div></footer>
+    <PublicFooter />
   </main>;
 }
