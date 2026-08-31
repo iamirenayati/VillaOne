@@ -1,0 +1,82 @@
+.page {
+  min-height: 100vh;
+  color: var(--vo-ink-900);
+  background:
+    radial-gradient(circle at 85% 0, rgb(138 167 157 / .18), transparent 28rem),
+    var(--vo-surface);
+}
+
+.page :global(.notification-shell) {
+  width: min(100% - clamp(1rem, 5vw, 5rem), 58rem);
+  padding-block: clamp(2rem, 6vw, 5rem) 7rem;
+}
+
+.page :global(.notification-shell > a) {
+  color: var(--vo-ink-500);
+  font-size: .64rem;
+  text-decoration: none;
+}
+
+.page :global(.notification-shell > .eyebrow) { margin-top: 3rem; }
+.page :global(.notification-shell h1) { margin: .75rem 0 .7rem; color: var(--vo-pine-950); font-size: clamp(2.5rem, 6vw, 4.8rem); font-weight: 550; line-height: 1.28; letter-spacing: -.05em; }
+.page :global(.notification-shell > p:not(.eyebrow):not(.notification-message)) { max-width: 36rem; margin: 0; color: var(--vo-ink-500); font-size: .72rem; line-height: 2; }
+
+.page :global(.notification-inbox),
+.page :global(.notification-options),
+.page :global(.notification-loading) {
+  margin-top: 2rem;
+  overflow: hidden;
+  border: 1px solid var(--vo-line);
+  border-radius: var(--vo-radius-lg);
+  background: var(--vo-surface-raised);
+  box-shadow: var(--vo-shadow-soft);
+}
+
+.page :global(.notification-inbox > header) { padding: 1.15rem 1.3rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--vo-line); }
+.page :global(.notification-inbox h2),
+.page :global(.notification-options h2) { margin: 0; color: var(--vo-pine-900); font-size: .95rem; }
+.page :global(.notification-inbox > header span) { padding: .4rem .65rem; border-radius: var(--vo-radius-round); color: var(--vo-caspian-700); background: var(--vo-mist-50); font-size: .58rem; }
+
+.page :global(.notification-inbox > button) { width: 100%; min-height: 5.1rem; padding: 1rem 1.3rem; display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 1rem; border: 0; border-bottom: 1px solid var(--vo-line); color: inherit; background: transparent; font-family: inherit; text-align: right; cursor: pointer; transition: background-color 160ms ease; }
+.page :global(.notification-inbox > button:last-of-type) { border-bottom: 0; }
+.page :global(.notification-inbox > button.unread) { background: linear-gradient(90deg, rgb(231 243 238 / .56), transparent); }
+.page :global(.notification-inbox > button:hover) { background: var(--vo-mist-50); }
+.page :global(.notification-inbox > button > span) { min-width: 0; }
+.page :global(.notification-inbox b), .page :global(.notification-inbox small) { display: block; }
+.page :global(.notification-inbox b) { overflow: hidden; color: var(--vo-pine-900); font-size: .68rem; text-overflow: ellipsis; white-space: nowrap; }
+.page :global(.notification-inbox small) { margin-top: .28rem; overflow: hidden; color: var(--vo-ink-500); font-size: .6rem; line-height: 1.8; text-overflow: ellipsis; white-space: nowrap; }
+.page :global(.notification-inbox time) { color: var(--vo-ink-400); font-size: .56rem; white-space: nowrap; }
+.page :global(.notification-inbox em) { padding: .25rem .45rem; border: 1px solid var(--vo-line); border-radius: var(--vo-radius-sm); color: var(--vo-ink-500); font-size: .52rem; font-style: normal; white-space: nowrap; }
+.page :global(.notification-empty) { margin: 0; padding: 3rem 1rem; color: var(--vo-ink-500); font-size: .68rem; text-align: center; }
+
+.page :global(.notification-options) { padding: 1.3rem; }
+.page :global(.notification-options > p) { margin: .5rem 0 1rem; color: var(--vo-ink-500); font-size: .64rem; line-height: 1.9; }
+.page :global(.notification-options label) { min-height: 4rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--vo-line); }
+.page :global(.notification-options label:last-of-type) { border-bottom: 0; }
+.page :global(.notification-options b), .page :global(.notification-options small) { display: block; }
+.page :global(.notification-options b) { color: var(--vo-pine-900); font-size: .66rem; }
+.page :global(.notification-options small) { margin-top: .2rem; color: var(--vo-ink-500); font-size: .56rem; }
+.page :global(.notification-options input) { width: 1.1rem; height: 1.1rem; accent-color: var(--vo-pine-800); }
+.page :global(.notification-options > button) { min-height: 2.8rem; margin-top: 1.1rem; padding-inline: 1rem; border: 0; border-radius: var(--vo-radius-control); color: #fff; background: var(--vo-pine-950); font-family: inherit; font-size: .62rem; cursor: pointer; }
+.page :global(.notification-options > button:disabled) { opacity: .55; cursor: wait; }
+.page :global(.notification-error) { margin-top: 1.5rem; padding: 1rem 1.1rem; border: 1px solid rgb(153 64 50 / .22); border-radius: var(--vo-radius-md); color: var(--vo-danger-700); background: rgb(255 248 245 / .92); }
+.page :global(.notification-error p) { margin: 0; font-size: .66rem; line-height: 1.8; }
+.page :global(.notification-error button) { min-height: 2.4rem; margin-top: .75rem; padding-inline: .75rem; border: 1px solid currentColor; border-radius: var(--vo-radius-control); color: inherit; background: transparent; font-family: inherit; font-size: .6rem; cursor: pointer; }
+.page :global(.notification-message) { margin-top: 1rem; color: var(--vo-caspian-700); font-size: .64rem; }
+.page :global(:is(a, button, input):focus-visible) { outline: 3px solid var(--vo-focus); outline-offset: 3px; }
+
+@media (max-width: 42rem) {
+  .page :global(.notification-shell) { width: min(100% - 1rem, 40rem); }
+  .page :global(.notification-shell > .eyebrow) { margin-top: 2.25rem; }
+  .page :global(.notification-inbox > button) { grid-template-columns: minmax(0, 1fr) auto; gap: .45rem .75rem; }
+  .page :global(.notification-inbox time) { grid-column: 2; grid-row: 1; }
+  .page :global(.notification-inbox em) { grid-column: 1 / -1; grid-row: 2; width: max-content; }
+}
+
+@media (max-width: 24rem) {
+  .page :global(.notification-inbox > header), .page :global(.notification-options) { padding-inline: .85rem; }
+  .page :global(.notification-inbox > button) { padding-inline: .85rem; }
+  .page :global(.notification-inbox small) { white-space: normal; }
+}
+
+@media (prefers-reduced-motion: reduce) { .page :global(.notification-inbox > button) { transition: none; } }

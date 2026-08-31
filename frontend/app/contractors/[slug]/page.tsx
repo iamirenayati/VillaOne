@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { InnerHeader } from "../../components/InnerHeader";
 import { InquiryForm } from "../../components/InquiryForm";
 import { type Contractor, type ContractorCatalogItem, fetchContractor } from "../../lib/api";
+import styles from "../Contractor.module.css";
 
 function formatBudget(value: number) {
   if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toLocaleString("fa-IR", { maximumFractionDigits: 1 })} میلیارد`;
@@ -152,7 +153,7 @@ export default function ContractorDetailPage() {
 
   useEffect(() => { void load(); }, [load]);
 
-  return <main dir="rtl" className="inner-page market-detail contractor-profile-page">
+  return <main dir="rtl" className={`${styles.page} inner-page market-detail contractor-profile-page`}>
     <InnerHeader />
     {loading ? <div className="contractor-profile-loading section-shell" role="status" aria-live="polite" aria-busy="true"><span className="status-pulse" /><p>در حال آماده‌سازی کاتالوگ…</p></div> : error ? <div className="market-state section-shell market-state-error" role="alert"><strong>{error}</strong><span>ممکن است پروفایل منتشر نشده باشد یا ارتباط با سرور قطع شده باشد.</span><button type="button" onClick={() => void load()}>تلاش دوباره</button><a className="text-link" href="/contractors">بازگشت به متخصصان</a></div> : item ? <ContractorProfile item={item} /> : null}
   </main>;

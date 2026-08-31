@@ -1,8 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
 import { InnerHeader } from "../components/InnerHeader";
 import { type Contractor, fetchContractors } from "../lib/api";
+import styles from "./Contractor.module.css";
 
 function ContractorPortrait({ item }: { item: Contractor }) {
   return <a className="contractor-showcase-visual" href={`/contractors/${item.slug}`} aria-label={`مشاهده پروفایل ${item.name}`}>
@@ -64,9 +66,11 @@ export default function ContractorsPage() {
 
   useEffect(() => { void load(); }, [load]);
 
-  return <main dir="rtl" className="inner-page market-page contractor-page contractor-directory-v2">
+  return <main dir="rtl" className={`${styles.page} inner-page market-page contractor-page contractor-directory-v2`}>
     <InnerHeader />
     <section className="contractor-editorial-hero">
+      <img className="contractor-hero-art" src="/images/editorial/architecture-studio.webp" alt="" width="960" height="1200" fetchPriority="high" />
+      <div className="contractor-hero-shade" aria-hidden="true" />
       <div className="section-shell contractor-editorial-hero-inner">
         <div className="contractor-hero-copy">
           <p className="eyebrow"><span /> شبکه تخصصی ساخت در مازندران</p>

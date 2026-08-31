@@ -1,0 +1,52 @@
+.page { min-height: 100vh; color: var(--vo-ink-900); background: var(--vo-ivory-50); }
+.page :global(.receipt-shell) { width: min(100% - clamp(1rem, 5vw, 5rem), 62rem); padding-block: clamp(2rem, 6vw, 5rem) 7rem; }
+.page :global(.receipt-paper) { width: 100%; padding: clamp(1.25rem, 5vw, 3.75rem); border: 1px solid var(--vo-line); border-radius: var(--vo-radius-lg); background: var(--vo-surface-raised); box-shadow: var(--vo-shadow-card); }
+.page :global(.receipt-paper > header) { padding-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--vo-line); }
+.page :global(.receipt-paper > header > div) { display: flex; align-items: center; gap: .75rem; }
+.page :global(.receipt-paper > header strong), .page :global(.receipt-paper > header small) { display: block; }
+.page :global(.receipt-paper > header strong) { color: var(--vo-pine-950); font-size: .76rem; letter-spacing: .14em; }
+.page :global(.receipt-paper > header small) { margin-top: .25rem; color: var(--vo-ink-500); font-size: .6rem; }
+.page :global(.receipt-paper > header button) { min-height: 2.65rem; padding: 0 .8rem; border: 1px solid var(--vo-line-strong); border-radius: var(--vo-radius-control); color: var(--vo-pine-700); background: transparent; font-family: inherit; font-size: .6rem; cursor: pointer; }
+.page :global(.receipt-title) { padding: 2.5rem 0 1.75rem; position: relative; }
+.page :global(.receipt-title p) { margin: 0; color: var(--vo-ink-500); font-size: .62rem; }
+.page :global(.receipt-title h1) { margin: .45rem 0 0; color: var(--vo-pine-950); font-size: clamp(1.7rem, 4vw, 2.3rem); letter-spacing: .12em; }
+.page :global(.receipt-status) { position: absolute; top: 2.5rem; left: 0; padding: .5rem .7rem; border: 1px solid rgb(183 138 74 / .2); border-radius: var(--vo-radius-round); background: var(--vo-champagne-100); color: var(--vo-champagne-700); font-size: .6rem; }
+.page :global(.receipt-status.confirmed) { border-color: rgb(36 98 84 / .18); background: var(--vo-mist-100); color: var(--vo-caspian-700); }
+.page :global(.receipt-status.cancelled), .page :global(.receipt-status.expired) { border-color: rgb(153 64 50 / .16); background: #fff3ef; color: var(--vo-danger-600); }
+.page :global(.receipt-villa) { min-height: 8rem; display: grid; grid-template-columns: 9rem minmax(0, 1fr); border: 1px solid var(--vo-line); border-radius: var(--vo-radius-md); overflow: hidden; }
+.page :global(.receipt-villa img), .page :global(.receipt-villa-placeholder) { width: 9rem; height: 8rem; display: grid; place-items: center; object-fit: cover; background: var(--vo-pine-950); color: var(--vo-champagne-500); font-size: 1.3rem; }
+.page :global(.receipt-villa > div:last-child) { padding: 1.25rem; }
+.page :global(.receipt-villa small) { color: var(--vo-ink-500); font-size: .6rem; }
+.page :global(.receipt-villa h2) { margin: .4rem 0; color: var(--vo-pine-950); font-size: 1rem; }
+.page :global(.receipt-villa p) { margin: 0; color: var(--vo-ink-600); font-size: .65rem; }
+.page :global(.receipt-finance), .page :global(.receipt-payments), .page :global(.receipt-review) { margin-top: 2rem; }
+.page :global(.receipt-finance h2), .page :global(.receipt-payments h2), .page :global(.receipt-review h2) { margin: 0 0 .8rem; color: var(--vo-pine-900); font-size: .86rem; }
+.page :global(.receipt-finance dl) { margin: 0; border-top: 1px solid var(--vo-line); }
+.page :global(.receipt-finance dl > div) { min-height: 3rem; padding: .7rem 0; display: flex; justify-content: space-between; align-items: center; gap: 1rem; border-bottom: 1px solid var(--vo-line); }
+.page :global(.receipt-finance dt) { color: var(--vo-ink-600); font-size: .66rem; }
+.page :global(.receipt-finance dd) { margin: 0; color: var(--vo-pine-800); font-size: .7rem; font-weight: 650; }
+.page :global(.receipt-payments > div) { min-height: 4rem; padding: .8rem 1rem; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .3rem 1rem; border: 1px solid var(--vo-line); border-radius: var(--vo-radius-sm); background: var(--vo-paper); }
+.page :global(.receipt-payments > div + div) { border-top: 0; border-radius: 0 0 var(--vo-radius-sm) var(--vo-radius-sm); }
+.page :global(.receipt-payments > div:first-of-type) { border-radius: var(--vo-radius-sm) var(--vo-radius-sm) 0 0; }
+.page :global(.receipt-payments span b), .page :global(.receipt-payments span small) { display: block; }
+.page :global(.receipt-payments span b) { color: var(--vo-pine-800); font-size: .67rem; }
+.page :global(.receipt-payments span small) { margin-top: .25rem; color: var(--vo-ink-500); font-size: .59rem; line-height: 1.65; }
+.page :global(.receipt-payments strong) { color: var(--vo-pine-900); font-size: .68rem; white-space: nowrap; }
+.page :global(.receipt-payments code) { grid-column: 1 / -1; color: var(--vo-ink-400); font-size: .58rem; }
+.page :global(.receipt-payments > p) { margin: 0; padding: 1rem; border: 1px dashed var(--vo-line-strong); border-radius: var(--vo-radius-sm); color: var(--vo-ink-500); font-size: .66rem; }
+.page :global(.receipt-review) { padding: 1.25rem; border: 1px solid var(--vo-line); border-radius: var(--vo-radius-md); background: var(--vo-paper); }
+.page :global(.review-form) { display: grid; gap: .7rem; }
+.page :global(.review-form input), .page :global(.review-form textarea) { width: 100%; padding: .8rem; border: 1px solid var(--vo-line-strong); border-radius: var(--vo-radius-control); background: #fff; color: var(--vo-ink-900); font-family: inherit; font-size: .7rem; }
+.page :global(.review-form > button) { min-height: 3rem; border: 0; border-radius: var(--vo-radius-control); background: var(--vo-pine-950); color: #fff; font-family: inherit; font-size: .68rem; cursor: pointer; }
+.page :global(.review-form > button:disabled) { opacity: .55; cursor: not-allowed; }
+.page :global(.review-message) { margin: .75rem 0 0; color: var(--vo-caspian-700); font-size: .65rem; }
+.page :global(.receipt-paper > footer) { margin-top: 2.5rem; padding-top: 1.25rem; display: flex; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--vo-line); }
+.page :global(.receipt-paper > footer p), .page :global(.receipt-paper > footer a) { margin: 0; color: var(--vo-ink-500); font-size: .6rem; }
+.page :global(.receipt-paper > footer a) { color: var(--vo-pine-700); text-decoration: none; }
+.page :global(.receipt-state) { min-height: 28rem; padding: 2rem; display: grid; place-items: center; align-content: center; text-align: center; border: 1px solid var(--vo-line); border-radius: var(--vo-radius-lg); background: var(--vo-surface-raised); }
+.page :global(.receipt-state h1) { margin: 0 0 .8rem; color: var(--vo-pine-950); font-size: clamp(2.4rem, 7vw, 4rem); }
+.page :global(.receipt-state p) { max-width: 28rem; color: var(--vo-ink-500); font-size: .72rem; line-height: 2; }
+.page :global(.receipt-state a) { min-height: 3rem; padding: 0 1rem; display: inline-flex; align-items: center; border-radius: var(--vo-radius-control); background: var(--vo-pine-950); color: #fff; font-size: .65rem; text-decoration: none; }
+.page :global(:is(button, input, textarea, a):focus-visible) { outline: 3px solid var(--vo-focus); outline-offset: 3px; }
+@media (max-width: 38rem) { .page :global(.receipt-shell) { width: min(100% - 1rem, 40rem); padding-top: 1.25rem; } .page :global(.receipt-paper) { padding: 1rem; } .page :global(.receipt-paper > header) { align-items: flex-start; flex-direction: column; gap: 1rem; } .page :global(.receipt-paper > header button) { width: 100%; } .page :global(.receipt-status) { position: static; display: inline-flex; margin-top: 1rem; } .page :global(.receipt-villa) { grid-template-columns: 1fr; } .page :global(.receipt-villa img), .page :global(.receipt-villa-placeholder) { width: 100%; height: 12rem; } .page :global(.receipt-villa > div:last-child) { padding: 1rem; } .page :global(.receipt-payments > div) { grid-template-columns: 1fr; } .page :global(.receipt-payments strong) { text-align: right; } .page :global(.receipt-paper > footer) { align-items: flex-start; flex-direction: column; } }
+@media print { .page { background: #fff; } .page :global(.receipt-paper) { border: 0; box-shadow: none; } .page :global(.inner-header), .page :global(.receipt-paper > header button), .page :global(.receipt-review) { display: none; } .page :global(.receipt-shell) { width: 100%; padding: 0; } }

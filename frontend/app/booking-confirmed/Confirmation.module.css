@@ -1,0 +1,53 @@
+.page { min-height: 100vh; color: var(--vo-ink-900); background: var(--vo-surface); }
+.page :global(.confirmation-hero) { min-height: 34rem; padding: clamp(7rem, 14vw, 11rem) max(1rem, calc((100% - 80rem) / 2)) clamp(3rem, 7vw, 6rem); display: grid; grid-template-columns: minmax(16rem, .78fr) minmax(0, 1.22fr); align-items: center; gap: clamp(2rem, 7vw, 8rem); color: #fff; background: radial-gradient(circle at 20% 80%, rgb(67 120 104 / .34), transparent 34rem), var(--vo-pine-950); }
+.page :global(.confirmation-copy) { max-width: 44rem; }
+.page :global(.confirmation-copy .eyebrow) { color: var(--vo-champagne-500); }
+.page :global(.confirmation-copy h1) { margin: .9rem 0 1.1rem; white-space: pre-line; font-size: clamp(3.2rem, 7vw, 6.6rem); font-weight: 540; line-height: 1.22; letter-spacing: -.055em; }
+.page :global(.confirmation-copy > p:not(.eyebrow)) { max-width: 35rem; margin: 0; color: rgb(255 255 255 / .7); font-size: .83rem; line-height: 2; }
+.page :global(.confirmation-code) { width: min(100%, 21rem); margin-top: 2rem; padding: .8rem 1rem; display: grid; grid-template-columns: 1fr auto; gap: .25rem 1rem; border: 1px solid rgb(255 255 255 / .2); border-radius: var(--vo-radius-md); background: rgb(255 255 255 / .07); }
+.page :global(.confirmation-code span) { color: rgb(255 255 255 / .55); font-size: .58rem; }
+.page :global(.confirmation-code strong) { color: #fff; font-size: .88rem; letter-spacing: .12em; }
+.page :global(.confirmation-code button) { grid-column: 2; grid-row: 1 / 3; min-height: 2.5rem; padding: 0 .7rem; border: 1px solid rgb(255 255 255 / .3); border-radius: var(--vo-radius-control); color: #fff; background: transparent; font-family: inherit; font-size: .58rem; cursor: pointer; }
+.page :global(.confirmation-art) { min-height: 18rem; position: relative; display: grid; place-items: center; border: 1px solid rgb(255 255 255 / .12); border-radius: 50%; background: radial-gradient(circle, rgb(199 165 107 / .2), transparent 58%), rgb(255 255 255 / .04); }
+.page :global(.confirmation-art > b) { position: absolute; top: 1.75rem; right: 2.25rem; color: rgb(255 255 255 / .42); font-size: .72rem; letter-spacing: .18em; }
+.page :global(.success-ring) { width: 8rem; height: 8rem; display: grid; place-items: center; border: 1px solid rgb(199 165 107 / .65); border-radius: 50%; box-shadow: 0 0 0 1.6rem rgb(199 165 107 / .06), 0 0 0 3.4rem rgb(199 165 107 / .035); }
+.page :global(.success-ring i) { width: 3.25rem; height: 3.25rem; display: grid; place-items: center; border-radius: 50%; background: var(--vo-champagne-500); color: var(--vo-pine-950); font-size: 1.3rem; font-style: normal; }
+.page :global(.orbit) { position: absolute; border: 1px solid rgb(255 255 255 / .16); border-radius: 50%; transform: rotate(-25deg); }
+.page :global(.orbit-one) { width: 74%; height: 33%; }
+.page :global(.orbit-two) { width: 40%; height: 84%; transform: rotate(31deg); }
+.page :global(.confirmation-body) { width: min(100% - clamp(1rem, 5vw, 5rem), 80rem); padding-block: clamp(2rem, 5vw, 4.5rem) 7rem; }
+.page :global(.confirmed-stay) { min-height: 9.5rem; padding: .75rem; display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) auto; align-items: center; gap: 1.25rem; border: 1px solid var(--vo-line); border-radius: var(--vo-radius-lg); background: var(--vo-surface-raised); box-shadow: var(--vo-shadow-soft); }
+.page :global(.confirmed-stay > img) { width: 9.5rem; height: 8rem; border-radius: var(--vo-radius-md); object-fit: cover; background: var(--vo-mist-100); }
+.page :global(.confirmed-stay-placeholder) { width: 9.5rem; height: 8rem; display: grid; place-items: center; border-radius: var(--vo-radius-md); color: var(--vo-champagne-500); background: radial-gradient(circle at 30% 20%, rgb(90 144 123 / .32), transparent 55%), var(--vo-pine-950); font: 500 1.2rem var(--font-display), serif; letter-spacing: .16em; }
+.page :global(.confirmed-stay-copy > span) { color: var(--vo-champagne-700); font-size: .62rem; }
+.page :global(.confirmed-stay-copy h2) { margin: .35rem 0; color: var(--vo-pine-950); font-size: 1.1rem; }
+.page :global(.confirmed-stay-copy p) { margin: 0; color: var(--vo-ink-500); font-size: .66rem; }
+.page :global(.confirmed-stay-copy > div) { margin-top: .75rem; display: flex; align-items: center; gap: .8rem; color: var(--vo-pine-800); font-size: .7rem; }
+.page :global(.confirmed-stay-copy > div i) { color: var(--vo-ink-400); font-style: normal; font-size: .58rem; }
+.page :global(.confirmed-stay > a) { padding: .7rem .85rem; border: 1px solid var(--vo-line-strong); border-radius: var(--vo-radius-control); color: var(--vo-pine-700); font-size: .62rem; text-decoration: none; white-space: nowrap; }
+.page :global(.confirmation-addons) { margin-top: 1.25rem; padding: 1.25rem; border: 1px solid var(--vo-line); border-radius: var(--vo-radius-lg); background: var(--vo-surface-raised); }
+.page :global(.confirmation-addons h2) { margin: 0 0 .9rem; color: var(--vo-pine-900); font-size: .86rem; }
+.page :global(.confirmation-addons > div) { display: grid; grid-template-columns: repeat(3, 1fr); gap: .65rem; }
+.page :global(.confirmation-addons > div > span) { padding: .8rem; display: grid; gap: .25rem; border: 1px solid var(--vo-line); border-radius: var(--vo-radius-sm); }
+.page :global(.confirmation-addons b) { color: var(--vo-pine-800); font-size: .68rem; }
+.page :global(.confirmation-addons small) { color: var(--vo-ink-500); font-size: .58rem; line-height: 1.7; }
+.page :global(.confirmation-grid) { margin-top: 1.25rem; display: grid; grid-template-columns: repeat(3, 1fr); border-block: 1px solid var(--vo-line); }
+.page :global(.confirmation-grid article) { min-height: 12.5rem; padding: 1.5rem; border-inline-start: 1px solid var(--vo-line); }
+.page :global(.confirmation-grid article:first-child) { border-inline-start: 0; }
+.page :global(.confirmation-grid article > span) { color: var(--vo-champagne-600); font-size: .66rem; }
+.page :global(.confirmation-grid h3) { margin: .85rem 0 .5rem; color: var(--vo-pine-900); font-size: .86rem; }
+.page :global(.confirmation-grid p) { min-height: 3rem; margin: 0; color: var(--vo-ink-500); font-size: .65rem; line-height: 1.9; }
+.page :global(.confirmation-grid small) { color: var(--vo-ink-500); font-size: .6rem; }
+.page :global(.confirmation-grid .status-waiting) { color: var(--vo-champagne-700); }
+.page :global(.confirmation-grid a) { color: var(--vo-pine-700); font-size: .62rem; text-decoration: none; }
+.page :global(.confirmation-actions) { margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: .7rem; }
+.page :global(.confirmation-actions a) { min-height: 3.1rem; padding: 0 1.2rem; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--vo-line-strong); border-radius: var(--vo-radius-control); color: var(--vo-pine-700); font-size: .66rem; text-decoration: none; }
+.page :global(.confirmation-actions .primary-confirmation-action) { border-color: var(--vo-pine-950); background: var(--vo-pine-950); color: #fff; }
+.page :global(.account-empty) { min-height: 27rem; padding: 2rem; display: grid; place-items: center; align-content: center; text-align: center; border: 1px solid var(--vo-line); border-radius: var(--vo-radius-lg); background: var(--vo-surface-raised); }
+.page :global(.account-empty h1) { margin: .8rem 0; color: var(--vo-pine-950); font-size: clamp(2.2rem, 6vw, 4rem); }
+.page :global(.account-empty p) { max-width: 30rem; color: var(--vo-ink-500); font-size: .75rem; line-height: 2; }
+.page :global(.account-empty a) { min-height: 3rem; padding: 0 1rem; display: inline-flex; align-items: center; border-radius: var(--vo-radius-control); background: var(--vo-pine-950); color: #fff; font-size: .68rem; text-decoration: none; }
+.page :global(:is(button, a):focus-visible) { outline: 3px solid var(--vo-focus); outline-offset: 3px; }
+@media (max-width: 52rem) { .page :global(.confirmation-hero) { grid-template-columns: 1fr; gap: 2rem; } .page :global(.confirmation-art) { order: -1; min-height: 12rem; max-width: 18rem; } .page :global(.confirmed-stay) { grid-template-columns: 7rem minmax(0, 1fr); } .page :global(.confirmed-stay > img), .page :global(.confirmed-stay-placeholder) { width: 7rem; height: 7rem; } .page :global(.confirmed-stay > a) { grid-column: 1 / -1; justify-self: start; } }
+@media (max-width: 38rem) { .page :global(.confirmation-hero) { padding-inline: 1rem; } .page :global(.confirmation-copy h1) { font-size: clamp(2.8rem, 14vw, 4.2rem); } .page :global(.confirmation-code) { width: 100%; } .page :global(.confirmation-body) { width: min(100% - 1rem, 40rem); } .page :global(.confirmed-stay) { grid-template-columns: 1fr; } .page :global(.confirmed-stay > img), .page :global(.confirmed-stay-placeholder) { width: 100%; height: 12rem; } .page :global(.confirmed-stay > a) { justify-self: stretch; } .page :global(.confirmation-addons > div), .page :global(.confirmation-grid) { grid-template-columns: 1fr; } .page :global(.confirmation-grid article) { min-height: auto; border-inline-start: 0; border-top: 1px solid var(--vo-line); } .page :global(.confirmation-grid article:first-child) { border-top: 0; } .page :global(.confirmation-actions) { flex-direction: column; } .page :global(.confirmation-actions a) { width: 100%; } }
+@media (prefers-reduced-motion: reduce) { .page :global(.orbit) { display: none; } }

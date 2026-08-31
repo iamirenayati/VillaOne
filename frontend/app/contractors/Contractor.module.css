@@ -1,0 +1,242 @@
+.page { min-height: 100vh; color: var(--vo-ink-900); background: var(--vo-surface); }
+.page :global(.contractor-editorial-hero) { min-height: 38rem; position: relative; overflow: hidden; color: #fff; background: var(--vo-pine-950); }
+.page :global(.contractor-hero-art) { width: 48%; height: 100%; position: absolute; inset-block: 0; inset-inline-start: 0; object-fit: cover; opacity: .74; }
+.page :global(.contractor-hero-shade) { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(8 38 31 / .22), var(--vo-pine-950) 72%), linear-gradient(180deg, transparent 45%, rgb(8 38 31 / .72)); }
+.page :global(.contractor-editorial-hero-inner) { min-height: 38rem; position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(17rem, .55fr); align-items: end; gap: clamp(2rem, 8vw, 8rem); padding-block: clamp(6rem, 12vw, 10rem) 4rem; }
+.page :global(.contractor-hero-copy) { max-width: 42rem; }
+.page :global(.contractor-hero-copy .eyebrow) { color: var(--vo-champagne-500); }
+.page :global(.contractor-hero-copy h1) { margin: 1rem 0 1.25rem; font-size: clamp(3.4rem, 8vw, 7.4rem); font-weight: 540; line-height: 1.18; letter-spacing: -.06em; }
+.page :global(.contractor-hero-copy h1 em) { color: var(--vo-champagne-500); font-style: normal; }
+.page :global(.contractor-hero-copy > p:not(.eyebrow)) { max-width: 31rem; margin: 0; color: rgb(255 255 255 / .68); font-size: .8rem; line-height: 2.1; }
+.page :global(.contractor-hero-actions) { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: .7rem; }
+.page :global(.contractor-hero-actions a) { min-height: 3rem; padding: 0 1rem; display: inline-flex; align-items: center; border: 1px solid rgb(255 255 255 / .26); border-radius: var(--vo-radius-control); color: #fff; font-size: .65rem; text-decoration: none; }
+.page :global(.contractor-hero-actions .contractor-hero-primary) { border-color: var(--vo-champagne-500); background: var(--vo-champagne-500); color: var(--vo-pine-950); }
+.page :global(.contractor-hero-note) { padding: 1.25rem; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .8rem 1rem; border: 1px solid rgb(255 255 255 / .18); border-radius: var(--vo-radius-lg); background: rgb(255 255 255 / .07); backdrop-filter: blur(18px); }
+.page :global(.contractor-hero-note > span) { color: var(--vo-champagne-500); font-size: .62rem; }
+.page :global(.contractor-hero-note p) { margin: 0; color: rgb(255 255 255 / .7); font-size: .62rem; line-height: 1.85; }
+.page :global(.contractor-directory) { width: min(100% - clamp(1rem, 5vw, 5rem), 80rem); padding-block: clamp(3.5rem, 8vw, 7rem); }
+.page :global(.contractor-directory-heading) { margin-bottom: 3.5rem; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(15rem, .7fr); align-items: end; gap: 2rem; }
+.page :global(.contractor-directory-heading h2) { margin: .75rem 0 0; color: var(--vo-pine-950); font-size: clamp(2.5rem, 5vw, 4.8rem); font-weight: 550; letter-spacing: -.05em; }
+.page :global(.contractor-directory-heading > p:last-child) { margin: 0; color: var(--vo-ink-500); font-size: .67rem; line-height: 2; }
+.page :global(.contractor-directory-count) { padding-inline-start: 1.5rem; border-inline-start: 1px solid var(--vo-line); }
+.page :global(.contractor-directory-count strong), .page :global(.contractor-directory-count span) { display: block; }
+.page :global(.contractor-directory-count strong) { color: var(--vo-pine-800); font-size: 2rem; }
+.page :global(.contractor-directory-count span) { margin-top: .25rem; color: var(--vo-ink-500); font-size: .58rem; }
+.page :global(.contractor-showcase-list) { display: grid; gap: clamp(2.5rem, 7vw, 6rem); }
+.page :global(.contractor-showcase) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .85fr); gap: clamp(1.5rem, 5vw, 5rem); align-items: center; }
+.page :global(.contractor-showcase.is-reversed) { direction: ltr; }
+.page :global(.contractor-showcase.is-reversed > *) { direction: rtl; }
+.page :global(.contractor-showcase-visual) { min-height: 31rem; position: relative; display: block; overflow: hidden; border-radius: var(--vo-radius-xl); background: var(--vo-pine-950); box-shadow: var(--vo-shadow-card); }
+.page :global(.contractor-showcase-visual img) { width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; }
+.page :global(.contractor-showcase-visual::after) { content: ""; position: absolute; inset: 1rem; border: 1px solid rgb(255 255 255 / .32); border-radius: calc(var(--vo-radius-xl) - .5rem); pointer-events: none; }
+.page :global(.contractor-image-fallback) { width: 100%; height: 100%; min-height: 15rem; display: grid; place-items: center; align-content: center; gap: .55rem; color: var(--vo-champagne-500); background: linear-gradient(145deg, var(--vo-pine-700), var(--vo-pine-950)); font-size: .66rem; text-align: center; }
+.page :global(.contractor-image-fallback i) { font-style: normal; font-size: 1.5rem; letter-spacing: .15em; }
+.page :global(.contractor-showcase-index), .page :global(.contractor-featured-ribbon) { position: absolute; z-index: 1; }
+.page :global(.contractor-showcase-index) { top: 1.5rem; right: 1.5rem; color: #fff; font-size: .72rem; letter-spacing: .14em; }
+.page :global(.contractor-featured-ribbon) { right: 1.5rem; bottom: 1.5rem; padding: .5rem .7rem; border-radius: var(--vo-radius-round); background: var(--vo-champagne-500); color: var(--vo-pine-950); font-size: .56rem; }
+.page :global(.contractor-showcase-copy) { min-width: 0; }
+.page :global(.contractor-directory-meta) { display: flex; flex-wrap: wrap; gap: .45rem .75rem; color: var(--vo-ink-500); font-size: .6rem; }
+.page :global(.contractor-directory-meta .is-verified) { color: var(--vo-caspian-700); }
+.page :global(.contractor-directory-meta i) { font-style: normal; color: var(--vo-champagne-600); }
+.page :global(.contractor-showcase-kicker) { margin: 1.5rem 0 .55rem; color: var(--vo-champagne-700); font-size: .67rem; }
+.page :global(.contractor-showcase-copy h2) { margin: 0; color: var(--vo-pine-950); font-size: clamp(2rem, 4vw, 3.7rem); font-weight: 550; line-height: 1.35; letter-spacing: -.045em; }
+.page :global(.contractor-showcase-copy h2 a) { color: inherit; text-decoration: none; }
+.page :global(.contractor-showcase-description) { max-width: 34rem; margin: 1rem 0 0; color: var(--vo-ink-600); font-size: .76rem; line-height: 2.1; }
+.page :global(.contractor-service-tags) { margin: 1.5rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .45rem; list-style: none; }
+.page :global(.contractor-service-tags li) { padding: .5rem .65rem; border: 1px solid var(--vo-line); border-radius: var(--vo-radius-round); color: var(--vo-ink-600); background: var(--vo-surface-raised); font-size: .58rem; }
+.page :global(.contractor-showcase-copy > footer) { margin-top: 2rem; padding-top: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-top: 1px solid var(--vo-line); }
+.page :global(.contractor-primary-link) { color: var(--vo-pine-700); font-size: .66rem; text-decoration: none; }
+.page :global(.contractor-primary-link span) { margin-inline-start: .4rem; color: var(--vo-champagne-600); }
+.page :global(.contractor-showcase-copy > footer small) { color: var(--vo-ink-500); font-size: .55rem; }
+.page :global(.contractor-concierge-band) { padding-block: clamp(3.5rem, 8vw, 6rem); color: #fff; background: var(--vo-pine-950); }
+.page :global(.contractor-concierge-band > div) { width: min(100% - clamp(1rem, 5vw, 5rem), 80rem); display: grid; grid-template-columns: minmax(0, 1fr) minmax(15rem, .8fr) auto; align-items: end; gap: 2rem; }
+.page :global(.contractor-concierge-band h2) { margin: .75rem 0 0; font-size: clamp(2.2rem, 5vw, 4.6rem); font-weight: 540; line-height: 1.35; letter-spacing: -.05em; }
+.page :global(.contractor-concierge-band > div > p) { margin: 0; color: rgb(255 255 255 / .68); font-size: .68rem; line-height: 2; }
+.page :global(.contractor-concierge-band a) { min-height: 3rem; padding: 0 1rem; display: inline-flex; align-items: center; border: 1px solid var(--vo-champagne-500); border-radius: var(--vo-radius-control); color: var(--vo-champagne-500); font-size: .64rem; text-decoration: none; white-space: nowrap; }
+.page :global(.contractor-profile-hero) { min-height: 36rem; position: relative; overflow: hidden; color: #fff; background: var(--vo-pine-950); }
+.page :global(.contractor-profile-hero > img), .page :global(.contractor-profile-hero > .contractor-image-fallback) { width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; }
+.page :global(.contractor-profile-shade) { position: absolute; inset: 0; background: linear-gradient(90deg, rgb(8 38 31 / .1), var(--vo-pine-950) 78%), linear-gradient(0deg, rgb(8 38 31 / .78), transparent 60%); }
+.page :global(.contractor-profile-hero-content) { min-height: 36rem; position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: end; align-items: flex-start; padding-block: 6rem 3.5rem; }
+.page :global(.contractor-back-link) { margin-bottom: auto; color: rgb(255 255 255 / .7); font-size: .64rem; text-decoration: none; }
+.page :global(.contractor-profile-badges) { display: flex; flex-wrap: wrap; gap: .45rem; }
+.page :global(.contractor-profile-badges span) { padding: .5rem .65rem; border: 1px solid rgb(255 255 255 / .24); border-radius: var(--vo-radius-round); color: var(--vo-champagne-500); font-size: .58rem; }
+.page :global(.contractor-profile-hero-content > p) { margin: 1.25rem 0 .4rem; color: var(--vo-champagne-500); font-size: .7rem; }
+.page :global(.contractor-profile-hero h1) { margin: 0; font-size: clamp(3rem, 8vw, 7rem); font-weight: 540; letter-spacing: -.06em; }
+.page :global(.contractor-profile-meta) { margin-top: .9rem; display: flex; flex-wrap: wrap; gap: .6rem 1rem; color: rgb(255 255 255 / .68); font-size: .62rem; }
+.page :global(.contractor-profile-cta) { min-height: 3rem; margin-top: 1.5rem; padding: 0 1rem; display: inline-flex; align-items: center; border-radius: var(--vo-radius-control); background: var(--vo-champagne-500); color: var(--vo-pine-950); font-size: .65rem; text-decoration: none; }
+.page :global(.contractor-profile-overview) { width: min(100% - clamp(1rem, 5vw, 5rem), 80rem); padding-block: clamp(3rem, 8vw, 6rem); display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .65fr); gap: clamp(2rem, 7vw, 7rem); align-items: start; }
+.page :global(.contractor-profile-story h2) { margin: .75rem 0 1rem; color: var(--vo-pine-950); font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 550; line-height: 1.35; letter-spacing: -.05em; }
+.page :global(.contractor-profile-description) { max-width: 42rem; color: var(--vo-ink-600); font-size: .8rem; line-height: 2.2; }
+.page :global(.contractor-profile-story h3) { margin: 2.25rem 0 1rem; color: var(--vo-pine-900); font-size: .94rem; }
+.page :global(.contractor-profile-story ul) { margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; list-style: none; }
+.page :global(.contractor-profile-story li) { padding: .75rem; display: flex; align-items: center; gap: .6rem; border: 1px solid var(--vo-line); border-radius: var(--vo-radius-sm); color: var(--vo-ink-700); font-size: .64rem; }
+.page :global(.contractor-profile-story li span) { color: var(--vo-champagne-600); font-size: .58rem; }
+.page :global(.contractor-trust-note) { margin-top: 1.5rem; padding: 1rem; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .7rem; border: 1px solid rgb(36 98 84 / .16); border-radius: var(--vo-radius-md); background: var(--vo-mist-50); }
+.page :global(.contractor-trust-note > span) { color: var(--vo-caspian-700); }
+.page :global(.contractor-trust-note p), .page :global(.contractor-trust-note strong) { margin: 0; display: block; }
+.page :global(.contractor-trust-note p) { color: var(--vo-ink-600); font-size: .62rem; line-height: 1.9; }
+.page :global(.contractor-trust-note strong) { margin-bottom: .2rem; color: var(--vo-pine-800); font-size: .68rem; }
+.page :global(.contractor-inquiry-column) { min-width: 0; position: sticky; top: 6.25rem; }
+.page :global(.contractor-inquiry-column > p) { margin: .75rem 0 0; color: var(--vo-ink-500); font-size: .6rem; }
+.page :global(.contractor-catalog-nav) { position: sticky; top: 4.75rem; z-index: 10; border-block: 1px solid var(--vo-line); background: rgb(248 246 239 / .88); backdrop-filter: blur(16px); }
+.page :global(.contractor-catalog-nav > div) { width: min(100% - clamp(1rem, 5vw, 5rem), 80rem); min-height: 4rem; display: flex; align-items: center; gap: 1rem; overflow-x: auto; }
+.page :global(.contractor-catalog-nav a) { flex: 0 0 auto; padding: .6rem .8rem; color: var(--vo-ink-600); font-size: .62rem; text-decoration: none; white-space: nowrap; }
+.page :global(.contractor-catalog-nav a span) { margin-inline-start: .25rem; color: var(--vo-champagne-600); }
+.page :global(.contractor-catalog-nav a.is-cta) { margin-inline-start: auto; border-radius: var(--vo-radius-control); background: var(--vo-pine-950); color: #fff; }
+.page :global(.contractor-projects-section), .page :global(.contractor-products-section > div) { width: min(100% - clamp(1rem, 5vw, 5rem), 80rem); padding-block: clamp(3.5rem, 8vw, 7rem); }
+.page :global(.contractor-catalog-heading), .page :global(.contractor-products-heading) { margin-bottom: 3rem; display: grid; grid-template-columns: minmax(0, 1fr) minmax(16rem, .7fr); gap: 3rem; align-items: end; }
+.page :global(.contractor-catalog-heading h2), .page :global(.contractor-products-heading h2) { margin: .7rem 0 0; color: var(--vo-pine-950); font-size: clamp(2.3rem, 5vw, 4.5rem); font-weight: 550; line-height: 1.35; letter-spacing: -.05em; }
+.page :global(.contractor-catalog-heading > p), .page :global(.contractor-products-heading > p) { margin: 0; color: var(--vo-ink-600); font-size: .67rem; line-height: 2; }
+.page :global(.contractor-project-list) { display: grid; gap: 4rem; }
+.page :global(.contractor-project-showcase) { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .82fr); gap: clamp(1.5rem, 5vw, 5rem); align-items: center; }
+.page :global(.contractor-project-showcase.is-reversed) { direction: ltr; }
+.page :global(.contractor-project-showcase.is-reversed > *) { direction: rtl; }
+.page :global(.contractor-project-visual) { min-height: 29rem; position: relative; }
+.page :global(.contractor-catalog-image) { width: 100%; height: 29rem; overflow: hidden; border-radius: var(--vo-radius-xl); background: var(--vo-pine-950); box-shadow: var(--vo-shadow-card); }
+.page :global(.contractor-catalog-image img) { width: 100%; height: 100%; object-fit: cover; }
+.page :global(.contractor-project-number), .page :global(.contractor-project-area) { position: absolute; z-index: 1; }
+.page :global(.contractor-project-number) { top: 1.25rem; right: 1.25rem; color: #fff; font-size: .7rem; letter-spacing: .14em; }
+.page :global(.contractor-project-area) { right: 1.25rem; bottom: 1.25rem; padding: .45rem .6rem; border-radius: var(--vo-radius-round); background: rgb(8 38 31 / .8); color: #fff; font-size: .58rem; }
+.page :global(.contractor-project-copy h3) { margin: .5rem 0; color: var(--vo-pine-950); font-size: clamp(1.8rem, 4vw, 3.4rem); font-weight: 550; line-height: 1.4; letter-spacing: -.045em; }
+.page :global(.contractor-project-kicker) { margin: 0; color: var(--vo-champagne-700); font-size: .65rem; }
+.page :global(.contractor-project-subtitle) { margin: 0; color: var(--vo-ink-500); font-size: .68rem; }
+.page :global(.contractor-project-description) { margin: 1rem 0; color: var(--vo-ink-600); font-size: .7rem; line-height: 2; }
+.page :global(.contractor-project-facts) { margin: 1.25rem 0; display: grid; grid-template-columns: 1fr 1fr; border-block: 1px solid var(--vo-line); }
+.page :global(.contractor-project-facts span) { padding: .8rem 0; border-inline-start: 1px solid var(--vo-line); }
+.page :global(.contractor-project-facts span:first-child) { border-inline-start: 0; }
+.page :global(.contractor-project-facts small), .page :global(.contractor-project-facts strong) { display: block; }
+.page :global(.contractor-project-facts small) { color: var(--vo-ink-500); font-size: .56rem; }
+.page :global(.contractor-project-facts strong) { margin-top: .3rem; color: var(--vo-pine-800); font-size: .66rem; }
+.page :global(.contractor-price-range) { padding: .85rem 1rem; border-radius: var(--vo-radius-md); background: var(--vo-mist-50); }
+.page :global(.contractor-price-range > span), .page :global(.contractor-price-range p) { display: block; color: var(--vo-ink-500); font-size: .58rem; }
+.page :global(.contractor-price-range strong) { display: block; margin: .35rem 0; color: var(--vo-pine-800); font-size: .84rem; }
+.page :global(.contractor-price-range strong i) { margin-inline: .35rem; color: var(--vo-champagne-600); font-style: normal; font-size: .6rem; }
+.page :global(.contractor-price-range strong small) { font-size: .52rem; }
+.page :global(.contractor-price-range p) { margin: 0; line-height: 1.7; }
+.page :global(.catalog-report) { margin-top: 1.25rem; display: grid; gap: 1rem; }
+.page :global(.catalog-report-block h4) { margin: 0 0 .4rem; color: var(--vo-pine-900); font-size: .65rem; }
+.page :global(.catalog-report-block p), .page :global(.catalog-report-block li) { color: var(--vo-ink-600); font-size: .63rem; line-height: 1.8; }
+.page :global(.catalog-report-block p) { margin: 0; }
+.page :global(.catalog-report-block ul) { margin: 0; padding: 0; display: grid; gap: .3rem; list-style: none; }
+.page :global(.catalog-report-block li span) { margin-inline-end: .35rem; color: var(--vo-caspian-700); }
+.page :global(.contractor-project-cta) { min-height: 3rem; margin-top: 1.25rem; padding: 0 .95rem; display: inline-flex; align-items: center; border-radius: var(--vo-radius-control); background: var(--vo-pine-950); color: #fff; font-size: .64rem; text-decoration: none; }
+.page :global(.contractor-products-section) { background: var(--vo-pine-950); color: #fff; }
+.page :global(.contractor-products-heading h2) { color: #fff; }
+.page :global(.contractor-products-heading > p) { color: rgb(255 255 255 / .65); }
+.page :global(.contractor-product-grid) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.page :global(.contractor-product-card) { overflow: hidden; border: 1px solid rgb(255 255 255 / .14); border-radius: var(--vo-radius-lg); background: rgb(255 255 255 / .06); }
+.page :global(.contractor-product-card .catalog-card-image) { height: 15rem; }
+.page :global(.contractor-product-card .catalog-card-image img) { width: 100%; height: 100%; object-fit: cover; }
+.page :global(.contractor-product-content) { padding: 1.25rem; }
+.page :global(.contractor-product-content header) { display: flex; justify-content: space-between; color: var(--vo-champagne-500); font-size: .58rem; }
+.page :global(.contractor-product-content h3) { margin: .8rem 0 .3rem; color: #fff; font-size: 1.1rem; }
+.page :global(.contractor-product-content p) { color: rgb(255 255 255 / .65); font-size: .62rem; line-height: 1.9; }
+.page :global(.contractor-product-content .contractor-price-range) { margin-top: 1rem; background: rgb(255 255 255 / .08); }
+.page :global(.contractor-product-content .contractor-price-range strong) { color: var(--vo-champagne-500); }
+.page :global(.contractor-product-content ul) { margin: 1rem 0 0; padding: 0; display: grid; gap: .35rem; list-style: none; color: rgb(255 255 255 / .62); font-size: .6rem; }
+.page :global(.contractor-pricing-note) { margin-bottom: 4rem; padding: 1rem; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .7rem; border: 1px solid var(--vo-line); border-radius: var(--vo-radius-md); background: var(--vo-mist-50); }
+.page :global(.contractor-pricing-note > span) { color: var(--vo-champagne-600); }
+.page :global(.contractor-pricing-note p), .page :global(.contractor-pricing-note strong) { margin: 0; display: block; }
+.page :global(.contractor-pricing-note p) { color: var(--vo-ink-600); font-size: .62rem; line-height: 1.9; }
+.page :global(.contractor-pricing-note strong) { color: var(--vo-pine-800); font-size: .66rem; }
+.page :global(.contractor-profile-loading) { min-height: 32rem; display: grid; place-items: center; align-content: center; color: var(--vo-ink-500); font-size: .72rem; }
+.page :global(.market-state) { width: min(100% - 1rem, 60rem); min-height: 22rem; margin-block: 3rem 7rem; padding: 2rem; display: grid; place-items: center; align-content: center; gap: .6rem; border: 1px solid var(--vo-line); border-radius: var(--vo-radius-lg); background: var(--vo-surface-raised); text-align: center; }
+.page :global(.market-state strong) { color: var(--vo-pine-900); font-size: 1rem; }
+.page :global(.market-state span) { color: var(--vo-ink-500); font-size: .65rem; }
+.page :global(.market-state button), .page :global(.market-state a) { min-height: 2.8rem; margin-top: .6rem; padding: 0 .85rem; display: inline-flex; align-items: center; border: 1px solid var(--vo-line-strong); border-radius: var(--vo-radius-control); background: transparent; color: var(--vo-pine-700); font-family: inherit; font-size: .62rem; text-decoration: none; cursor: pointer; }
+.page :global(:is(a, button, input, textarea, select):focus-visible) { outline: 3px solid var(--vo-focus); outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) { .page :global(.contractor-showcase-visual img), .page :global(.contractor-catalog-image img) { transition: transform 700ms var(--vo-ease-out); } .page :global(.contractor-showcase-visual:hover img), .page :global(.contractor-catalog-image:hover img) { transform: scale(1.035); } }
+@media (max-width: 60rem) { .page :global(.contractor-editorial-hero-inner) { grid-template-columns: 1fr; align-items: end; } .page :global(.contractor-hero-art) { width: 100%; opacity: .5; } .page :global(.contractor-hero-shade) { background: linear-gradient(90deg, rgb(8 38 31 / .46), var(--vo-pine-950) 92%), linear-gradient(0deg, rgb(8 38 31 / .88), transparent 70%); } .page :global(.contractor-directory-heading) { grid-template-columns: 1fr auto; } .page :global(.contractor-directory-heading > p:last-child) { grid-column: 1 / -1; } .page :global(.contractor-profile-overview) { grid-template-columns: 1fr; } .page :global(.contractor-inquiry-column) { position: static; } .page :global(.contractor-catalog-heading), .page :global(.contractor-products-heading) { grid-template-columns: 1fr; gap: 1rem; } }
+@media (max-width: 46rem) { .page :global(.contractor-directory), .page :global(.contractor-projects-section), .page :global(.contractor-products-section > div), .page :global(.contractor-profile-overview) { width: min(100% - 1rem, 40rem); } .page :global(.contractor-editorial-hero-inner), .page :global(.contractor-profile-hero-content) { min-height: 34rem; padding-block: 5.5rem 2.5rem; } .page :global(.contractor-hero-copy h1), .page :global(.contractor-profile-hero h1) { font-size: clamp(2.8rem, 14vw, 4.6rem); } .page :global(.contractor-showcase), .page :global(.contractor-project-showcase) { grid-template-columns: 1fr; gap: 1.5rem; } .page :global(.contractor-showcase.is-reversed), .page :global(.contractor-project-showcase.is-reversed) { direction: rtl; } .page :global(.contractor-showcase-visual), .page :global(.contractor-project-visual), .page :global(.contractor-catalog-image) { min-height: 20rem; height: 20rem; } .page :global(.contractor-directory-heading) { grid-template-columns: 1fr; gap: 1rem; } .page :global(.contractor-directory-count) { padding-inline-start: 0; border-inline-start: 0; border-top: 1px solid var(--vo-line); padding-top: 1rem; } .page :global(.contractor-concierge-band > div) { grid-template-columns: 1fr; align-items: start; } .page :global(.contractor-profile-story ul), .page :global(.contractor-product-grid) { grid-template-columns: 1fr; } .page :global(.contractor-project-facts) { grid-template-columns: 1fr 1fr; } .page :global(.contractor-showcase-copy > footer) { align-items: flex-start; flex-direction: column; } }
+@media (max-width: 24rem) { .page :global(.contractor-hero-actions), .page :global(.contractor-hero-actions a), .page :global(.contractor-concierge-band a) { width: 100%; } .page :global(.contractor-hero-actions a), .page :global(.contractor-concierge-band a) { justify-content: center; } .page :global(.contractor-hero-note) { padding: .9rem; } }
+@media (prefers-reduced-motion: reduce) { .page :global(.contractor-showcase-visual img), .page :global(.contractor-catalog-image img) { transition: none; } }
+/* Readability and card-surface repair. These scoped rules intentionally outrank
+   the retired global marketplace styles that are still used by older pages. */
+.page :global(.contractor-directory),
+.page :global(.contractor-concierge-band > div),
+.page :global(.contractor-profile-overview),
+.page :global(.contractor-catalog-nav > div),
+.page :global(.contractor-projects-section),
+.page :global(.contractor-products-section > div) {
+  width: min(100% - clamp(2rem, 5vw, 5rem), 80rem);
+  margin-inline: auto;
+}
+
+.page :global(.contractor-showcase-copy) {
+  padding: clamp(1.5rem, 3.5vw, 3rem);
+  border: 1px solid var(--vo-line);
+  border-radius: var(--vo-radius-xl);
+  background: var(--vo-surface-raised);
+  box-shadow: 0 1.25rem 3.5rem rgb(20 48 39 / .07);
+}
+
+.page :global(.contractor-showcase-copy > footer) {
+  margin-top: 1.75rem;
+  padding: 1rem;
+  border: 1px solid var(--vo-line);
+  border-radius: var(--vo-radius-md);
+  background: var(--vo-mist-50);
+}
+
+.page :global(.contractor-primary-link) {
+  min-height: 2.8rem;
+  padding: 0 .95rem;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--vo-radius-control);
+  color: #fff;
+  background: var(--vo-pine-950);
+  font-size: .78rem;
+  font-weight: 650;
+}
+
+.page :global(.contractor-primary-link span) { color: var(--vo-champagne-500); }
+.page :global(.contractor-showcase-copy > footer small) { color: var(--vo-ink-600); font-size: .7rem; line-height: 1.7; }
+.page :global(.contractor-directory-heading > p:last-child),
+.page :global(.contractor-showcase-description),
+.page :global(.contractor-concierge-band > div > p),
+.page :global(.contractor-profile-description),
+.page :global(.contractor-catalog-heading > p),
+.page :global(.contractor-products-heading > p),
+.page :global(.contractor-project-description),
+.page :global(.contractor-product-content p),
+.page :global(.contractor-pricing-note p),
+.page :global(.contractor-inquiry-intro) {
+  font-size: clamp(.8rem, 1.2vw, .92rem);
+  line-height: 2;
+}
+
+.page :global(.contractor-directory-meta),
+.page :global(.contractor-showcase-kicker),
+.page :global(.contractor-profile-meta),
+.page :global(.contractor-project-kicker),
+.page :global(.contractor-project-subtitle),
+.page :global(.contractor-product-content header),
+.page :global(.contractor-catalog-nav a) { font-size: .72rem; }
+
+.page :global(.contractor-service-tags li),
+.page :global(.contractor-profile-story li),
+.page :global(.contractor-project-facts small),
+.page :global(.catalog-report-block p),
+.page :global(.catalog-report-block li),
+.page :global(.contractor-product-content ul) { font-size: .7rem; }
+
+.page :global(.contractor-project-facts strong),
+.page :global(.contractor-profile-story h3),
+.page :global(.catalog-report-block h4) { font-size: .8rem; }
+
+.page :global(.contractor-price-range > span),
+.page :global(.contractor-price-range p) { font-size: .68rem; }
+.page :global(.contractor-price-range strong) { font-size: 1rem; }
+
+@media (max-width: 720px) {
+  .page :global(.contractor-directory),
+  .page :global(.contractor-concierge-band > div),
+  .page :global(.contractor-profile-overview),
+  .page :global(.contractor-catalog-nav > div),
+  .page :global(.contractor-projects-section),
+  .page :global(.contractor-products-section > div) { width: calc(100% - 2rem); }
+  .page :global(.contractor-showcase-copy) { padding: 1.25rem; }
+  .page :global(.contractor-showcase-copy > footer) { align-items: stretch; flex-direction: column; }
+  .page :global(.contractor-primary-link) { width: 100%; justify-content: space-between; }
+}

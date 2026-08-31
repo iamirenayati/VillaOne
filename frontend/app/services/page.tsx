@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import Link from "next/link";
@@ -20,7 +21,9 @@ export default function ServicesPage() {
     setLoading(true);
     setError("");
     try {
-      setItems((await fetchServices()) ?? []);
+      const services = await fetchServices();
+      if (services === null) throw new Error("سامانه خدمات در حال حاضر پیکربندی نشده است.");
+      setItems(services);
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "دریافت خدمات در حال حاضر ممکن نیست.");
     } finally {
@@ -29,13 +32,11 @@ export default function ServicesPage() {
   }, []);
 
   useEffect(() => { void load(); }, [load]);
-  const featured = items.find((item) => item.featured) ?? items[0];
-
   return (
     <main dir="rtl" className="inner-page service-editorial">
       <InnerHeader />
       <section className="service-editorial-hero">
-        {featured?.cover_image && <img src={featured.cover_image} alt="" />}
+        <img src="/images/editorial/private-chef.webp" alt="" width="1440" height="960" fetchPriority="high" />
         <div className="service-editorial-shade" />
         <div className="section-shell service-editorial-hero-copy">
           <p className="eyebrow"><span /> خدمات اقامت ویلاوان</p>

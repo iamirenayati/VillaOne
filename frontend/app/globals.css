@@ -1151,7 +1151,21 @@ footer {
 .map-note > span { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: #dfe9e4; color: var(--forest); font-size: 11px; }.map-note p { margin: 0; color: #808984; font-size: 8px; line-height: 1.6; }.map-note strong { display: block; color: var(--ink); font-size: 9px; }
 .mobile-filter-button { display: none; }.empty-results { grid-column: 1 / -1; min-height: 430px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: var(--ivory); }
 .empty-results > span { font-family: Georgia, serif; color: var(--bronze); font-size: 58px; }.empty-results h2 { margin: 8px 0; font-size: 24px; }.empty-results p { margin: 0 0 20px; color: #78827d; font-size: 12px; }.empty-results button { padding: 12px 20px; border: 0; background: var(--forest); color: #fff; cursor: pointer; font-size: 11px; }
-.mini-footer { background: #0b211b; color: rgba(255,255,255,.52); }.mini-footer > div { min-height: 82px; display: flex; align-items: center; justify-content: space-between; font-size: 9px; }.mini-footer div div { display: flex; gap: 25px; }
+.mini-footer { width:100%; margin-top:clamp(3rem,7vw,7rem); background:var(--vo-pine-950,#0b211b); color:rgba(255,255,255,.68); }
+.mini-footer > .section-shell { width:min(calc(100% - 2rem),80rem); min-height:5.5rem; margin-inline:auto; padding:1.25rem 0; display:flex; align-items:center; justify-content:space-between; gap:1.5rem; font-size:.76rem; }
+.mini-footer > .section-shell > span { color:#fff; font-size:.88rem; font-weight:700; }
+.mini-footer .section-shell > div { display:flex; flex-wrap:wrap; gap:.75rem 1.5rem; }
+.mini-footer a { color:rgba(255,255,255,.76); font-size:.76rem; text-decoration:none; transition:color .18s ease; }
+.mini-footer a:hover { color:var(--vo-champagne-500,#d5ad70); }
+.mini-footer a:focus-visible { outline:3px solid var(--vo-champagne-500,#d5ad70); outline-offset:4px; }
+@media (max-width:600px) { .mini-footer > .section-shell { min-height:7rem; align-items:flex-start; flex-direction:column; justify-content:center; }.mini-footer .section-shell > div { gap:.75rem 1.1rem; } }
+
+/* Legal pages share the public reading scale instead of the legacy 8–10px UI. */
+.legal-page .legal-hero > p:not(.eyebrow) { color:var(--vo-ink-600,#66716b); font-size:.92rem; line-height:2; }
+.legal-page .legal-hero small { color:var(--vo-ink-500,#7a847f); font-size:.72rem; }
+.legal-page .legal-layout > aside a { min-height:2.8rem; display:flex; align-items:center; color:var(--vo-ink-600,#66716b); font-size:.78rem; text-decoration:none; }
+.legal-page .legal-layout h2 { font-size:clamp(1.25rem,2.2vw,1.55rem); }
+.legal-page .legal-layout article p { color:var(--vo-ink-700,#56645d); font-size:.88rem; line-height:2.1; }
 
 /* Villa detail */
 .detail-shell { padding-top: 36px; }.detail-breadcrumb { margin-bottom: 38px; }
@@ -1197,7 +1211,13 @@ footer {
 @media(max-width:600px){.market-hero{min-height:400px;padding-inline:15px}.market-heading{align-items:start;flex-direction:column}.property-grid,.contractor-grid{grid-template-columns:1fr}.market-detail-hero{height:460px}.market-detail-layout{width:calc(100% - 30px);padding-block:45px}.market-facts{grid-template-columns:1fr}.market-facts div{border-left:0;border-bottom:1px solid var(--line)}.market-copy ul{grid-template-columns:1fr}.lead-form{padding:22px}.journal-heading{width:calc(100% - 30px)}.journal-grid{width:calc(100% - 30px)}.journal-grid article>div{padding:28px}.article-cover{height:300px}.contractor-ops-summary{grid-template-columns:1fr 1fr}.contractor-edit-modal .admin-edit-grid{grid-template-columns:1fr}.contractor-edit-modal .wide-field{grid-column:auto}.catalog-heading{display:block}.catalog-heading h2{font-size:30px}.catalog-heading > p{margin-top:17px}.catalog-project-grid,.catalog-product-grid{grid-template-columns:1fr}.catalog-products{margin-top:45px}.catalog-product-card{display:block}.catalog-product-card > p{margin:15px 0 !important}.catalog-product-card > strong,.catalog-product-card > .catalog-timeline{display:inline-block;margin-left:12px}.catalog-note{font-size:8px}}
 
 /* JOURNAL V1 — editorial reading experience */
-.journal-heading-layout { display:grid; grid-template-columns:minmax(0,1fr) 300px; align-items:end; gap:50px; }
+.real-estate-hero { position:relative; isolation:isolate; overflow:hidden; background:#17382e; }
+.real-estate-hero > img { width:100%; height:100%; position:absolute; z-index:0; inset:0; object-fit:cover; object-position:center 55%; }
+.market-hero-shade { position:absolute; z-index:1; inset:0; background:linear-gradient(90deg,rgba(7,28,22,.2),rgba(7,28,22,.68) 52%,rgba(7,28,22,.96)),linear-gradient(0deg,rgba(7,28,22,.7),transparent 62%); }
+.real-estate-hero > .section-shell { position:relative; z-index:2; }
+.journal-heading-layout { display:grid; grid-template-columns:minmax(0,1fr) 360px; align-items:end; gap:50px; }
+.journal-heading-aside { width:100%; max-width:420px; margin:0; display:grid; gap:18px; }
+.journal-heading-aside > img { width:100%; aspect-ratio:3/2; display:block; object-fit:cover; }
 .journal-editorial-note { display:grid; gap:8px; padding:22px 0 3px; border-top:1px solid var(--line); color:#64736e; }
 .journal-editorial-note span { color:var(--bronze); font-size:9px; }.journal-editorial-note strong { color:var(--forest); font:500 20px/1.5 var(--font-display),Tahoma,sans-serif; }.journal-editorial-note small { font-size:9px; line-height:1.9; }
 .journal-categories { display:flex; gap:8px; padding-bottom:30px; overflow-x:auto; scrollbar-width:none; }.journal-categories::-webkit-scrollbar { display:none; }.journal-categories a { flex:0 0 auto; padding:10px 15px; border:1px solid #d9ddd7; border-radius:20px; color:#72807b; font-size:9px; text-decoration:none; transition:background .2s,border-color .2s,color .2s; }.journal-categories a:hover,.journal-categories a.active { border-color:var(--forest); background:var(--forest); color:#fff; }
@@ -1764,16 +1784,16 @@ footer {
   position: relative;
   overflow: hidden;
   color: #fff;
-  background:
-    linear-gradient(90deg,rgba(4,25,24,.97) 0%,rgba(5,28,27,.78) 48%,rgba(5,29,28,.26) 100%),
-    linear-gradient(0deg,rgba(4,22,21,.82),transparent 62%),
-    url('/images/villas/villa-01.jpg') center 48%/cover no-repeat;
+  background: #071f1e;
 }
+.contractor-hero-art { width: 100%; height: 100%; position: absolute; z-index: 0; inset: 0; object-fit: cover; object-position: center 46%; }
+.contractor-hero-shade { position: absolute; z-index: 1; inset: 0; background: linear-gradient(90deg,rgba(5,29,28,.24) 0%,rgba(5,28,27,.78) 50%,rgba(4,25,24,.98) 100%),linear-gradient(0deg,rgba(4,22,21,.84),transparent 62%); }
 .contractor-editorial-hero::before {
   content: "";
   position: absolute;
   inset: 0;
   opacity: .22;
+  z-index: 2;
   pointer-events: none;
   background-image: linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);
   background-size: 76px 76px;
@@ -1781,7 +1801,7 @@ footer {
 }
 .contractor-editorial-hero-inner {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   width: 100%;
   display: grid;
   grid-template-columns: minmax(0,1.5fr) minmax(280px,.55fr);
@@ -2081,7 +2101,7 @@ footer {
 .service-catalogue-heading h2 { margin:15px 0 0; font-family:var(--font-display),serif; font-size:clamp(42px,5vw,72px); font-weight:400; line-height:1.08; }
 .service-catalogue-heading>p { margin:0; color:#6c786f; line-height:2.1; }
 .service-catalogue-list { display:grid; gap:105px; }
-.service-editorial-card { min-height:560px; display:grid; grid-template-columns:1.12fr .88fr; background:#fff; box-shadow:0 24px 70px rgba(30,49,41,.08); }
+.service-editorial-card { min-height:560px; display:grid; grid-template-columns:1.12fr .88fr; overflow:hidden; border:1px solid var(--vo-line); border-radius:var(--vo-radius-xl); background:#fff; box-shadow:0 24px 70px rgba(30,49,41,.08); }
 .service-editorial-card.is-reversed { grid-template-columns:.88fr 1.12fr; }
 .service-editorial-card.is-reversed .service-editorial-visual { order:2; }
 .service-editorial-visual { position:relative; min-height:560px; overflow:hidden; background:#d9ded7; color:white; }
@@ -2097,18 +2117,18 @@ footer {
 .service-editorial-copy>p:not(.service-card-category) { margin:25px 0; color:#68766d; line-height:2; }
 .service-editorial-copy ul { display:grid; gap:10px; margin:0 0 34px; padding:0; list-style:none; }
 .service-editorial-copy li::before { content:"—"; margin-left:10px; color:#b88447; }
-.service-editorial-copy footer { display:flex; justify-content:space-between; gap:24px; align-items:end; padding-top:25px; border-top:1px solid #e5e2da; }
+.service-editorial-copy footer { margin-top:auto; padding:1rem 1.1rem; display:flex; justify-content:space-between; gap:1rem; align-items:center; border:1px solid var(--vo-line); border-radius:var(--vo-radius-md); background:var(--vo-mist-50); color:var(--vo-ink-900); }
 .service-editorial-copy footer div { display:grid; gap:7px; }
-.service-editorial-copy footer span { color:#899087; font-size:10px; }
-.service-editorial-copy footer strong { font-size:13px; }
-.service-editorial-copy footer>a { display:inline-flex; gap:18px; color:var(--service-ink); font-size:12px; text-decoration:none; }
+.service-editorial-copy footer span { color:var(--vo-ink-500); font-size:.7rem; }
+.service-editorial-copy footer strong { color:var(--vo-pine-950); font-size:.9rem; line-height:1.75; }
+.service-editorial-copy footer>a { min-height:2.8rem; padding:0 .95rem; display:inline-flex; align-items:center; justify-content:center; gap:1rem; border-radius:var(--vo-radius-control); background:var(--vo-pine-950); color:#fff; font-size:.76rem; font-weight:650; text-decoration:none; white-space:nowrap; }
 .service-catalogue-loading,.service-catalogue-state { min-height:300px; display:grid; place-items:center; align-content:center; gap:14px; border:1px solid #dedbd3; text-align:center; }
 .service-catalogue-loading { grid-template-columns:repeat(3,8px); }
 .service-catalogue-loading i { width:8px; height:8px; border-radius:50%; background:#b88447; animation:servicePulse 1.2s infinite alternate; }
 .service-catalogue-loading i:nth-child(2) { animation-delay:.2s; }.service-catalogue-loading i:nth-child(3) { animation-delay:.4s; }
 .service-catalogue-loading span { grid-column:1/-1; color:#717b74; }
 .service-catalogue-state b { font:32px var(--font-display),serif; }.service-catalogue-state p { margin:0; color:#717b74; }.service-catalogue-state button,.service-catalogue-state a { padding:12px 22px; border:1px solid #28473b; background:transparent; color:#28473b; text-decoration:none; cursor:pointer; }
-.service-concierge-band { padding-block:105px; background:#183229; color:white; text-align:center; }
+.service-concierge-band { padding-block:105px; background:linear-gradient(rgba(15,42,33,.9),rgba(15,42,33,.94)),url("/images/editorial/villa-preparation.webp") center 54%/cover no-repeat; color:white; text-align:center; }
 .service-concierge-band .section-shell { max-width:800px; }.service-concierge-band h2 { margin:15px 0; font:400 clamp(42px,5vw,70px) var(--font-display),serif; }.service-concierge-band p:not(.eyebrow) { color:#aebdb5; }.service-concierge-band a { display:inline-flex; margin-top:22px; padding:15px 28px; background:#d4a565; color:#14271f; text-decoration:none; }
 
 .service-detail-hero { position:relative; min-height:730px; display:flex; align-items:flex-end; overflow:hidden; background:#173229; color:white; }
@@ -2128,7 +2148,7 @@ footer {
   .service-editorial-hero-note,.service-detail-price { display:none; }.service-catalogue-heading,.service-detail-overview,.service-scope>.section-shell,.service-inquiry>.section-shell { grid-template-columns:1fr; gap:48px; }.service-editorial-card,.service-editorial-card.is-reversed { grid-template-columns:1fr; }.service-editorial-card.is-reversed .service-editorial-visual { order:initial; }.service-editorial-visual { min-height:430px; }.service-booking-card { position:static; }.service-scope-columns { grid-template-columns:1fr 1fr; }
 }
 @media (max-width:560px) {
-  .service-editorial-hero { min-height:680px; }.service-editorial-hero-copy { padding:145px 20px 60px; }.service-editorial-hero-copy h1 { font-size:55px; letter-spacing:-1px; }.service-catalogue { padding:75px 20px 90px; }.service-catalogue-heading { margin-bottom:55px; }.service-catalogue-list { gap:55px; }.service-editorial-visual { min-height:330px; }.service-editorial-copy { padding:35px 23px; }.service-editorial-copy footer { align-items:flex-start; flex-direction:column; }.service-detail-hero { min-height:620px; }.service-detail-hero-copy { padding:135px 20px 48px; }.service-detail-hero-copy>p { margin-top:65px; }.service-detail-hero-copy h1 { font-size:55px; }.service-detail-overview { padding:70px 20px; }.service-detail-features { grid-template-columns:1fr; }.service-detail-features div:nth-child(odd) { padding-left:0; border-left:0; }.service-booking-card { padding:30px 23px; }.service-scope { padding:70px 20px; }.service-scope-columns,.service-policies { grid-template-columns:1fr; }.service-policies { padding:70px 20px; }.service-policies>div { padding:30px 24px; }.service-gallery { padding:0 20px 80px; }.service-gallery>div { grid-template-columns:1fr; }.service-gallery figure { min-height:280px; }.service-inquiry { padding:75px 20px; }
+  .service-editorial-hero { min-height:680px; }.service-editorial-hero-copy { padding:145px 20px 60px; }.service-editorial-hero-copy h1 { font-size:55px; letter-spacing:-1px; }.service-catalogue { padding:75px 20px 90px; }.service-catalogue-heading { margin-bottom:55px; }.service-catalogue-list { gap:55px; }.service-editorial-visual { min-height:330px; }.service-editorial-copy { padding:35px 23px; }.service-editorial-copy footer { align-items:stretch; flex-direction:column; }.service-editorial-copy footer>a { width:100%; justify-content:space-between; }.service-detail-hero { min-height:620px; }.service-detail-hero-copy { padding:135px 20px 48px; }.service-detail-hero-copy>p { margin-top:65px; }.service-detail-hero-copy h1 { font-size:55px; }.service-detail-overview { padding:70px 20px; }.service-detail-features { grid-template-columns:1fr; }.service-detail-features div:nth-child(odd) { padding-left:0; border-left:0; }.service-booking-card { padding:30px 23px; }.service-scope { padding:70px 20px; }.service-scope-columns,.service-policies { grid-template-columns:1fr; }.service-policies { padding:70px 20px; }.service-policies>div { padding:30px 24px; }.service-gallery { padding:0 20px 80px; }.service-gallery>div { grid-template-columns:1fr; }.service-gallery figure { min-height:280px; }.service-inquiry { padding:75px 20px; }
 }
 @media (prefers-reduced-motion:reduce) { .service-editorial-visual img,.service-catalogue-loading i,.service-detail-loading i { transition:none; animation:none; } }
 
