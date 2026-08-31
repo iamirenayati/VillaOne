@@ -3,9 +3,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { InnerHeader } from "../components/InnerHeader";
+import { PublicSelect } from "../components/PublicSelect";
 import { formatShamsiDate } from "../components/ShamsiDateField";
 import type { VillaListing } from "../types/villa";
 import { createApiBooking, fetchBookingQuote, fetchEligibleServices, fetchVilla, type BookingQuote, type ServiceOffer, type ServiceSelection, VillaOneApiError } from "../lib/api";
+import styles from "./Checkout.module.css";
 
 export default function CheckoutPage() {
   const searchParams = useSearchParams();
@@ -123,10 +125,10 @@ export default function CheckoutPage() {
     }
   }
 
-  if (!villa) return <main dir="rtl" className="inner-page checkout-page"><InnerHeader /><section className="checkout-shell section-shell"><div className="account-empty"><span>!</span><h1>اطلاعات رزرو پیدا نشد</h1><p>برای ادامه، ابتدا یک ویلا و تاریخ معتبر انتخاب کنید.</p><a href="/villas">بازگشت به ویلاها</a></div></section></main>;
+  if (!villa) return <main dir="rtl" className={`${styles.page} inner-page checkout-page`}><InnerHeader /><section className="checkout-shell section-shell"><div className="account-empty"><span>!</span><h1>اطلاعات رزرو پیدا نشد</h1><p>برای ادامه، ابتدا یک ویلا و تاریخ معتبر انتخاب کنید.</p><a href="/villas">بازگشت به ویلاها</a></div></section></main>;
 
   return (
-    <main dir="rtl" className="inner-page checkout-page">
+    <main dir="rtl" className={`${styles.page} inner-page checkout-page`}>
       <InnerHeader />
       <section className="checkout-shell section-shell">
         <div className="checkout-topline">
@@ -144,30 +146,24 @@ export default function CheckoutPage() {
           <div className="checkout-form">
             <section className="checkout-section">
               <div className="checkout-section-head"><span>۰۱</span><div><h2>اطلاعات مهمان</h2><p>برای هماهنگی ورود و صدور رسید</p></div></div>
-              <div className="form-grid">
-                <label><span>نام و نام خانوادگی</span><input autoComplete="name" placeholder="نامی که در حساب شما ثبت شده است" /></label>
-                <label><span>شماره موبایل</span><input dir="ltr" disabled placeholder="شماره تأییدشده حساب شما" /></label>
-                <label><span>کد ملی</span><input dir="ltr" inputMode="numeric" placeholder="••••••••••" /></label>
-                <label><span>ایمیل <small>اختیاری</small></span><input dir="ltr" type="email" placeholder="name@example.com" /></label>
-              </div>
-              <label className="identity-note"><input type="checkbox" defaultChecked /><span><b>احراز هویت مهمان اصلی</b>تصویر مدرک شناسایی فقط هنگام ورود بررسی می‌شود و در این نسخه ذخیره نمی‌شود.</span></label>
+              <div className="checkout-identity-card"><span aria-hidden="true">✓</span><div><b>اطلاعات از حساب تأییدشده شما دریافت می‌شود</b><p>شماره موبایل حساب برای هماهنگی رزرو و صدور رسید استفاده خواهد شد. مدرک شناسایی فقط هنگام ورود بررسی می‌شود.</p></div><a href="/account">بررسی اطلاعات حساب</a></div>
             </section>
 
             <section className="checkout-section">
               <div className="checkout-section-head"><span>۰۲</span><div><h2>روش پرداخت</h2><p>برای رزروهای لوکس، پرداخت بیعانه هم ممکن است</p></div></div>
               <div className="payment-options">
                 <button className={paymentType === "deposit" ? "selected" : ""} type="button" onClick={() => setPaymentType("deposit")}>
-                  <i>{paymentType === "deposit" ? "●" : "○"}</i><div><span className="recommended">پیشنهاد ویلاوان</span><h3>بیعانه برای تأیید رزرو</h3><p>{deposit.toLocaleString("fa-IR")} تومان پس از تماس کانسیرج هماهنگ می‌شود؛ باقی‌مانده هنگام ورود.</p></div><strong>{deposit.toLocaleString("fa-IR")}<small> تومان</small></strong>
+                  <i>{paymentType === "deposit" ? "●" : "○"}</i><div><span className="recommended">پیشنهاد ویلاوان</span><h3>بیعانه برای تأیید رزرو</h3><p>{deposit.toLocaleString("fa-IR")} تومان را در مرحله بعد کارت‌به‌کارت می‌کنید؛ باقی‌مانده طبق شرایط رزرو پرداخت می‌شود.</p></div><strong>{deposit.toLocaleString("fa-IR")}<small> تومان</small></strong>
                 </button>
                 <button className={paymentType === "full" ? "selected" : ""} type="button" onClick={() => setPaymentType("full")}>
-                  <i>{paymentType === "full" ? "●" : "○"}</i><div><h3>تسویه کامل</h3><p>در صورت تمایل، مبلغ کامل نیز در تماس کانسیرج هماهنگ می‌شود.</p></div><strong>{grandTotal.toLocaleString("fa-IR")}<small> تومان</small></strong>
+                  <i>{paymentType === "full" ? "●" : "○"}</i><div><h3>تسویه کامل</h3><p>مبلغ کامل رزرو را در مرحله بعد کارت‌به‌کارت می‌کنید و رسید برای تیم مالی ارسال می‌شود.</p></div><strong>{grandTotal.toLocaleString("fa-IR")}<small> تومان</small></strong>
                 </button>
               </div>
-              <div className="gateway-row"><div><span className="gateway-symbol">V1</span><p><b>هماهنگی پرداخت با کانسیرج</b>پس از ثبت درخواست، تیم ویلاوان برای نحوه پرداخت با شما تماس می‌گیرد.</p></div><span>بدون پرداخت آنلاین در این مرحله</span></div>
+              <div className="gateway-row"><div><span className="gateway-symbol">V1</span><p><b>پرداخت کارت‌به‌کارت</b>پس از ثبت درخواست، شماره کارت امن و فرم ارسال رسید نمایش داده می‌شود.</p></div><span>مرحله بعد: ارسال رسید</span></div>
             </section>
 
             <section className="checkout-section extras-section">
-              <div className="checkout-section-head"><span>۰۲</span><div><h2>خدمات تکمیلی سفر</h2><p>هر چیزی که دوست دارید از قبل برای اقامتتان آماده باشد انتخاب کنید.</p></div></div>
+              <div className="checkout-section-head"><span>۰۳</span><div><h2>خدمات تکمیلی سفر</h2><p>هر چیزی که دوست دارید از قبل برای اقامتتان آماده باشد انتخاب کنید.</p></div></div>
               <div className="booking-addons" role="group" aria-label="خدمات تکمیلی رزرو">
                 {servicesLoading ? <p className="addons-empty" aria-live="polite">در حال بررسی خدمات قابل ارائه برای این ویلا و تاریخ…</p> : servicesError ? <div className="addons-error" role="alert"><p>{servicesError}</p><button type="button" onClick={() => void loadServices()}>تلاش دوباره</button></div> : services.length === 0 ? <p className="addons-empty">برای این ویلا و بازه اقامت، خدمت قابل رزروی منتشر نشده است. رزرو ویلا بدون خدمات تکمیلی ادامه دارد.</p> : services.map((service) => {
                   const selection = serviceItems.find((item) => item.slug === service.slug);
@@ -178,9 +174,9 @@ export default function CheckoutPage() {
                       <span className="addon-check">{selected ? "✓" : ""}</span><span className="addon-copy"><b>{service.title}</b><small>{service.short_description || service.description}</small><em>{service.price_note}</em></span><strong>{Number(service.base_price).toLocaleString("fa-IR")} <small>تومان</small></strong>
                     </label>
                     {selection && <div className="addon-config" aria-label={`تنظیمات ${service.title}`}>
-                      {service.schedule_type === "stay_date" && <label><span>روز ارائه</span><select value={selection.service_date ?? checkin} onChange={(event) => updateService(service.slug, { service_date: event.target.value })}>{stayDates.map((date) => <option value={date} key={date}>{formatStayDate(date)}</option>)}</select></label>}
-                      {service.pricing_model === "per_unit" && <label><span>تعداد {service.unit_label || "واحد"}</span><select value={selection.quantity ?? service.minimum_quantity} onChange={(event) => updateService(service.slug, { quantity: Number(event.target.value) })}>{Array.from({ length: service.maximum_quantity - service.minimum_quantity + 1 }, (_, index) => service.minimum_quantity + index).map((quantity) => <option value={quantity} key={quantity}>{quantity.toLocaleString("fa-IR")}</option>)}</select></label>}
-                      <label><span>زمان ترجیحی</span><select value={selection.time_slot ?? ""} onChange={(event) => updateService(service.slug, { time_slot: event.target.value ? event.target.value as NonNullable<ServiceSelection["time_slot"]> : undefined })}><option value="">بدون ترجیح</option><option value="breakfast">صبحانه</option><option value="lunch">ناهار</option><option value="dinner">شام</option><option value="morning">صبح</option><option value="afternoon">بعدازظهر</option><option value="evening">عصر</option><option value="flexible">انعطاف‌پذیر</option></select></label>
+                      {service.schedule_type === "stay_date" && <PublicSelect className="addon-select" label="روز ارائه" value={selection.service_date ?? checkin} onChange={(serviceDate) => updateService(service.slug, { service_date: serviceDate })} options={stayDates.map((date) => ({ value: date, label: formatStayDate(date) }))} />}
+                      {service.pricing_model === "per_unit" && <PublicSelect className="addon-select" label={`تعداد ${service.unit_label || "واحد"}`} value={String(selection.quantity ?? service.minimum_quantity)} onChange={(quantity) => updateService(service.slug, { quantity: Number(quantity) })} options={Array.from({ length: service.maximum_quantity - service.minimum_quantity + 1 }, (_, index) => service.minimum_quantity + index).map((quantity) => ({ value: String(quantity), label: quantity.toLocaleString("fa-IR") }))} />}
+                      <PublicSelect className="addon-select" label="زمان ترجیحی" value={selection.time_slot ?? ""} onChange={(timeSlot) => updateService(service.slug, { time_slot: timeSlot ? timeSlot as NonNullable<ServiceSelection["time_slot"]> : undefined })} options={[{ value: "", label: "بدون ترجیح" }, { value: "breakfast", label: "صبحانه" }, { value: "lunch", label: "ناهار" }, { value: "dinner", label: "شام" }, { value: "morning", label: "صبح" }, { value: "afternoon", label: "بعدازظهر" }, { value: "evening", label: "عصر" }, { value: "flexible", label: "انعطاف‌پذیر" }]} />
                       <label className="addon-note"><span>یادداشت برای ارائه‌دهنده <small>اختیاری</small></span><input value={selection.note ?? ""} maxLength={500} onChange={(event) => updateService(service.slug, { note: event.target.value })} placeholder="حساسیت غذایی، مناسبت یا درخواست خاص…" /></label>
                     </div>}
                   </div>;
@@ -190,7 +186,7 @@ export default function CheckoutPage() {
             </section>
 
             <section className="checkout-section extras-section">
-              <div className="checkout-section-head"><span>۰۳</span><div><h2>جزئیات سفر</h2><p>کمک می‌کند میزبان بهتر آماده شود</p></div></div>
+              <div className="checkout-section-head"><span>۰۴</span><div><h2>جزئیات سفر</h2><p>کمک می‌کند میزبان بهتر آماده شود</p></div></div>
               <label className="wide-field"><span>مناسبت یا درخواست خاص <small>اختیاری</small></span><textarea value={guestNote} onChange={(event) => setGuestNote(event.target.value)} placeholder="مثلاً برای جشن تولد کوچک سفر می‌کنیم یا نیاز به تخت کودک داریم..." /></label>
               <p className="identity-note">تخفیف‌ها و شرایط ویژه در این نسخه توسط کانسیرج بررسی و در رسید نهایی ثبت می‌شوند.</p>
             </section>
@@ -201,13 +197,13 @@ export default function CheckoutPage() {
               <div className="summary-villa">{villa.image ? <img src={villa.image} alt={villa.title} /> : <span className="summary-villa-placeholder" aria-hidden="true">V1</span>}<div><span>{villa.city} · {villa.setting}</span><h2>{villa.title}</h2><p>★ {villa.rating} · {villa.reviews.toLocaleString("fa-IR")} نظر</p></div></div>
               <div className="summary-dates"><div><span>ورود</span><strong>{formatStayDate(checkin)}</strong><small dir="ltr">{formatShamsiDate(checkin)}</small><small>بعد از ساعت ۱۵</small></div><i>←</i><div><span>خروج</span><strong>{formatStayDate(checkout)}</strong><small dir="ltr">{formatShamsiDate(checkout)}</small><small>تا ساعت ۱۲</small></div></div>
               <div className="summary-guests"><span>مدت اقامت</span><b>{nights.toLocaleString("fa-IR")} شب · {Number(guests).toLocaleString("fa-IR")} مهمان</b></div>
-              <div className="summary-price"><p><span>{nights.toLocaleString("fa-IR")} شب اقامت</span><b>{stayTotal.toLocaleString("fa-IR")} تومان</b></p>{extrasTotal > 0 && <p><span>خدمات انتخابی</span><b>{extrasTotal.toLocaleString("fa-IR")} تومان</b></p>}<p><span>هزینه خدمات ویلاوان</span><b>{serviceFee === 0 ? "رایگان" : `${serviceFee.toLocaleString("fa-IR")} تومان`}</b></p><p className="summary-total"><span>مبلغ کل رزرو</span><strong>{grandTotal.toLocaleString("fa-IR")} تومان</strong></p><p className="pay-now"><span>مبلغ قابل هماهنگی پس از تماس</span><strong>{quoteLoading ? "در حال محاسبه…" : `${payable.toLocaleString("fa-IR")} تومان`}</strong></p></div>
-              <label className="terms-row"><input type="checkbox" checked={terms} onChange={(event) => setTerms(event.target.checked)} /><span>قوانین اقامت، سیاست کنسلی و شرایط پرداخت ویلاوان را خوانده‌ام و می‌پذیرم.</span></label>
+              <div className="summary-price"><p><span>{nights.toLocaleString("fa-IR")} شب اقامت</span><b>{stayTotal.toLocaleString("fa-IR")} تومان</b></p>{extrasTotal > 0 && <p><span>خدمات انتخابی</span><b>{extrasTotal.toLocaleString("fa-IR")} تومان</b></p>}<p><span>هزینه خدمات ویلاوان</span><b>{serviceFee === 0 ? "رایگان" : `${serviceFee.toLocaleString("fa-IR")} تومان`}</b></p><p className="summary-total"><span>مبلغ کل رزرو</span><strong>{grandTotal.toLocaleString("fa-IR")} تومان</strong></p><p className="pay-now"><span>مبلغ قابل پرداخت در مرحله بعد</span><strong>{quoteLoading ? "در حال محاسبه…" : `${payable.toLocaleString("fa-IR")} تومان`}</strong></p></div>
+              <label className="terms-row"><input type="checkbox" checked={terms} onChange={(event) => setTerms(event.target.checked)} /><span><a href="/terms">قوانین اقامت</a>، <a href="/cancellation">سیاست کنسلی</a> و شرایط پرداخت ویلاوان را خوانده‌ام و می‌پذیرم.</span></label>
               <button className="final-pay-button" type="button" disabled={!terms || submitting || quoteLoading || Boolean(quoteError)} onClick={completePayment}>{submitting ? "در حال ثبت درخواست..." : quoteLoading ? "در حال دریافت قیمت نهایی…" : `ثبت درخواست و نگه‌داری زمان`}</button>
               {quoteError && <p className="checkout-api-error" role="alert">{quoteError}</p>}
               {bookingError && <p className="checkout-api-error" role="alert">{bookingError}</p>}
             </div>
-            <a className="summary-support" href="/#footer"><span>؟</span><p><b>سؤالی درباره پرداخت دارید؟</b>کانسیرج ویلاوان همراه شماست.</p><i>←</i></a>
+            <a className="summary-support" href="/support"><span>؟</span><p><b>سؤالی درباره پرداخت دارید؟</b>کانسیرج ویلاوان همراه شماست.</p><i>←</i></a>
           </aside>
         </div>
       </section>

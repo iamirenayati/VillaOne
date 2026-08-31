@@ -183,90 +183,16 @@
   font-weight: 600;
 }
 
-.customSelect {
-  width: 100%;
-  min-width: 0;
-  position: relative;
+.heroSelect {
+  --public-select-height: 2.25rem;
+  --public-select-padding: 0;
+  --public-select-border: 0;
+  --public-select-radius: 0;
+  --public-select-background: transparent;
+  --public-select-label-color: #727a72;
+  --public-select-text-color: var(--home-ink);
+  --public-select-font-size: .92rem;
 }
-
-.selectTrigger {
-  width: 100%;
-  min-height: 2.25rem;
-  padding: 0;
-  border: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  color: var(--home-ink);
-  background: transparent;
-  font: inherit;
-  text-align: start;
-  cursor: pointer;
-}
-
-.selectTrigger strong {
-  min-width: 0;
-  overflow: hidden;
-  font-size: 0.92rem;
-  font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.selectChevron {
-  color: var(--home-brass);
-  font-size: 1.15rem;
-  line-height: 1;
-  transform: translateY(-0.1rem);
-}
-
-.selectMenu {
-  width: max(100%, 15rem);
-  max-height: 18rem;
-  position: absolute;
-  z-index: 60;
-  inset-inline-start: -0.75rem;
-  bottom: calc(100% + 1.05rem);
-  overflow-y: auto;
-  padding: 0.5rem;
-  border: 1px solid rgba(17, 52, 42, 0.14);
-  border-radius: var(--vo-radius-lg);
-  background: rgba(255, 253, 247, 0.98);
-  box-shadow: 0 24px 60px rgba(5, 27, 21, 0.24);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  animation: selectReveal 160ms var(--vo-ease-out) both;
-}
-
-.selectOption,
-.selectOptionActive {
-  width: 100%;
-  min-height: 2.85rem;
-  padding: 0 0.85rem;
-  border: 0;
-  border-radius: var(--vo-radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  color: var(--home-ink);
-  background: transparent;
-  font: inherit;
-  font-size: 0.86rem;
-  font-weight: 500;
-  text-align: start;
-  cursor: pointer;
-  transition: color 160ms var(--vo-ease-standard), background-color 160ms var(--vo-ease-standard);
-}
-
-.selectOptionActive {
-  color: var(--home-pine);
-  background: var(--home-parchment);
-  font-weight: 700;
-}
-
-.selectOptionActive > span:last-child { color: var(--home-brass); }
 
 .searchField :global(.shamsi-field) { width: 100%; }
 .searchField :global(.shamsi-trigger) { min-height: 2rem; padding: 0; border: 0; background: transparent; box-shadow: none; }
@@ -324,12 +250,6 @@
   .primaryAction:hover { background: #fff; transform: translateY(-2px); }
   .secondaryAction:hover { color: var(--home-parchment); border-color: var(--home-parchment); }
   .searchButton:hover { background: #1c4437; transform: translateY(-1px); box-shadow: 0 12px 28px rgba(9, 41, 34, .2); }
-  .selectOption:hover { color: var(--home-pine); background: rgba(226, 229, 218, 0.62); }
-}
-
-@keyframes selectReveal {
-  from { opacity: 0; transform: translateY(0.45rem) scale(0.985); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .story {
@@ -590,7 +510,6 @@
   .secondaryAction { min-height: 2.75rem; font-size: .75rem; }
   .searchDock { bottom: .75rem; border-radius: var(--vo-radius-lg); }
   .searchField { min-height: 4.25rem; padding: .55rem .8rem; }
-  .selectMenu { width: min(16rem, calc(100vw - 2rem)); inset-inline-start: -.5rem; }
   .searchField :global(.shamsi-popover) { position: fixed; width: min(92vw, 380px); inset-inline: 4vw !important; inset-block: auto 1rem !important; }
   .searchButton { min-height: 4.25rem; min-width: 0; grid-column: 1 / -1; }
   .heroFootnote { display: none; }
@@ -614,7 +533,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .heroContent,.villaSkeletons i,.selectMenu { animation: none; }
+  .heroContent,.villaSkeletons i { animation: none; }
   .villaCinematicVisual img,.journalImage img,.primaryAction,.searchButton { transition: none; }
 }
 

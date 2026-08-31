@@ -2,11 +2,11 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-async function render() {
+async function render(pathname = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
-  return worker.fetch(new Request("http://localhost/", { headers: { accept: "text/html" } }), {
+  return worker.fetch(new Request(`http://localhost${pathname}`, { headers: { accept: "text/html" } }), {
     ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) },
   }, { waitUntil() {}, passThroughOnException() {} });
 }
@@ -21,6 +21,15 @@ test("server-renders the VillaOne customer homepage", async () => {
   assert.match(html, /تاریخ ورود/);
   assert.match(html, /مشاهده ویلاها/);
   assert.doesNotMatch(html, /Your site is taking shape|react-loading-skeleton|Building your site/);
+});
+
+test("public pages expose a working skip link and main landmark", async () => {
+  for (const pathname of ["/", "/villas"]) {
+    const response = await render(pathname);
+    const html = await response.text();
+    assert.match(html, /href="#main-content"/);
+    assert.match(html, /<main[^>]+id="main-content"/);
+  }
 });
 
 test("customer shell keeps the critical booking surfaces wired", async () => {
@@ -65,27 +74,63 @@ test("homepage cinematic media stays poster-first and accessible", async () => {
   assert.match(media, /fetchPriority=\{eager/);
 });
 
+test("homepage hero keeps booking search prominent without decorative scroll instructions", async () => {
+  const response = await render("/");
+  const html = await response.text();
+
+  assert.match(html, /aria-label="جست‌وجوی اقامتگاه"/);
+  assert.match(html, /کشف ویلاها/);
+  assert.doesNotMatch(html, /برای کشف بیشتر/);
+});
+
+test("editorial photography is connected to its intended public surfaces", async () => {
+  const [hero, editorial, contractors, services, properties, journal, styles] = await Promise.all([
+    readFile(new URL("../app/components/home/HomeHero.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/components/home/HomeEditorial.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/contractors/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/services/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/real-estate/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/journal/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(hero, /home-hero-poster\.webp/);
+  assert.match(editorial, /terrace-breakfast\.webp/);
+  assert.match(contractors, /architecture-studio\.webp/);
+  assert.match(services, /private-chef\.webp/);
+  assert.match(styles, /villa-preparation\.webp/);
+  assert.match(properties, /property-editorial\.webp/);
+  assert.match(journal, /forest-journey\.webp/);
+});
+
 test("homepage presents real villas in a balanced two-column grid", async () => {
-  const [showcase, styles] = await Promise.all([
+  const [home, showcase, editorial, styles] = await Promise.all([
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/components/home/HomeVillaShowcase.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/components/home/HomeEditorial.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/HomePage.module.css", import.meta.url), "utf8"),
   ]);
 
+  assert.match(home, /\.slice\(0, 4\)/);
   assert.match(showcase, /villaCinematicList/);
   assert.match(showcase, /villaCinematicCard/);
   assert.match(showcase, /villaDisplayTitle/);
   assert.match(showcase, /villa\.image/);
+  assert.doesNotMatch(showcase, /minimumIntegerDigits/);
+  assert.doesNotMatch(editorial, /verticalLabel|داستان ویلاوان/);
   assert.match(styles, /grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
   assert.match(styles, /min-height:\s*clamp\(28rem,\s*38vw,\s*36rem\)/);
   assert.match(styles, /font-size:\s*clamp\(2rem,\s*3\.6vw,\s*4rem\)/);
 });
 
 test("public navigation has one accessible shared implementation", async () => {
-  const [header, home, hero] = await Promise.all([
+  const [header, home, hero, response] = await Promise.all([
     readFile(new URL("../app/components/PublicHeader.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/components/home/HomeHero.tsx", import.meta.url), "utf8"),
+    render("/villas"),
   ]);
+  const html = await response.text();
 
   assert.match(header, /export function PublicHeader/);
   assert.match(header, /variant\?: "surface" \| "overlay"/);
@@ -94,6 +139,36 @@ test("public navigation has one accessible shared implementation", async () => {
   assert.match(header, /document\.body\.style\.overflow/);
   assert.match(hero, /PublicHeader variant="overlay"/);
   assert.doesNotMatch(home, /className="site-header"/);
+  assert.equal((html.match(/aria-label="منوی اصلی"/g) ?? []).length, 1);
+  assert.match(html, /ورود \/ ثبت‌نام|حساب کاربری/);
+  assert.match(html, /aria-current="page"/);
+});
+
+test("3D route renders a truthful conceptual experience and shared navigation", async () => {
+  const response = await render("/3d");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /جنگل هیرکانی،/);
+  assert.match(html, /بازآفرینی‌شده/);
+  assert.match(html, /تجربه مفهومی/);
+  assert.match(html, /در حال آماده‌سازی جنگل/);
+  assert.match(html, /href="\/3d"/);
+  assert.match(html, /href="\/map"/);
+  assert.match(html, /href="\/villas"/);
+  assert.doesNotMatch(html, /قیمت|رزرو این ویلا|موقعیت دقیق/);
+});
+
+test("3D experience exposes keyboard camera views and recovery controls", async () => {
+  const response = await render("/3d");
+  const html = await response.text();
+  assert.match(html, /aria-label="زاویه‌های دید"/);
+  assert.match(html, />ورود</);
+  assert.match(html, />معماری</);
+  assert.match(html, />سایه‌سار</);
+  assert.match(html, />آب</);
+  assert.match(html, /aria-pressed="true"/);
+  assert.match(html, /بازگشت به نمای اصلی/);
+  assert.match(html, /ماوس|لمس|کلید/);
 });
 
 test("contractor marketplace keeps the concierge lead flow wired", async () => {
@@ -131,18 +206,40 @@ test("contractor marketplace keeps the concierge lead flow wired", async () => {
 });
 
 test("journal keeps a readable structured reader experience", async () => {
-  const [article, reader, styles] = await Promise.all([
+  const [list, article, reader, styles] = await Promise.all([
+    readFile(new URL("../app/journal/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/journal/[slug]/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/journal/[slug]/ArticleReader.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+    readFile(new URL("../app/journal/Journal.module.css", import.meta.url), "utf8"),
   ]);
 
+  assert.match(list, /Journal\.module\.css/);
+  assert.match(list, /masthead|latestStory/);
   assert.match(article, /article-reading-layout/);
   assert.match(article, /article-toc/);
+  assert.match(article, /Journal\.module\.css/);
   assert.match(reader, /navigator\.clipboard/);
   assert.match(reader, /AbortError/);
-  assert.match(styles, /\.article-reading-layout\.has-toc/);
-  assert.match(styles, /font-size:16px/);
+  assert.match(styles, /:global\(\.article-reading-layout\.has-toc\)/);
+  assert.match(styles, /font-size:\s*clamp\(1rem/);
+});
+
+test("real-estate catalogue and detail expose reliable editorial states", async () => {
+  const [list, detail, styles] = await Promise.all([
+    readFile(new URL("../app/real-estate/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/real-estate/[slug]/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/real-estate/RealEstate.module.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(list, /RealEstate\.module\.css/);
+  assert.match(list, /loadListings/);
+  assert.match(list, /تلاش دوباره/);
+  assert.match(list, /role="alert"/);
+  assert.match(detail, /RealEstate\.module\.css/);
+  assert.match(detail, /loadListing/);
+  assert.match(detail, /تلاش دوباره/);
+  assert.match(styles, /\.featuredCard/);
+  assert.match(styles, /@media \(max-width:\s*720px\)/);
 });
 
 test("service marketplace is backend-driven and supports bookable service details", async () => {
@@ -191,12 +288,21 @@ test("villa catalogue uses truthful luxury discovery states", async () => {
   assert.match(styles, /@media \(max-width:\s*720px\)/);
 });
 
+test("villa catalogue exposes its date search as a submit form", async () => {
+  const response = await render("/villas");
+  const html = await response.text();
+
+  assert.match(html, /<form[^>]+aria-label="جست‌وجوی ویلا"/);
+  assert.match(html, /<button[^>]+type="submit"[^>]*>.*جست‌وجوی اقامتگاه/s);
+});
+
 test("villa detail is driven by real villa content and production booking states", async () => {
-  const [page, types, api, styles] = await Promise.all([
+  const [page, types, api, styles, moduleStyles] = await Promise.all([
     readFile(new URL("../app/villas/[slug]/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/types/villa.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/lib/api.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+    readFile(new URL("../app/villas/[slug]/VillaDetail.module.css", import.meta.url), "utf8").catch(() => ""),
   ]);
   assert.match(page, /villa-luxury-detail/);
   assert.match(page, /detail-page-skeleton/);
@@ -207,6 +313,10 @@ test("villa detail is driven by real villa content and production booking states
   assert.match(types, /description: string/);
   assert.match(api, /description: item\.description/);
   assert.match(styles, /\.luxury-booking-card/);
+  assert.match(page, /VillaDetail\.module\.css/);
+  assert.match(page, /href="#booking-panel"/);
+  assert.match(page, /id="booking-panel"/);
+  assert.match(moduleStyles, /\.mobileBookingJump/);
 });
 
 test("singular villa URLs redirect to the canonical catalogue", async () => {
@@ -263,6 +373,29 @@ test("practical map remains API-driven, synchronized and keyless", async () => {
   assert.match(logo, /villaone-logo-mark/);
   assert.match(logo, /viewBox="0 0 48 48"/);
   assert.match(layout, /\/brand\/villaone-mark\.svg/);
+});
+
+test("customer-facing dropdowns share one accessible design-system primitive", async () => {
+  const publicDropdownPages = [
+    "../app/components/home/HomeHero.tsx",
+    "../app/villas/page.tsx",
+    "../app/villas/[slug]/page.tsx",
+    "../app/checkout/page.tsx",
+    "../app/support/page.tsx",
+    "../app/map/page.tsx",
+  ];
+
+  for (const pathname of publicDropdownPages) {
+    const source = await readFile(new URL(pathname, import.meta.url), "utf8");
+    assert.match(source, /PublicSelect/);
+    assert.doesNotMatch(source, /<select\b/);
+  }
+
+  const select = await readFile(new URL("../app/components/PublicSelect.tsx", import.meta.url), "utf8");
+  assert.match(select, /role="listbox"/);
+  assert.match(select, /aria-expanded/);
+  assert.match(select, /ArrowDown/);
+  assert.match(select, /Escape/);
 });
 
 test("operations admin uses accessible production interaction primitives", async () => {

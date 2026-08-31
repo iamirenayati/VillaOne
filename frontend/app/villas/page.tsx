@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { BrandMark } from "../components/BrandLogo";
 import { InnerHeader } from "../components/InnerHeader";
+import { PublicSelect } from "../components/PublicSelect";
 import { ShamsiDateField } from "../components/ShamsiDateField";
 import type { VillaListing } from "../types/villa";
 import { fetchCities, fetchFavoriteVillas, fetchVillas, hasAuthenticatedSession, toggleVillaFavorite } from "../lib/api";
+import styles from "./Villas.module.css";
 
 const ALL_CITIES = "همه شهرها";
 
@@ -96,7 +99,8 @@ export default function VillasPage() {
     });
   }, [allVillas, forestOnly, instantOnly, jacuzziOnly, maxPrice, minPrice, mountainOnly, poolOnly, sort]);
 
-  function runSearch() {
+  function runSearch(event?: FormEvent<HTMLFormElement>) {
+    event?.preventDefault();
     if (!checkin || !checkout) { setSearchError("لطفاً تاریخ ورود و خروج را انتخاب کنید."); return; }
     if (checkout <= checkin) { setSearchError("تاریخ خروج باید بعد از تاریخ ورود باشد."); return; }
     if (Number(guests) < 1) { setSearchError("تعداد مهمانان را انتخاب کنید."); return; }
@@ -127,7 +131,7 @@ export default function VillasPage() {
     }
   }
 
-  return <main dir="rtl" className="inner-page villas-luxury-page">
+  return <main id="main-content" tabIndex={-1} dir="rtl" className={`inner-page villas-luxury-page ${styles.page}`}>
     <InnerHeader />
 
     <section className="villa-catalog-hero">
@@ -138,27 +142,27 @@ export default function VillasPage() {
           <p>ویلاهای منتشرشده با اطلاعات واقعی، قیمت شفاف و برنامه دسترسی قابل بررسی.</p>
           <div className="catalog-trust-line"><span>✓ بررسی محتوای اقامتگاه</span><span>◌ پشتیبانی رزرو</span><span>◇ پرداخت امن کارت‌به‌کارت</span></div>
         </div>
-        <div className="catalog-hero-art" aria-hidden="true"><BrandMark /><span>VILLAONE</span><small>CURATED STAYS · MAZANDARAN</small></div>
+        <div className="catalog-hero-art" aria-hidden="true"><BrandMark /><span>VILLAONE</span><small>اقامتگاه‌های منتشرشده مازندران</small></div>
       </div>
     </section>
 
-    <section className="catalog-search-shell section-shell" aria-label="جست‌وجوی ویلا">
+    <form className="catalog-search-shell section-shell" aria-label="جست‌وجوی ویلا" onSubmit={runSearch}>
       <div className="catalog-search-panel">
-        <label><span>مقصد</span><select value={city} onChange={(event) => setCity(event.target.value)}>{cities.map((item) => <option key={item}>{item}</option>)}</select></label>
+        <PublicSelect className="catalog-select-field" label="مقصد" value={city} onChange={setCity} options={cities.map((item) => ({ value: item, label: item }))} />
         <ShamsiDateField value={checkin} onChange={setCheckin} label="ورود" />
         <ShamsiDateField value={checkout} minValue={checkin} onChange={setCheckout} label="خروج" />
-        <label><span>مهمان</span><select value={guests} onChange={(event) => setGuests(event.target.value)}>{[2, 4, 6, 8, 10, 12].map((count) => <option value={count} key={count}>{count.toLocaleString("fa-IR")} نفر</option>)}</select></label>
-        <button type="button" onClick={runSearch}><span>جست‌وجوی اقامتگاه</span><b>←</b></button>
+        <PublicSelect className="catalog-select-field" label="مهمان" value={guests} onChange={setGuests} options={[2, 4, 6, 8, 10, 12].map((count) => ({ value: String(count), label: `${count.toLocaleString("fa-IR")} نفر` }))} />
+        <button type="submit"><span>جست‌وجوی اقامتگاه</span><b aria-hidden="true">←</b></button>
       </div>
       {searchError && <p className="search-form-error" role="alert">{searchError}</p>}
-    </section>
+    </form>
 
     <section className="luxury-catalog-layout section-shell">
       <div className="catalog-topbar">
         <div><small>اقامتگاه‌های قابل رزرو</small><h2>{dataSource === "ready" ? `${results.length.toLocaleString("fa-IR")} انتخاب برای سفر شما` : "در حال بررسی انتخاب‌ها"}</h2></div>
         <div className="catalog-topbar-actions">
           <button className="mobile-filter-button" type="button" onClick={() => setFiltersOpen((value) => !value)} aria-expanded={filtersOpen}>فیلترها {activeFilterCount > 0 && <span>{activeFilterCount.toLocaleString("fa-IR")}</span>}</button>
-          <label><span>مرتب‌سازی</span><select value={sort} onChange={(event) => setSort(event.target.value)}><option value="recommended">پیشنهاد ویلاوان</option><option value="low">کمترین قیمت</option><option value="high">بیشترین قیمت</option></select></label>
+          <PublicSelect className="catalog-sort-select" label="مرتب‌سازی" value={sort} onChange={setSort} options={[{ value: "recommended", label: "پیشنهاد ویلاوان" }, { value: "low", label: "کمترین قیمت" }, { value: "high", label: "بیشترین قیمت" }]} />
         </div>
       </div>
 
@@ -168,7 +172,7 @@ export default function VillasPage() {
           <fieldset><legend>بودجه هر شب</legend><div className="luxury-price-inputs"><label><span>از (میلیون)</span><input type="number" min="0" max={maxPrice} value={minPrice} onChange={(event) => setMinPrice(Math.max(0, Math.min(Number(event.target.value) || 0, maxPrice)))} /></label><label><span>تا (میلیون)</span><input type="number" min={minPrice} max="100" value={maxPrice} onChange={(event) => setMaxPrice(Math.max(minPrice, Number(event.target.value) || minPrice))} /></label></div></fieldset>
           <fieldset><legend>نوع رزرو</legend><label className="luxury-check"><input type="checkbox" checked={instantOnly} onChange={(event) => setInstantOnly(event.target.checked)} /><span><b>رزرو آنی</b><small>بدون انتظار برای تأیید میزبان</small></span></label></fieldset>
           <fieldset><legend>امکانات و فضا</legend><label className="luxury-check"><input type="checkbox" checked={poolOnly} onChange={(event) => setPoolOnly(event.target.checked)} /><span><b>استخر اختصاصی</b></span></label><label className="luxury-check"><input type="checkbox" checked={jacuzziOnly} onChange={(event) => setJacuzziOnly(event.target.checked)} /><span><b>جکوزی یا آب‌گرم</b></span></label><label className="luxury-check"><input type="checkbox" checked={forestOnly} onChange={(event) => setForestOnly(event.target.checked)} /><span><b>فضای جنگلی</b></span></label><label className="luxury-check"><input type="checkbox" checked={mountainOnly} onChange={(event) => setMountainOnly(event.target.checked)} /><span><b>چشم‌انداز کوهستان</b></span></label></fieldset>
-          <a className="filter-map-link" href="/map"><span>◎</span><div><b>انتخاب روی نقشه</b><small>موقعیت تقریبی همه ویلاها</small></div><i>←</i></a>
+          <Link className="filter-map-link" href="/map"><span>◎</span><div><b>انتخاب روی نقشه</b><small>موقعیت تقریبی همه ویلاها</small></div><i>←</i></Link>
         </aside>
 
         <div className="catalog-results" aria-live="polite">
@@ -179,16 +183,16 @@ export default function VillasPage() {
             const selected = favorites.includes(villa.slug);
             const galleryCount = Math.max(villa.gallery.length, villa.image ? 1 : 0);
             return <article className="luxury-villa-card" key={villa.slug}>
-              <a className="luxury-villa-media" href={`/villas/${villa.slug}?${tripQuery}`}><VillaImage villa={villa} />{villa.badge && <span className="luxury-villa-badge">{villa.badge}</span>}{galleryCount > 1 && <small>▦ {galleryCount.toLocaleString("fa-IR")} تصویر</small>}</a>
+              <Link className="luxury-villa-media" href={`/villas/${villa.slug}?${tripQuery}`}><VillaImage villa={villa} />{villa.badge && <span className="luxury-villa-badge">{villa.badge}</span>}{galleryCount > 1 && <small>▦ {galleryCount.toLocaleString("fa-IR")} تصویر</small>}</Link>
               <button className={selected ? "luxury-favorite is-selected" : "luxury-favorite"} type="button" onClick={() => toggleFavorite(villa.slug)} aria-label={selected ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"} aria-pressed={selected}>{selected ? "♥" : "♡"}</button>
-              <div className="luxury-villa-body"><div className="luxury-villa-overline"><span>{villa.city}</span><i />{villa.setting}</div><a href={`/villas/${villa.slug}?${tripQuery}`}><h3>{villa.title}</h3></a><p>{villa.guests.toLocaleString("fa-IR")} مهمان · {villa.rooms.toLocaleString("fa-IR")} اتاق خواب{villa.tags[0] ? ` · ${villa.tags[0]}` : ""}</p><div className="luxury-villa-footer"><div><strong>{villa.priceLabel}</strong><span> تومان / شب</span></div><span className="villa-rating-truth">{villa.reviews ? `★ ${villa.rating} · ${villa.reviews.toLocaleString("fa-IR")} نظر` : "اقامتگاه جدید"}</span></div></div>
+              <div className="luxury-villa-body"><div className="luxury-villa-overline"><span>{villa.city}</span><i />{villa.setting}</div><Link href={`/villas/${villa.slug}?${tripQuery}`}><h3>{villa.title}</h3></Link><p>{villa.guests.toLocaleString("fa-IR")} مهمان · {villa.rooms.toLocaleString("fa-IR")} اتاق خواب{villa.tags[0] ? ` · ${villa.tags[0]}` : ""}</p><div className="luxury-villa-footer"><div><strong>{villa.priceLabel}</strong><span> تومان / شب</span></div><span className="villa-rating-truth">{villa.reviews ? `★ ${villa.rating} · ${villa.reviews.toLocaleString("fa-IR")} نظر` : "اقامتگاه جدید"}</span></div></div>
             </article>;
           })}</div>}
         </div>
       </div>
     </section>
 
-    <section className="catalog-map-cta section-shell"><div><span>◎</span><div><small>دید متفاوت</small><h2>ویلاها را روی نقشه مازندران ببینید</h2><p>شهر، فاصله و موقعیت تقریبی اقامتگاه‌ها را یک‌جا مقایسه کنید.</p></div></div><a href="/map">باز کردن نقشه <b>←</b></a></section>
-    <footer className="mini-footer"><div className="section-shell"><span>© {new Intl.DateTimeFormat("fa-IR-u-ca-persian", { year: "numeric" }).format(new Date())} ویلاوان</span><div><a href="/support">پشتیبانی</a><a href="/terms">قوانین رزرو</a><a href="/privacy">حریم خصوصی</a></div></div></footer>
+    <section className="catalog-map-cta section-shell"><div><span>◎</span><div><small>دید متفاوت</small><h2>ویلاها را روی نقشه مازندران ببینید</h2><p>شهر، فاصله و موقعیت تقریبی اقامتگاه‌ها را یک‌جا مقایسه کنید.</p></div></div><Link href="/map">باز کردن نقشه <b>←</b></Link></section>
+    <footer className="mini-footer"><div className="section-shell"><span>© {new Intl.DateTimeFormat("fa-IR-u-ca-persian", { year: "numeric" }).format(new Date())} ویلاوان</span><div><Link href="/support">پشتیبانی</Link><Link href="/terms">قوانین رزرو</Link><Link href="/privacy">حریم خصوصی</Link></div></div></footer>
   </main>;
 }

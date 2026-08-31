@@ -8,6 +8,7 @@
 .page :global(.support-form h2), .page :global(.support-history h2) { margin: 0; color: var(--vo-pine-900); font-size: 1rem; }
 .page :global(.support-form > h2) { font-size: 1.25rem; }
 .page :global(.support-fields) { margin-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.page :global(.support-select) { --public-select-height: 3.2rem; --public-select-font-size: .76rem; }
 .page :global(.support-fields label.wide) { grid-column: 1 / -1; }
 .page :global(.support-fields label > span) { margin-bottom: .45rem; display: block; color: var(--vo-ink-600); font-size: .64rem; }
 .page :global(.support-fields input), .page :global(.support-fields select), .page :global(.support-fields textarea) { width: 100%; padding: 0 .8rem; border: 1px solid var(--vo-line-strong); border-radius: var(--vo-radius-control); background: var(--vo-paper); color: var(--vo-ink-900); font-family: inherit; font-size: .7rem; }

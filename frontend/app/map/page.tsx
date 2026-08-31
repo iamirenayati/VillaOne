@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { BrandMark } from "../components/BrandLogo";
 import { InnerHeader } from "../components/InnerHeader";
+import { PublicSelect } from "../components/PublicSelect";
 import { fetchMapVillas, type MapVilla } from "../lib/api";
 import { PracticalMap } from "./PracticalMap";
 import { settingLabel, toman } from "./map-utils";
@@ -93,13 +94,7 @@ export default function MazandaranMapPage() {
             <span aria-hidden="true">⌕</span>
             <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="نام ویلا، شهر یا نوع اقامت" aria-label="جست‌وجوی ویلا روی نقشه" />
           </label>
-          <label className="map-city-filter">
-            <span>مقصد</span>
-            <select value={city} onChange={(event) => setCity(event.target.value)} aria-label="فیلتر شهر">
-              <option value="all">همه شهرها</option>
-              {cities.map((name) => <option key={name} value={name}>{name}</option>)}
-            </select>
-          </label>
+          <PublicSelect className="map-city-filter" label="مقصد" value={city} onChange={setCity} options={[{ value: "all", label: "همه شهرها" }, ...cities.map((name) => ({ value: name, label: name }))]} />
           <button type="button" className="map-fit-button" onClick={() => setFitRequest((value) => value + 1)} disabled={filteredVillas.length === 0}>
             <span aria-hidden="true">◎</span> نمایش همه روی نقشه
           </button>

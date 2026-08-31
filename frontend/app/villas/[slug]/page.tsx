@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import { AvailabilityCalendar } from "../../components/AvailabilityCalendar";
 import { BrandMark } from "../../components/BrandLogo";
 import { InnerHeader } from "../../components/InnerHeader";
+import { PublicSelect } from "../../components/PublicSelect";
 import { ShamsiDateField } from "../../components/ShamsiDateField";
 import type { VillaListing } from "../../types/villa";
 import { type BookingQuote, type VillaReview, fetchBookingQuote, fetchFavoriteVillas, fetchVilla, fetchVillaAvailability, fetchVillaReviews, hasAuthenticatedSession, requestOtp, toggleVillaFavorite, verifyOtp, VillaOneApiError } from "../../lib/api";
+import styles from "./VillaDetail.module.css";
 
 const emptyVilla: VillaListing = { slug: "", title: "", city: "", region: "", setting: "", description: "", price: 0, priceLabel: "۰", depositPercentage: 0, guests: 0, rooms: 0, beds: 0, baths: 0, rating: "جدید", reviews: 0, badge: "", instant: false, pool: false, image: "", gallery: [], tags: [] };
 
@@ -146,14 +148,15 @@ export default function VillaDetailPage() {
     finally { setAuthBusy(false); }
   }
 
-  if (loadState === "loading") return <main dir="rtl" className="inner-page villa-luxury-detail"><InnerHeader /><DetailSkeleton /></main>;
-  if (loadState === "error" || !villa.slug) return <main dir="rtl" className="inner-page villa-luxury-detail"><InnerHeader /><section className="section-shell"><div className="detail-error-state" role="alert"><span>!</span><h1>این ویلا در دسترس نیست</h1><p>ممکن است اقامتگاه منتشر نشده باشد یا ارتباط با سرور موقتاً قطع شده باشد.</p><div><button type="button" onClick={() => setLoadRevision((value) => value + 1)}>تلاش دوباره</button><a href="/villas">بازگشت به ویلاها</a></div></div></section></main>;
+  if (loadState === "loading") return <main id="main-content" tabIndex={-1} dir="rtl" className={`inner-page villa-luxury-detail ${styles.page}`}><InnerHeader /><DetailSkeleton /></main>;
+  if (loadState === "error" || !villa.slug) return <main id="main-content" tabIndex={-1} dir="rtl" className={`inner-page villa-luxury-detail ${styles.page}`}><InnerHeader /><section className="section-shell"><div className="detail-error-state" role="alert"><span>!</span><h1>این ویلا در دسترس نیست</h1><p>ممکن است اقامتگاه منتشر نشده باشد یا ارتباط با سرور موقتاً قطع شده باشد.</p><div><button type="button" onClick={() => setLoadRevision((value) => value + 1)}>تلاش دوباره</button><a href="/villas">بازگشت به ویلاها</a></div></div></section></main>;
 
-  return <main dir="rtl" className="inner-page villa-luxury-detail">
+  return <main id="main-content" tabIndex={-1} dir="rtl" className={`inner-page villa-luxury-detail ${styles.page}`}>
     <InnerHeader />
     <div className="luxury-detail-shell section-shell">
       <nav className="luxury-detail-breadcrumb" aria-label="مسیر صفحه"><a href="/">خانه</a><span>←</span><a href="/villas">ویلاها</a><span>←</span><b>{villa.city}</b></nav>
       <header className="luxury-detail-heading"><div><div className="luxury-detail-kicker">{villa.badge && <span>{villa.badge}</span>}<small>{villa.city} · {villa.setting}</small></div><h1>{villa.title}</h1><p><span>{villa.reviews ? `★ ${villa.rating} از ${villa.reviews.toLocaleString("fa-IR")} نظر تأییدشده` : "اقامتگاه تازه‌منتشرشده"}</span><i />{villa.region}</p></div><div className="luxury-detail-actions"><button type="button" onClick={handleShare}>↗ <span>اشتراک‌گذاری</span></button><button type="button" className={favorite ? "is-favorite" : ""} onClick={handleFavorite}>{favorite ? "♥" : "♡"}<span>{favorite ? "ذخیره شد" : "ذخیره"}</span></button><small aria-live="polite">{shareMessage}</small></div></header>
+      <a className={styles.mobileBookingJump} href="#booking-panel"><span>از شبی {villa.priceLabel} تومان</span><strong>بررسی تاریخ و رزرو</strong></a>
 
       <section className={`luxury-detail-gallery gallery-count-${Math.min(gallery.length, 5)}`} aria-label="تصاویر اقامتگاه">
         {gallery.length ? gallery.slice(0, 5).map((image, index) => <button type="button" key={`${image}-${index}`} className={`luxury-gallery-item item-${index + 1}`} onClick={() => setActivePhoto(index)} aria-label={`باز کردن تصویر ${index + 1}`}><img src={image} alt={`${villa.title}، تصویر ${index + 1}`} /></button>) : <div className="luxury-gallery-fallback"><BrandMark /><span>تصاویر این اقامتگاه در حال تکمیل است</span></div>}
@@ -174,14 +177,14 @@ export default function VillaDetailPage() {
 
           <section className="luxury-detail-section luxury-region"><div><p className="eyebrow dark"><span /> موقعیت تقریبی</p><h2>{villa.region}</h2><p>برای حفظ حریم خصوصی میزبان، نشانی دقیق پس از تأیید رزرو ارائه می‌شود.</p></div><a href={`/map?villa=${encodeURIComponent(villa.slug)}`}>مشاهده روی نقشه <span>←</span></a></section>
 
-          <section className="luxury-detail-section luxury-policies"><p className="eyebrow dark"><span /> پیش از درخواست</p><h2>رزرو روشن و بدون ابهام</h2><div><article><span>۰۱</span><strong>حداقل دو شب اقامت</strong><p>سامانه بازه‌های کوتاه‌تر را تأیید نمی‌کند.</p></article><article><span>۰۲</span><strong>ثبت درخواست و مهلت پرداخت</strong><p>پس از ثبت، رزرو تا زمان درج‌شده برای پرداخت نگه داشته می‌شود.</p></article><article><span>۰۳</span><strong>بررسی رسید کارت‌به‌کارت</strong><p>رزرو پس از تأیید رسید توسط تیم مالی قطعی می‌شود.</p></article></div><footer><a href="/terms">قوانین رزرو</a><a href="/cancellation">سیاست لغو</a><a href="/support">پشتیبانی</a></footer></section>
+          <section className="luxury-detail-section luxury-policies"><p className="eyebrow dark"><span /> پیش از درخواست</p><h2>رزرو روشن و بدون ابهام</h2><div><article><strong>حداقل دو شب اقامت</strong><p>سامانه بازه‌های کوتاه‌تر را تأیید نمی‌کند.</p></article><article><strong>ثبت درخواست و مهلت پرداخت</strong><p>پس از ثبت، رزرو تا زمان درج‌شده برای پرداخت نگه داشته می‌شود.</p></article><article><strong>بررسی رسید کارت‌به‌کارت</strong><p>رزرو پس از تأیید رسید توسط تیم مالی قطعی می‌شود.</p></article></div><footer><a href="/terms">قوانین رزرو</a><a href="/cancellation">سیاست لغو</a><a href="/support">پشتیبانی</a></footer></section>
 
           <section className="luxury-detail-section luxury-reviews" id="reviews"><div className="luxury-section-heading"><div><p className="eyebrow dark"><span /> تجربه مهمانان</p><h2>{villa.reviews ? `${villa.rating} از ۵` : "هنوز نظری ثبت نشده"}</h2></div>{villa.reviews > 0 && <small>{villa.reviews.toLocaleString("fa-IR")} اقامت تأییدشده</small>}</div>{reviews.length ? <div className="luxury-review-grid">{reviews.slice(0, 3).map((review) => <article key={review.id}><header><span>{review.guest_name.slice(0, 1)}</span><div><b>{review.guest_name}</b><small>{new Intl.DateTimeFormat("fa-IR-u-ca-persian", { month: "long", year: "numeric" }).format(new Date(review.created_at))}</small></div><em>{"★".repeat(review.rating)}</em></header><h3>{review.title || "تجربه اقامت"}</h3><blockquote>«{review.comment}»</blockquote></article>)}</div> : <p className="truthful-empty-copy">نظرها فقط پس از پایان اقامت و برای مهمان تأییدشده منتشر می‌شوند.</p>}</section>
         </div>
 
-        <aside className="luxury-booking-wrap"><div className="luxury-booking-card">
+        <aside id="booking-panel" className="luxury-booking-wrap" aria-label="انتخاب تاریخ و رزرو"><div className="luxury-booking-card">
           {bookingStep < 2 ? <><header><div><strong>{villa.priceLabel}</strong><span> تومان / شب</span></div><small>{villa.instant ? "رزرو آنی" : "درخواست رزرو"}</small></header>
-            <div className="luxury-booking-fields"><ShamsiDateField value={checkin} onChange={setCheckin} label="ورود" disabledDates={unavailableDates} /><ShamsiDateField value={checkout} minValue={checkin} onChange={setCheckout} label="خروج" disabledDates={unavailableDates} /><label><span>مهمانان</span><select value={guests} onChange={(event) => setGuests(event.target.value)}>{Array.from({ length: villa.guests }, (_, index) => index + 1).map((count) => <option value={count} key={count}>{count.toLocaleString("fa-IR")} مهمان</option>)}</select></label></div>
+            <div className="luxury-booking-fields"><ShamsiDateField value={checkin} onChange={setCheckin} label="ورود" disabledDates={unavailableDates} /><ShamsiDateField value={checkout} minValue={checkin} onChange={setCheckout} label="خروج" disabledDates={unavailableDates} /><PublicSelect className="booking-guest-select" label="مهمانان" value={guests} onChange={setGuests} options={Array.from({ length: villa.guests }, (_, index) => index + 1).map((count) => ({ value: String(count), label: `${count.toLocaleString("fa-IR")} مهمان` }))} /></div>
             {dateMessage && <p className={datesAvailable ? "luxury-date-status is-available" : "luxury-date-status"}>{datesAvailable ? "✓" : "◌"} {dateMessage}</p>}
             {bookingStep === 1 && <label className="luxury-phone-field"><span>شماره موبایل برای ادامه</span><input dir="ltr" inputMode="tel" value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="09•• ••• ••••" /></label>}
             <button className="luxury-booking-submit" type="button" disabled={authBusy || quoteLoading || !quote || datesAvailable !== true || nights < 2} onClick={() => bookingStep === 0 ? continueToCheckout() : sendOtp()}>{bookingStep === 0 ? quoteLoading ? "در حال محاسبه قیمت…" : "ادامه رزرو" : authBusy ? "در حال ارسال…" : "ارسال کد تأیید"}<span>←</span></button>
