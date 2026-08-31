@@ -41,3 +41,4 @@ tsconfig.tsbuildinfo
 /.wrangler/
 /outputs/
 /work/
+/.worktrees/
