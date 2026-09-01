@@ -87,6 +87,8 @@ jobs:
         run: npm run lint
       - name: Build frontend
         run: npm run build
+      - name: Check frontend performance budgets
+        run: npm run check:budget
       - name: Rendered HTML smoke tests
         run: node --test tests/rendered-html.test.mjs
       - name: Build frontend image
