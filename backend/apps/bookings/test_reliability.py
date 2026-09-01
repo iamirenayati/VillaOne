@@ -2,6 +2,7 @@ from datetime import timedelta
 import json
 
 from django.core.exceptions import ValidationError
+from django.core.management import call_command
 from django.urls import reverse
 from django.utils import timezone
 from rest_framework.test import APITestCase
@@ -9,7 +10,7 @@ from rest_framework.test import APITestCase
 from apps.accounts.models import User
 from apps.villas.models import City, Villa
 
-from .models import AdminAuditLog, Booking, CustomerNotification, Payment
+from .models import AdminAuditLog, Booking, CustomerNotification, OperationalTaskRun, Payment
 from .services import create_booking, decide_booking, expire_stale_bookings
 
 
@@ -80,6 +81,20 @@ class ReliableBookingWorkflowTests(APITestCase):
         audit = AdminAuditLog.objects.get(action="booking.expired", target_id=str(booking.pk))
         self.assertIsNone(audit.admin)
         self.assertEqual(audit.system_actor, "operational_tasks")
+
+    def test_operational_command_persists_success_and_is_idempotent(self):
+        booking = self.booking(client_request_id="command-expiry-request")
+        booking.expires_at = timezone.now() - timedelta(minutes=1)
+        booking.save(update_fields=["expires_at"])
+
+        call_command("process_operational_tasks", batch_size=10)
+        call_command("process_operational_tasks", batch_size=10)
+
+        booking.refresh_from_db()
+        run = OperationalTaskRun.objects.get(task_name="process_operational_tasks")
+        self.assertEqual(booking.status, Booking.Status.EXPIRED)
+        self.assertEqual(run.status, OperationalTaskRun.Status.SUCCEEDED)
+        self.assertEqual(run.processed_count, 0)
 
     def test_customer_notification_api_is_owner_scoped_and_markable(self):
         booking = self.booking(client_request_id="notification-request")
