@@ -19,6 +19,20 @@ from .serializers import AdminAuditLogSerializer, AdminBookingServiceSerializer,
 from .services import cancellation_quote, card_transfer_instructions, complete_mock_payment, decide_booking, expire_stale_bookings, initiate_payment, mark_cancellation_refunded, record_manual_payment, reconcile_manual_payment, resolve_cancellation, review_card_transfer, submit_card_transfer
 
 
+def conflict_response(request, exc, code):
+    """Return the same structured error envelope used by the global handler."""
+    return Response(
+        {
+            "detail": exc.messages if hasattr(exc, "messages") else str(exc),
+            "code": code,
+            "field_errors": {},
+            "request_id": getattr(request, "request_id", ""),
+            "retryable": False,
+        },
+        status=status.HTTP_409_CONFLICT,
+    )
+
+
 class BookingCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     throttle_classes = [ScopedRateThrottle]
@@ -31,7 +45,7 @@ class BookingCreateView(generics.CreateAPIView):
         try:
             booking = serializer.save()
         except DjangoValidationError as exc:
-            return Response({"detail": exc.messages}, status=status.HTTP_409_CONFLICT)
+            return conflict_response(request, exc, "booking_conflict")
         return Response(BookingSerializer(booking).data, status=status.HTTP_201_CREATED)
 
 
@@ -47,7 +61,7 @@ class BookingQuoteView(generics.GenericAPIView):
         try:
             quote = serializer.save()
         except DjangoValidationError as exc:
-            return Response({"detail": exc.messages}, status=status.HTTP_409_CONFLICT)
+            return conflict_response(request, exc, "booking_quote_conflict")
         payload = {key: str(value) if hasattr(value, "as_tuple") else value for key, value in quote.items()}
         return Response(payload)
 
@@ -123,7 +137,7 @@ class PaymentInitiateView(generics.GenericAPIView):
         try:
             payment = initiate_payment(booking=booking)
         except DjangoValidationError as exc:
-            return Response({"detail": exc.messages}, status=status.HTTP_409_CONFLICT)
+            return conflict_response(request, exc, "payment_conflict")
         return Response({"payment": PaymentSerializer(payment).data, "mode": "local_mock"}, status=status.HTTP_201_CREATED)
 
 
@@ -141,7 +155,7 @@ class MockPaymentCompleteView(generics.GenericAPIView):
         try:
             payment = complete_mock_payment(payment=payment, success=serializer.validated_data["result"] == "paid")
         except DjangoValidationError as exc:
-            return Response({"detail": exc.messages}, status=status.HTTP_409_CONFLICT)
+            return conflict_response(request, exc, "payment_mock_conflict")
         payment.booking.refresh_from_db()
         return Response({"payment": PaymentSerializer(payment).data, "booking": BookingSerializer(payment.booking).data})
 
@@ -155,7 +169,7 @@ class CardTransferInstructionsView(APIView):
         try:
             return Response(card_transfer_instructions(booking))
         except DjangoValidationError as exc:
-            return Response({"detail": exc.messages}, status=status.HTTP_409_CONFLICT)
+            return conflict_response(request, exc, "payment_instructions_conflict")
 
 
 class CardTransferSubmitView(generics.GenericAPIView):
@@ -171,7 +185,7 @@ class CardTransferSubmitView(generics.GenericAPIView):
         try:
             payment = submit_card_transfer(booking=booking, **serializer.validated_data)
         except DjangoValidationError as exc:
-            return Response({"detail": exc.messages}, status=status.HTTP_409_CONFLICT)
+            return conflict_response(request, exc, "payment_receipt_conflict")
         return Response(PaymentSerializer(payment).data, status=status.HTTP_201_CREATED)
 
 
@@ -225,7 +239,7 @@ class AdminCardTransferReviewView(generics.GenericAPIView):
         try:
             payment = review_card_transfer(payment=payment, admin_user=request.user, approve=serializer.validated_data["action"] == "approve", review_note=serializer.validated_data.get("review_note", ""))
         except DjangoValidationError as exc:
-            return Response({"detail": exc.messages}, status=status.HTTP_409_CONFLICT)
+            return conflict_response(request, exc, "payment_review_conflict")
         return Response(PaymentSerializer(payment).data)
 
 
@@ -331,7 +345,7 @@ class AdminBookingActionView(generics.GenericAPIView):
                 approve=serializer.validated_data["action"] == "approve",
             )
         except DjangoValidationError as exc:
-            return Response({"detail": exc.messages}, status=status.HTTP_409_CONFLICT)
+            return conflict_response(request, exc, "booking_decision_conflict")
         return Response(BookingSerializer(booking).data)
 
 
@@ -345,7 +359,7 @@ class AdminPaymentReconcileView(APIView):
         try:
             payment = reconcile_manual_payment(payment=payment, admin_user=request.user)
         except DjangoValidationError as exc:
-            return Response({"detail": exc.messages}, status=status.HTTP_409_CONFLICT)
+            return conflict_response(request, exc, "payment_reconciliation_conflict")
         return Response(PaymentSerializer(payment).data)
 
 
@@ -362,7 +376,7 @@ class AdminManualPaymentRecordView(generics.GenericAPIView):
         try:
             payment = record_manual_payment(booking=booking, admin_user=request.user, amount=serializer.validated_data.get("amount"))
         except DjangoValidationError as exc:
-            return Response({"detail": exc.messages}, status=status.HTTP_409_CONFLICT)
+            return conflict_response(request, exc, "payment_record_conflict")
         return Response(PaymentSerializer(payment).data, status=status.HTTP_201_CREATED)
 
 
@@ -393,7 +407,7 @@ class AdminCancellationActionView(generics.GenericAPIView):
             else:
                 cancellation = resolve_cancellation(cancellation_request=cancellation, admin_user=request.user, approve=action == "approve", admin_note=serializer.validated_data.get("admin_note", ""))
         except DjangoValidationError as exc:
-            return Response({"detail": exc.messages}, status=status.HTTP_409_CONFLICT)
+            return conflict_response(request, exc, "cancellation_conflict")
         return Response(CancellationRequestSerializer(cancellation).data)
 
 

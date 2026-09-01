@@ -125,6 +125,7 @@ class BookingServiceTests(APITestCase):
         response = self.client.post(reverse("booking-create"), changed, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
+        self.assertEqual(response.data["code"], "booking_conflict")
         self.assertEqual(Booking.objects.filter(client_request_id="booking-replay-2").count(), 1)
 
     def test_public_quote_matches_created_booking(self):
@@ -240,6 +241,7 @@ class BookingServiceTests(APITestCase):
         }, format="json")
 
         self.assertEqual(blocked.status_code, status.HTTP_409_CONFLICT)
+        self.assertEqual(blocked.data["code"], "booking_quote_conflict")
         self.assertIn("در دسترس نیست", str(blocked.data))
 
     def test_content_admin_can_operate_service_fulfilment_queue(self):
@@ -260,6 +262,7 @@ class BookingServiceTests(APITestCase):
     def test_quote_rejects_one_night_and_past_stays(self):
         one_night = self.client.post(reverse("booking-quote"), {"villa_slug": self.villa.slug, "checkin": "2026-08-20", "checkout": "2026-08-21", "guests_count": 2, "payment_type": "deposit"}, format="json")
         self.assertEqual(one_night.status_code, status.HTTP_409_CONFLICT)
+        self.assertEqual(one_night.data["code"], "booking_quote_conflict")
         past = self.client.post(reverse("booking-quote"), {"villa_slug": self.villa.slug, "checkin": "2020-08-20", "checkout": "2020-08-23", "guests_count": 2, "payment_type": "deposit"}, format="json")
         self.assertEqual(past.status_code, status.HTTP_409_CONFLICT)
 
