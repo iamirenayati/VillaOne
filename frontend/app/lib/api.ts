@@ -526,7 +526,15 @@ export async function reviewAdminCardTransferPayment(paymentId: number, action: 
 export async function fetchAdminCardTransferProof(paymentId: number) {
   const base = apiBase(); const token = accessToken();
   if (!base || !token) throw new VillaOneApiError("برای مشاهده رسید باید وارد حساب مدیر شوید.");
-  const response = await fetch(`${base}/bookings/admin/payments/${paymentId}/proof/`, { headers: { Authorization: `Bearer ${token}` } });
+  let response = await fetch(`${base}/bookings/admin/payments/${paymentId}/proof/`, { headers: { Authorization: `Bearer ${token}` } });
+  if (response.status === 401) {
+    const refreshed = await refreshAccessToken();
+    if (refreshed) response = await fetch(`${base}/bookings/admin/payments/${paymentId}/proof/`, { headers: { Authorization: `Bearer ${refreshed}` } });
+  }
+  if (response.status === 401) {
+    clearExpiredSession();
+    throw new VillaOneApiError("نشست شما منقضی شده است؛ لطفاً دوباره وارد شوید.", 401, { code: "token_expired", retryable: false, request_id: response.headers.get("X-Request-ID") ?? "" });
+  }
   if (!response.ok) throw await apiErrorFromResponse(response, "دریافت تصویر رسید ناموفق بود.");
   return URL.createObjectURL(await response.blob());
 }
