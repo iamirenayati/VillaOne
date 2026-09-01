@@ -14,7 +14,7 @@ DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() == "true"
 ALLOWED_HOSTS = [item.strip() for item in os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,testserver").split(",") if item.strip()]
 
 if not DEBUG:
-    if SECRET_KEY == "villaone-local-development-secret-key-change-me" or len(SECRET_KEY) < 50:
+    if SECRET_KEY == "villaone-local-development-secret-key-change-me" or "replace-with" in SECRET_KEY.lower() or len(SECRET_KEY) < 50:
         raise ImproperlyConfigured("DJANGO_SECRET_KEY امن برای محیط عملیاتی لازم است.")
     if not ALLOWED_HOSTS:
         raise ImproperlyConfigured("DJANGO_ALLOWED_HOSTS برای محیط عملیاتی لازم است.")

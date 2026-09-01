@@ -23,6 +23,10 @@ and build output are deliberately excluded from this repository.
 
 ## Release Compose
 
+For a new Ubuntu VPS, start with the complete [`VPS-SETUP.md`](VPS-SETUP.md)
+guide. It covers DNS, Docker, TLS, firewall rules, first database setup,
+business content, scheduled jobs, backups, verification, and normal releases.
+
 From the repository root, copy `backend/deploy/.env.production.example` to a
 protected `.env.production`, fill every required value, and validate the
 release configuration before starting services:
