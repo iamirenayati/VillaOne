@@ -1,6 +1,7 @@
 .env
 .env.*
 !.env.example
+!backend/deploy/.env.production.example
 
 **/node_modules/
 **/.next/
