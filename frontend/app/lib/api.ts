@@ -56,6 +56,33 @@ function clearExpiredSession() {
   window.dispatchEvent(new CustomEvent("villaone-session-expired"));
 }
 
+async function apiErrorFromResponse(response: Response, fallback: string) {
+  const payload = await response.json().catch(() => ({})) as Record<string, unknown> & {
+    detail?: string | string[];
+    non_field_errors?: string[];
+    code?: string;
+    field_errors?: Record<string, unknown>;
+    request_id?: string;
+    retryable?: boolean;
+  };
+  const detail = Array.isArray(payload.detail) ? payload.detail.join(" ") : payload.detail;
+  const fieldErrors = normalizeFieldErrors(payload.field_errors);
+  const fieldMessage = Object.values(fieldErrors).flat().join(" ") || Object.entries(payload)
+    .filter(([key]) => !["detail", "non_field_errors", "code", "field_errors", "request_id", "retryable"].includes(key))
+    .flatMap(([, value]) => Array.isArray(value) ? value.map(String) : typeof value === "string" ? [value] : [])
+    .join(" ");
+  return new VillaOneApiError(
+    detail || payload.non_field_errors?.join(" ") || fieldMessage || fallback,
+    response.status,
+    {
+      code: payload.code,
+      field_errors: payload.field_errors,
+      request_id: payload.request_id ?? response.headers.get("X-Request-ID") ?? "",
+      retryable: payload.retryable,
+    },
+  );
+}
+
 async function refreshAccessToken() {
   const base = apiBase();
   const refresh = typeof window === "undefined" ? null : window.localStorage.getItem("villaone-refresh-token");
@@ -86,23 +113,7 @@ async function apiFetch<T>(path: string, init: RequestInit = {}, authenticated =
     throw new VillaOneApiError("نشست شما منقضی شده است؛ لطفاً دوباره وارد شوید.", 401, { code: "token_expired", retryable: false, request_id: response.headers.get("X-Request-ID") ?? "" });
   }
   if (!response.ok) {
-    const payload = await response.json().catch(() => ({})) as Record<string, unknown> & { detail?: string | string[]; non_field_errors?: string[]; code?: string; field_errors?: Record<string, unknown>; request_id?: string; retryable?: boolean };
-    const detail = Array.isArray(payload.detail) ? payload.detail.join(" ") : payload.detail;
-    const fieldErrors = normalizeFieldErrors(payload.field_errors);
-    const fieldMessage = Object.values(fieldErrors).flat().join(" ") || Object.entries(payload)
-      .filter(([key]) => !["detail", "non_field_errors", "code", "field_errors", "request_id", "retryable"].includes(key))
-      .flatMap(([, value]) => Array.isArray(value) ? value.map(String) : typeof value === "string" ? [value] : [])
-      .join(" ");
-    throw new VillaOneApiError(
-      detail || payload.non_field_errors?.join(" ") || fieldMessage || "ارتباط با سرور ناموفق بود.",
-      response.status,
-      {
-        code: payload.code,
-        field_errors: payload.field_errors,
-        request_id: payload.request_id ?? response.headers.get("X-Request-ID") ?? "",
-        retryable: payload.retryable,
-      },
-    );
+    throw await apiErrorFromResponse(response, "ارتباط با سرور ناموفق بود.");
   }
   return response.json() as Promise<T>;
 }
@@ -483,10 +494,12 @@ export async function submitCardTransfer(code: string, input: { proofImage: File
   if (response.status === 401 && await refreshAccessToken()) {
     response = await fetch(`${apiBase()}/bookings/mine/${encodeURIComponent(code)}/card-transfer/`, { method: "POST", headers: { Authorization: `Bearer ${accessToken()}` }, body: form });
   }
-  if (response.status === 401) clearExpiredSession();
-  const payload = await response.json().catch(() => ({}));
-  if (!response.ok) throw new VillaOneApiError(Array.isArray(payload.detail) ? payload.detail.join(" ") : payload.detail || "ارسال رسید انجام نشد.", response.status);
-  return payload as ApiPayment;
+  if (response.status === 401) {
+    clearExpiredSession();
+    throw new VillaOneApiError("نشست شما منقضی شده است؛ لطفاً دوباره وارد شوید.", 401, { code: "token_expired", retryable: false, request_id: response.headers.get("X-Request-ID") ?? "" });
+  }
+  if (!response.ok) throw await apiErrorFromResponse(response, "ارسال رسید انجام نشد.");
+  return await response.json() as ApiPayment;
 }
 
 export type AdminCardTransferPayment = {
@@ -514,7 +527,7 @@ export async function fetchAdminCardTransferProof(paymentId: number) {
   const base = apiBase(); const token = accessToken();
   if (!base || !token) throw new VillaOneApiError("برای مشاهده رسید باید وارد حساب مدیر شوید.");
   const response = await fetch(`${base}/bookings/admin/payments/${paymentId}/proof/`, { headers: { Authorization: `Bearer ${token}` } });
-  if (!response.ok) throw new VillaOneApiError("دریافت تصویر رسید ناموفق بود.", response.status);
+  if (!response.ok) throw await apiErrorFromResponse(response, "دریافت تصویر رسید ناموفق بود.");
   return URL.createObjectURL(await response.blob());
 }
 
