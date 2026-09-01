@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings as django_settings
 from django.db import connection
@@ -53,6 +56,18 @@ class Command(BaseCommand):
                 failures.append("DEBUG must be disabled for a production release.")
             if connection.vendor != "postgresql":
                 failures.append("Production release verification requires PostgreSQL.")
+            if not os.getenv("FRONTEND_URL", "").strip():
+                failures.append("FRONTEND_URL must be configured for production redirects.")
+            if not django_settings.ALLOWED_HOSTS:
+                failures.append("DJANGO_ALLOWED_HOSTS must contain at least one host.")
+            if not django_settings.CORS_ALLOWED_ORIGINS:
+                failures.append("CORS_ALLOWED_ORIGINS must contain the frontend origin.")
+            if not django_settings.CSRF_TRUSTED_ORIGINS:
+                failures.append("CSRF_TRUSTED_ORIGINS must contain the frontend origin.")
+            for storage_name in ("MEDIA_ROOT", "PRIVATE_MEDIA_ROOT"):
+                storage_path = Path(getattr(django_settings, storage_name))
+                if not storage_path.exists() or not os.access(storage_path, os.W_OK):
+                    failures.append(f"{storage_name} is not writable: {storage_path}")
             if django_settings.PAYMENT_MOCK_ENABLED or django_settings.OTP_DEBUG_CODE:
                 failures.append("Mock payment and OTP debug output must be disabled.")
             executor = MigrationExecutor(connection)
