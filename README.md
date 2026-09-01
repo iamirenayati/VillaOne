@@ -1,16 +1,13 @@
 # VillaOne V1.1
 
-One-time monorepo snapshot of the VillaOne concierge platform for test deployment.
+Release monorepo for the VillaOne concierge platform. This tree is the source
+used by CI and the Docker Compose release workflow; the sibling `backend/` and
+`website/` checkouts remain useful for local feature work.
 
 ## Structure
 
 - `frontend/` — Vinext/React customer website and operations workspace.
 - `backend/` — Django REST API, booking operations, content management, and admin.
-
-The snapshot corresponds to:
-
-- Frontend commit `20c45746f978675f14512b2fd9ab78b86b7acd41`.
-- Backend commit `addcdf280685a7f9575355a4256bbf058bc6258b`.
 
 ## Local development
 
@@ -24,9 +21,23 @@ NEXT_PUBLIC_VILLAONE_API_URL=http://127.0.0.1:8000
 Local databases, environment files, uploaded media, payment proofs, dependencies,
 and build output are deliberately excluded from this repository.
 
+## Release Compose
+
+From the repository root, copy `backend/deploy/.env.production.example` to a
+protected `.env.production`, fill every required value, and validate the
+release configuration before starting services:
+
+```sh
+docker compose --env-file backend/deploy/.env.production \
+  -f backend/deploy/docker-compose.production.yml config
+```
+
+The production runbook in [`backend/deploy/README.md`](backend/deploy/README.md)
+documents the migration, backup, verification, and restart sequence. Service
+startup never runs migrations or fixture commands automatically.
+
 ## Netlify test
 
 Select this repository and set the Netlify base directory to `frontend`. The
 frontend still requires a publicly reachable Django API; a browser deployment
 cannot access a backend running at `localhost` on a developer computer.
-

@@ -46,7 +46,10 @@ services:
 
   frontend:
     build:
-      context: ../../website
+      # This release repository keeps the frontend in ./frontend. The
+      # standalone backend repository intentionally retains its sibling
+      # ../../website context.
+      context: ../../frontend
       args:
         NEXT_PUBLIC_VILLAONE_API_URL: /api/v1
         NEXT_PUBLIC_VILLAONE_SITE_URL: ${SITE_URL}
