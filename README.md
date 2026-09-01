@@ -15,7 +15,7 @@ Follow the setup instructions in [`frontend/README.md`](frontend/README.md) and
 [`backend/README.md`](backend/README.md). Configure the frontend API URL with:
 
 ```env
-NEXT_PUBLIC_VILLAONE_API_URL=http://127.0.0.1:8000
+NEXT_PUBLIC_VILLAONE_API_URL=http://127.0.0.1:8000/api/v1
 ```
 
 Local databases, environment files, uploaded media, payment proofs, dependencies,

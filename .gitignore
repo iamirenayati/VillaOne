@@ -12,10 +12,9 @@
 
 **/*.sqlite3
 backend/media/
-backend/private_media/
+backend/private-media/
 backend/staticfiles/
 
 *.log
 .DS_Store
 Thumbs.db
-
