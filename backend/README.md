@@ -43,7 +43,7 @@ python manage.py seed_marketplace
 
 Use `--publish` only for an intentional local visual preview. Before a real release, run `python manage.py verify_release`; it checks the business contact/legal content and requires at least one published villa, contractor, property, service, and article.
 
-For a SQLite backup, stop the API and copy both `db.sqlite3` and the `media/` directory to a dated backup location. Restore both, then run `python manage.py migrate` and `python manage.py verify_release`. For PostgreSQL, use `pg_dump --format=custom "$env:DATABASE_URL" > villaone.dump` and restore with `pg_restore --clean --if-exists --dbname "$env:DATABASE_URL" villaone.dump`; media files still require a separate copy.
+For a SQLite backup, stop the API and copy both `db.sqlite3` and the `media/` directory to a dated backup location. Restore both, then run `python manage.py migrate` and `python manage.py verify_release`. For PostgreSQL, use `pg_dump --format=custom "$env:DATABASE_URL" > villaone.dump` and restore with `pg_restore --clean --if-exists --dbname "$env:DATABASE_URL" villaone.dump`; media files still require a separate copy. The scheduled `process_operational_tasks` and `check_operational_integrity` commands are the source of truth for expiry and integrity checks.
 
 ### Monthly journal workflow
 
@@ -104,7 +104,7 @@ An unpaid booking request holds its dates for two hours by default, then expires
 
 ## Production deployment
 
-The backend directory is deployable as its own repository. `Dockerfile` builds the API and Django Admin, while `start.sh` applies migrations and starts Gunicorn without inserting fixtures. `/health/` checks both the application and its database connection.
+The backend directory is deployable as its own repository. `Dockerfile` builds the API and Django Admin, while `start.sh` only starts Gunicorn without applying migrations or inserting fixtures. Run migrations explicitly through `deploy/release.sh` (or the documented Compose command) before restarting the web service. `/health/` checks both the application and its database connection.
 
 For any later host, configure the backend independently and set the frontend API URL. Before exposing the service to guests, set the real hostname in `DJANGO_ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS`, then configure the frontend with:
 
