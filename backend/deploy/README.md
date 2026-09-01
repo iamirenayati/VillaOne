@@ -19,7 +19,7 @@ The frontend and backend share one HTTPS origin. Nginx sends `/api/`, `/admin/`,
 
 ## Normal release
 
-Run `./release.sh` from `/srv/villaone/backend/deploy`. It performs a pre-release application check and backup, builds images, confirms migrations are committed, applies them once, collects static assets, refreshes housekeeping state, verifies production readiness, restarts services, and checks `/health/ready/`.
+Run `./release.sh` from `/srv/villaone/backend/deploy`. It performs a pre-release application check and backup, builds images, confirms migrations are committed, applies them once, collects static assets, refreshes housekeeping state, verifies production readiness, restarts services, and runs the health plus public API smoke checks in `smoke.sh`.
 
 If a release fails before restart, the running version remains available. If readiness fails after restart, inspect `docker compose logs`, restore the previous image/tag, and use the pre-release backup only if a migration changed data incompatibly.
 

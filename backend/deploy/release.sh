@@ -34,4 +34,5 @@ until curl --fail --silent --show-error --max-time 5 "${SITE_URL%/}/health/ready
   sleep 5
 done
 
+"$DEPLOY_DIR/smoke.sh"
 echo "VillaOne release completed and readiness passed."
