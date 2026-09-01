@@ -3,8 +3,10 @@ from io import BytesIO
 
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.management import call_command, CommandError
 from django.urls import reverse
 from django.utils import timezone
+from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -13,6 +15,16 @@ from apps.villas.models import City, Villa
 from PIL import Image
 
 from .models import Article, ArticleImage, BusinessSettings, Contractor, Inquiry, RealEstateListing, ServiceAvailability, ServiceOffer
+
+
+class ReleaseVerificationTests(TestCase):
+    def test_incomplete_business_settings_lists_each_missing_launch_field(self):
+        with self.assertRaises(CommandError) as raised:
+            call_command("verify_release")
+
+        message = str(raised.exception)
+        for field in ("support_phone", "operating_hours", "footer_description", "terms_text", "privacy_text", "cancellation_text"):
+            self.assertIn(field, message)
 
 
 class MarketplaceApiTests(APITestCase):

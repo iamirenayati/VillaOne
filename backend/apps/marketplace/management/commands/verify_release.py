@@ -11,6 +11,16 @@ from apps.villas.models import Villa
 from apps.bookings.models import OperationalTaskRun
 
 
+REQUIRED_BUSINESS_FIELDS = (
+    ("support_phone", "شماره پشتیبانی"),
+    ("operating_hours", "ساعات پاسخ‌گویی"),
+    ("footer_description", "توضیح فوتر"),
+    ("terms_text", "شرایط استفاده"),
+    ("privacy_text", "حریم خصوصی"),
+    ("cancellation_text", "سیاست لغو"),
+)
+
+
 class Command(BaseCommand):
     help = "Checks that public content and business contact details are ready for a real release."
 
@@ -20,8 +30,13 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         failures = []
         settings = BusinessSettings.objects.filter(pk=1).first()
-        if not settings or not settings.is_launch_ready:
-            failures.append("تنظیمات کسب‌وکار (تماس، ساعات پاسخ‌گویی، توضیح و متن‌های قانونی) کامل نیست.")
+        if not settings:
+            missing = ", ".join(f"{field} ({label})" for field, label in REQUIRED_BUSINESS_FIELDS)
+            failures.append("Business settings record is missing; create it in Django Admin. Required fields: " + missing)
+        else:
+            missing = [f"{field} ({label})" for field, label in REQUIRED_BUSINESS_FIELDS if not str(getattr(settings, field, "") or "").strip()]
+            if missing:
+                failures.append("Business settings missing: " + ", ".join(missing))
         if not Villa.objects.filter(status=Villa.Status.PUBLISHED).exists():
             failures.append("هیچ ویلای منتشرشده‌ای وجود ندارد.")
         required_catalogs = (
