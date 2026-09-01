@@ -58,6 +58,8 @@ jobs:
         run: python manage.py check
       - name: Deployment checks
         run: python manage.py check --deploy --fail-level ERROR
+      - name: Validate release scripts
+        run: sh -n deploy/*.sh
       - name: Run backend tests
         run: python manage.py test --verbosity 2
       - name: Run PostgreSQL concurrency tests explicitly
