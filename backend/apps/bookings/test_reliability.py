@@ -81,6 +81,8 @@ class ReliableBookingWorkflowTests(APITestCase):
         audit = AdminAuditLog.objects.get(action="booking.expired", target_id=str(booking.pk))
         self.assertIsNone(audit.admin)
         self.assertEqual(audit.system_actor, "operational_tasks")
+        payment_audit = AdminAuditLog.objects.get(action="payment.expired", target_id=str(payment.pk))
+        self.assertEqual(payment_audit.system_actor, "operational_tasks")
 
     def test_operational_command_persists_success_and_is_idempotent(self):
         booking = self.booking(client_request_id="command-expiry-request")

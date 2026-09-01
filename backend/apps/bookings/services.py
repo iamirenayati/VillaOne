@@ -67,12 +67,20 @@ def expire_stale_bookings(now=None, *, batch_size=100, system_actor="operational
         for booking in rows:
             booking.status = Booking.Status.EXPIRED
             booking.save(update_fields=["status", "updated_at"])
-            booking.payments.filter(status=Payment.Status.PENDING).update(
-                status=Payment.Status.FAILED,
-                reviewed_at=now,
-                review_note="Booking hold expired automatically.",
-                updated_at=now,
-            )
+            pending_payments = list(booking.payments.filter(status=Payment.Status.PENDING))
+            for payment in pending_payments:
+                payment.status = Payment.Status.FAILED
+                payment.reviewed_at = now
+                payment.review_note = "Booking hold expired automatically."
+                payment.save(update_fields=["status", "reviewed_at", "review_note", "updated_at"])
+                AdminAuditLog.objects.create(
+                    admin=None,
+                    system_actor=system_actor,
+                    action="payment.expired",
+                    target_type="Payment",
+                    target_id=str(payment.pk),
+                    metadata={"booking_code": booking.code, "payment_id": payment.pk},
+                )
             AdminAuditLog.objects.create(
                 admin=None,
                 system_actor=system_actor,
