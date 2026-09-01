@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from io import BytesIO
 from unittest.mock import patch
 
@@ -19,9 +19,13 @@ from .services import cancellation_quote, complete_booking, create_booking, deci
 
 class BookingServiceTests(APITestCase):
     def setUp(self):
+        self.frozen_now = timezone.make_aware(datetime(2026, 8, 1, 12, 0))
         self.localdate_patcher = patch("apps.bookings.services.timezone.localdate", return_value=date(2026, 8, 1))
         self.localdate_patcher.start()
         self.addCleanup(self.localdate_patcher.stop)
+        self.now_patcher = patch("apps.bookings.services.timezone.now", return_value=self.frozen_now)
+        self.now_patcher.start()
+        self.addCleanup(self.now_patcher.stop)
         cache.clear()
         self.owner = User.objects.create_user(username="owner", phone="09120000001")
         self.guest = User.objects.create_user(username="guest", phone="09120000002", is_phone_verified=True)
@@ -121,13 +125,16 @@ class BookingServiceTests(APITestCase):
             default_daily_capacity=2,
             status=ServiceOffer.Status.PUBLISHED,
         )
+        checkin = timezone.localdate() + timedelta(days=5)
+        checkout = checkin + timedelta(days=3)
+        service_date = checkin + timedelta(days=1)
         payload = {
             "villa_slug": self.villa.slug,
-            "checkin": "2026-08-20",
-            "checkout": "2026-08-23",
+            "checkin": checkin.isoformat(),
+            "checkout": checkout.isoformat(),
             "guests_count": 3,
             "payment_type": "deposit",
-            "service_items": [{"slug": chef.slug, "service_date": "2026-08-21", "time_slot": "dinner"}],
+            "service_items": [{"slug": chef.slug, "service_date": service_date.isoformat(), "time_slot": "dinner"}],
         }
 
         quote = self.client.post(reverse("booking-quote"), payload, format="json")
@@ -135,7 +142,7 @@ class BookingServiceTests(APITestCase):
         self.assertEqual(quote.status_code, status.HTTP_200_OK, quote.data)
         self.assertEqual(quote.data["services_total"], "3600000")
         self.assertEqual(quote.data["services"][0]["quantity"], 3)
-        self.assertEqual(quote.data["services"][0]["service_date"], "2026-08-21")
+        self.assertEqual(quote.data["services"][0]["service_date"], service_date.isoformat())
         self.assertEqual(quote.data["services"][0]["time_slot"], "dinner")
 
     def test_booking_snapshots_rich_service_selection(self):
