@@ -13,9 +13,34 @@ function apiBase(): string | null {
   return null;
 }
 
+export type VillaOneApiErrorDetails = {
+  code?: string;
+  field_errors?: Record<string, unknown>;
+  request_id?: string;
+  retryable?: boolean;
+};
+
+function normalizeFieldErrors(value: unknown): Record<string, string[]> {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  return Object.fromEntries(Object.entries(value).map(([field, errors]) => [
+    field,
+    Array.isArray(errors) ? errors.map(String) : [String(errors)],
+  ]));
+}
+
 export class VillaOneApiError extends Error {
-  constructor(message: string, public status = 0) {
+  readonly code: string;
+  readonly fieldErrors: Record<string, string[]>;
+  readonly requestId: string;
+  readonly retryable: boolean;
+
+  constructor(message: string, public status = 0, details: VillaOneApiErrorDetails = {}) {
     super(message);
+    this.name = "VillaOneApiError";
+    this.code = details.code ?? "unknown_error";
+    this.fieldErrors = normalizeFieldErrors(details.field_errors);
+    this.requestId = details.request_id ?? "";
+    this.retryable = details.retryable ?? status >= 500;
   }
 }
 
@@ -51,20 +76,33 @@ async function apiFetch<T>(path: string, init: RequestInit = {}, authenticated =
   const base = apiBase();
   if (!base) throw new VillaOneApiError("API_NOT_CONFIGURED");
   const headers = new Headers(init.headers);
-  headers.set("Content-Type", "application/json");
+  if (!(init.body instanceof FormData) && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
   if (authenticated && accessToken()) headers.set("Authorization", `Bearer ${accessToken()}`);
   const response = await fetch(`${base}${path}`, { ...init, headers });
   if (response.status === 401 && authenticated && retry) {
     const refreshed = await refreshAccessToken();
     if (refreshed) return apiFetch<T>(path, init, authenticated, false);
     clearExpiredSession();
-    throw new VillaOneApiError("نشست شما منقضی شده است؛ لطفاً دوباره وارد شوید.", 401);
+    throw new VillaOneApiError("نشست شما منقضی شده است؛ لطفاً دوباره وارد شوید.", 401, { code: "token_expired", retryable: false, request_id: response.headers.get("X-Request-ID") ?? "" });
   }
   if (!response.ok) {
-    const payload = await response.json().catch(() => ({})) as Record<string, unknown> & { detail?: string | string[]; non_field_errors?: string[] };
+    const payload = await response.json().catch(() => ({})) as Record<string, unknown> & { detail?: string | string[]; non_field_errors?: string[]; code?: string; field_errors?: Record<string, unknown>; request_id?: string; retryable?: boolean };
     const detail = Array.isArray(payload.detail) ? payload.detail.join(" ") : payload.detail;
-    const fieldMessage = Object.entries(payload).filter(([key]) => !["detail", "non_field_errors"].includes(key)).flatMap(([, value]) => Array.isArray(value) ? value.map(String) : typeof value === "string" ? [value] : []).join(" ");
-    throw new VillaOneApiError(detail || payload.non_field_errors?.join(" ") || fieldMessage || "ارتباط با سرور ناموفق بود.", response.status);
+    const fieldErrors = normalizeFieldErrors(payload.field_errors);
+    const fieldMessage = Object.values(fieldErrors).flat().join(" ") || Object.entries(payload)
+      .filter(([key]) => !["detail", "non_field_errors", "code", "field_errors", "request_id", "retryable"].includes(key))
+      .flatMap(([, value]) => Array.isArray(value) ? value.map(String) : typeof value === "string" ? [value] : [])
+      .join(" ");
+    throw new VillaOneApiError(
+      detail || payload.non_field_errors?.join(" ") || fieldMessage || "ارتباط با سرور ناموفق بود.",
+      response.status,
+      {
+        code: payload.code,
+        field_errors: payload.field_errors,
+        request_id: payload.request_id ?? response.headers.get("X-Request-ID") ?? "",
+        retryable: payload.retryable,
+      },
+    );
   }
   return response.json() as Promise<T>;
 }
