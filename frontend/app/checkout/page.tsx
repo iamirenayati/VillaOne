@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { InnerHeader } from "../components/InnerHeader";
 import { PublicFooter } from "../components/PublicFooter";
 import { PublicSelect } from "../components/PublicSelect";
@@ -13,6 +13,7 @@ import styles from "./Checkout.module.css";
 
 export default function CheckoutPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const requestedSlug = searchParams.get("slug") ?? "";
   const [villa, setVilla] = useState<VillaListing | null>(null);
   const guests = searchParams.get("guests") ?? "2";
@@ -124,7 +125,7 @@ export default function CheckoutPage() {
         clientRequestId: window.sessionStorage.getItem("villaone-booking-request-id") || (() => { const id = crypto.randomUUID(); window.sessionStorage.setItem("villaone-booking-request-id", id); return id; })(),
       });
       window.sessionStorage.removeItem("villaone-booking-request-id");
-      window.location.href = `/payment?code=${encodeURIComponent(apiBooking.code)}`;
+      router.push(`/payment?code=${encodeURIComponent(apiBooking.code)}`);
     } catch (error) {
       setBookingError(error instanceof VillaOneApiError ? error.message : "ثبت رزرو انجام نشد؛ لطفاً دوباره تلاش کنید.");
       setSubmitting(false);
