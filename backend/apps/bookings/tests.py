@@ -92,6 +92,41 @@ class BookingServiceTests(APITestCase):
         self.assertEqual(response.data["payment_plan"], Booking.PaymentPlan.DEPOSIT)
         self.assertGreater(int(response.data["amount_due_now"]), 0)
 
+    def test_booking_request_id_replay_returns_original_booking(self):
+        payload = {
+            "villa_slug": self.villa.slug,
+            "checkin": "2026-08-20",
+            "checkout": "2026-08-23",
+            "guests_count": 2,
+            "payment_type": "deposit",
+            "client_request_id": "booking-replay-1",
+        }
+        self.client.force_authenticate(self.guest)
+        first = self.client.post(reverse("booking-create"), payload, format="json")
+        replay = self.client.post(reverse("booking-create"), payload, format="json")
+
+        self.assertEqual(first.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(replay.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(replay.data["code"], first.data["code"])
+        self.assertEqual(Booking.objects.filter(client_request_id="booking-replay-1").count(), 1)
+
+    def test_booking_request_id_reuse_with_different_data_is_conflict(self):
+        payload = {
+            "villa_slug": self.villa.slug,
+            "checkin": "2026-08-20",
+            "checkout": "2026-08-23",
+            "guests_count": 2,
+            "payment_type": "deposit",
+            "client_request_id": "booking-replay-2",
+        }
+        self.client.force_authenticate(self.guest)
+        self.assertEqual(self.client.post(reverse("booking-create"), payload, format="json").status_code, status.HTTP_201_CREATED)
+        changed = {**payload, "guests_count": 3}
+        response = self.client.post(reverse("booking-create"), changed, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
+        self.assertEqual(Booking.objects.filter(client_request_id="booking-replay-2").count(), 1)
+
     def test_public_quote_matches_created_booking(self):
         payload = {
             "villa_slug": self.villa.slug,
@@ -467,6 +502,51 @@ class BookingServiceTests(APITestCase):
         self.assertEqual(payment.status, Payment.Status.PAID)
         self.assertEqual(booking.status, Booking.Status.CONFIRMED)
         self.assertEqual(Availability.objects.filter(villa=self.villa, note=booking.code).count(), 3)
+
+    def test_card_transfer_request_id_replay_returns_original_payment(self):
+        BusinessSettings.objects.create(card_transfer_enabled=True, card_transfer_bank_name="Bank", card_transfer_cardholder_name="VillaOne", card_transfer_card_number="1234567812345678")
+        booking = create_booking(guest=self.guest, villa=self.villa, checkin=date(2026, 8, 20), checkout=date(2026, 8, 23), guests_count=2, payment_type="deposit")
+
+        from PIL import Image
+        first_stream = BytesIO(); Image.new("RGB", (400, 400), "white").save(first_stream, format="PNG")
+        second_stream = BytesIO(); Image.new("RGB", (400, 400), "white").save(second_stream, format="PNG")
+        first = submit_card_transfer(
+            booking=booking,
+            proof_image=SimpleUploadedFile("receipt-1.png", first_stream.getvalue(), content_type="image/png"),
+            reference_id="TRACK-REPLAY",
+            client_request_id="payment-replay-1",
+        )
+        replay = submit_card_transfer(
+            booking=booking,
+            proof_image=SimpleUploadedFile("receipt-2.png", second_stream.getvalue(), content_type="image/png"),
+            reference_id="TRACK-REPLAY",
+            client_request_id="payment-replay-1",
+        )
+
+        self.assertEqual(replay.pk, first.pk)
+        self.assertEqual(Payment.objects.filter(client_request_id="payment-replay-1").count(), 1)
+
+    def test_card_transfer_request_id_reuse_with_different_reference_is_conflict(self):
+        BusinessSettings.objects.create(card_transfer_enabled=True, card_transfer_bank_name="Bank", card_transfer_cardholder_name="VillaOne", card_transfer_card_number="1234567812345678")
+        booking = create_booking(guest=self.guest, villa=self.villa, checkin=date(2026, 8, 20), checkout=date(2026, 8, 23), guests_count=2, payment_type="deposit")
+
+        from PIL import Image
+        stream = BytesIO(); Image.new("RGB", (400, 400), "white").save(stream, format="PNG")
+        submit_card_transfer(
+            booking=booking,
+            proof_image=SimpleUploadedFile("receipt.png", stream.getvalue(), content_type="image/png"),
+            reference_id="TRACK-ORIGINAL",
+            client_request_id="payment-replay-2",
+        )
+        changed_stream = BytesIO(); Image.new("RGB", (400, 400), "white").save(changed_stream, format="PNG")
+        with self.assertRaises(ValidationError):
+            submit_card_transfer(
+                booking=booking,
+                proof_image=SimpleUploadedFile("receipt-changed.png", changed_stream.getvalue(), content_type="image/png"),
+                reference_id="TRACK-CHANGED",
+                client_request_id="payment-replay-2",
+            )
+        self.assertEqual(Payment.objects.filter(client_request_id="payment-replay-2").count(), 1)
 
     def test_finance_queue_is_paginated_searchable_and_private(self):
         booking = create_booking(guest=self.guest, villa=self.villa, checkin=date(2026, 8, 20), checkout=date(2026, 8, 23), guests_count=2, payment_type="deposit")

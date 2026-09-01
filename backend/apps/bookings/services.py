@@ -145,7 +145,7 @@ def submit_card_transfer(*, booking, proof_image, reference_id="", client_reques
     fingerprint = _request_fingerprint(request_payload)
     client_request_id = client_request_id or None
     if client_request_id:
-        existing = Payment.objects.filter(client_request_id=client_request_id).first()
+        existing = Payment.objects.select_for_update().filter(client_request_id=client_request_id).first()
         if existing:
             if existing.booking_id != locked.pk or existing.request_fingerprint != fingerprint:
                 raise ValidationError("این شناسه ارسال رسید قبلاً برای اطلاعات متفاوت استفاده شده است.")
@@ -159,17 +159,29 @@ def submit_card_transfer(*, booking, proof_image, reference_id="", client_reques
     if attempts >= 2:
         raise ValidationError("امکان ارسال رسید جدید برای این رزرو وجود ندارد.")
     proof_image = normalized_proof_image(proof_image)
-    payment = Payment.objects.create(
-        booking=locked,
-        gateway=Payment.Gateway.CARD_TO_CARD,
-        amount=locked.amount_due_now - locked.deposit_paid_online,
-        proof_image=proof_image,
-        reference_id=reference_id.strip(),
-        submitted_at=timezone.now(),
-        attempt_number=attempts + 1,
-        client_request_id=client_request_id,
-        request_fingerprint=fingerprint,
-    )
+    payment_fields = {
+        "booking": locked,
+        "gateway": Payment.Gateway.CARD_TO_CARD,
+        "amount": locked.amount_due_now - locked.deposit_paid_online,
+        "proof_image": proof_image,
+        "reference_id": reference_id.strip(),
+        "submitted_at": timezone.now(),
+        "attempt_number": attempts + 1,
+        "client_request_id": client_request_id,
+        "request_fingerprint": fingerprint,
+    }
+    try:
+        with transaction.atomic():
+            payment = Payment.objects.create(**payment_fields)
+    except IntegrityError:
+        if not client_request_id:
+            raise
+        existing = Payment.objects.select_for_update().filter(client_request_id=client_request_id).first()
+        if not existing:
+            raise
+        if existing.booking_id != locked.pk or existing.request_fingerprint != fingerprint:
+            raise ValidationError("این شناسه ارسال رسید قبلاً برای اطلاعات متفاوت استفاده شده است.")
+        return existing
     locked.expires_at = timezone.now() + timedelta(hours=24)
     locked.save(update_fields=["expires_at", "updated_at"])
     notify_customer(
@@ -555,7 +567,7 @@ def create_booking(*, guest, villa, checkin, checkout, guests_count, payment_typ
     fingerprint = _request_fingerprint(request_payload)
     client_request_id = client_request_id or None
     if client_request_id:
-        existing = Booking.objects.filter(client_request_id=client_request_id).first()
+        existing = Booking.objects.select_for_update().filter(client_request_id=client_request_id).first()
         if existing:
             if existing.guest_id != guest.pk or existing.request_fingerprint != fingerprint:
                 raise ValidationError("این شناسه درخواست قبلاً برای اطلاعات متفاوت استفاده شده است.")
@@ -604,8 +616,22 @@ def create_booking(*, guest, villa, checkin, checkout, guests_count, payment_typ
         client_request_id=client_request_id,
         request_fingerprint=fingerprint,
     )
-    booking.full_clean()
-    booking.save()
+    try:
+        # Keep the idempotency key out of model-level preflight validation so a
+        # concurrent retry is resolved through the database's unique constraint.
+        # The nested savepoint lets us recover the winning request safely.
+        with transaction.atomic():
+            booking.full_clean(exclude=["client_request_id"] if client_request_id else None)
+            booking.save()
+    except IntegrityError:
+        if not client_request_id:
+            raise
+        existing = Booking.objects.select_for_update().filter(client_request_id=client_request_id).first()
+        if not existing:
+            raise
+        if existing.guest_id != guest.pk or existing.request_fingerprint != fingerprint:
+            raise ValidationError("این شناسه درخواست قبلاً برای اطلاعات متفاوت استفاده شده است.")
+        return existing
     BookingService.objects.bulk_create([
         BookingService(
             booking=booking,
